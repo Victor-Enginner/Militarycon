@@ -721,8 +721,10 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
     dispararPesquisaAgentes: async (query: string) => {
       setAviso(`🔍 Agentes em campo: "${query}" · Calibrando com Groot 1...`)
       const entradas = imgsSel.map((n) => n.id)
-      await acao(() => api.pesquisar(slug, { query, entradas, tela: telaPadrao(), quantidade: 4 }))
+      await acao(() => api.pesquisar(slug, { query, entradas, tela: telaPadrao(), quantidade: 8 }))
     },
+    // sem `acao`: o erro (falta de chave, cota) volta para o painel que perguntou, não vira toast do canvas
+    perguntarGoogle: (pergunta: string) => api.perguntarGoogle(slug, pergunta),
     comandoVozAcao: (cmd) => {
       if (cmd === 'fechar') {
         if (visto) { setVisto(null); setAviso('Tela fechada'); return }
@@ -806,6 +808,15 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
             >
               <div className="lg-brand-badge">N</div>
               <span className="lg-brand-title">AGENTES FUI</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { location.hash = '#/projetos' }}
+              className="liquid-glass-button lg-btn-ferramentas"
+              title="Projetos: trocar de sessão ou criar uma nova"
+            >
+              <LayoutGrid size={14} />
+              <span>Sessões</span>
             </button>
             {abaNavegacao === 'agents' && !isZenMode && (
               <button

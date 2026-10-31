@@ -734,6 +734,118 @@ span.chip { cursor: default; }
   box-shadow: 0 0 22px rgba(0, 255, 204, 0.14);
 }
 
+/* Barra de seleção no mesmo vidro líquido da navbar e do HUD. O z-index a põe acima da camada de código
+   (z-1, multiply): sem ele os dígitos da chuva passavam por cima dos botões. */
+.canvas.fui-mode .barra-selecao {
+  z-index: 12;
+  padding: 5px 8px 5px 12px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(18, 18, 20, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05);
+}
+.canvas.fui-mode .barra-selecao .contagem { color: #ff5500; font-weight: 700; }
+.canvas.fui-mode .barra-selecao .sep { background: rgba(255, 255, 255, 0.18); }
+.canvas.fui-mode .barra-selecao .primario {
+  height: 32px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+.canvas.fui-mode .barra-selecao .primario:hover:not(:disabled) { background: rgba(255, 255, 255, 0.24); }
+.canvas.fui-mode .barra-selecao .ico { color: rgba(255, 255, 255, 0.82); border-radius: 50%; }
+.canvas.fui-mode .barra-selecao .ico:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+
+/* O HUD ficava em cima do rail de fogo (rail: left 16 + ~90 de largura; HUD: left 20, z 42 contra 6) e o cobria
+   por inteiro. Com o rail presente, o HUD começa depois dele; sem rail, volta ao canto (left: 20px). */
+.canvas.fui-mode:has(.trilho) .fui-hud-painel {
+  left: 116px;
+}
+
+/* Recolher o HUD: só fica transparente e sem clique. Nada é desmontado nem recebe display: none,
+   então o vídeo da câmera, o reconhecimento de voz e a detecção das mãos seguem funcionando. */
+.canvas.fui-mode .fui-hud-painel {
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.canvas.fui-mode .fui-hud-painel.recolhido {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-24px);
+}
+.fui-hud-alca {
+  position: fixed;
+  top: 78px;
+  left: 20px;
+  z-index: 42;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  color: #ff5500;
+  cursor: pointer;
+  background: rgba(18, 18, 20, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+}
+.fui-hud-alca:hover { background: rgba(40, 40, 44, 0.8); color: #fff; }
+.canvas.fui-mode:has(.trilho) .fui-hud-alca { left: 116px; }
+
+/* O painel Brief/Diário (.painel, z 10) é o que você está lendo: enquanto aberto, os cartões flutuantes (telemetria à
+   direita, HUD à esquerda) ficam ABAIXO dele. Antes a telemetria (z 42) cobria o texto e o botão de fechar. */
+.canvas.fui-mode:has(.painel) .lg-right-telemetry,
+.canvas.fui-mode:has(.painel) .fui-hud-painel,
+.canvas.fui-mode:has(.painel) .fui-hud-alca { z-index: 9; }
+
+/* Busca com dois botões (Google e pesquisa de agentes): o 2º fica ao lado do 1º, sem cobrir o texto digitado. */
+.lg-search-form .lg-search-input { padding-right: 62px; }
+.lg-search-send.google { right: 34px; }
+.lg-search-send:disabled { opacity: 0.35; cursor: default; }
+
+/* Cartão "Perguntar ao Google": resposta efêmera, só em memória (os termos do Google proíbem guardá-la). */
+.fui-google-card {
+  margin-top: 8px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: #e8e8ea;
+}
+.fui-google-topo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; color: #ff5500; font-size: 10px; letter-spacing: 0.05em; }
+.fui-google-topo strong { display: inline-flex; align-items: center; gap: 5px; }
+.fui-google-texto { white-space: pre-wrap; max-height: 150px; overflow-y: auto; line-height: 1.45; overflow-wrap: anywhere; }
+.fui-google-fontes { margin: 8px 0 0; padding-left: 14px; display: grid; gap: 2px; }
+.fui-google-fontes a { color: #ffb088; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.fui-google-sugestoes { display: block; width: 100%; height: 44px; margin-top: 8px; border: 0; border-radius: 8px; background: #fff; }
+.fui-google-aviso { margin: 0; color: rgba(255, 255, 255, 0.7); }
+.fui-google-erro { margin: 0; color: #ff8a65; overflow-wrap: anywhere; }
+.fui-google-rodape { display: block; margin-top: 6px; color: rgba(255, 255, 255, 0.45); }
+
+/* .primario herda --tinta, que no tema FUI é quase branco: o botão ficava branco com texto branco
+   (Direções, Abrir...). Vidro translúcido com texto branco, igual à aba ativa da navbar. */
+.canvas.fui-mode .primario,
+.home.fui-home .primario {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+.canvas.fui-mode .primario:hover:not(:disabled),
+.home.fui-home .primario:hover:not(:disabled) { background: rgba(255, 255, 255, 0.26); }
+
 /* Camada WebGL GPGPU + Radar Vetorial */
 .fui-webgl-camada {
   position: absolute;
@@ -1192,7 +1304,9 @@ span.chip { cursor: default; }
   color: #e2fbf7;
 }
 
-.home.fui-home > *:not(.fui-webgl-camada) {
+/* O cartão de telemetria (.lg-right-telemetry) tem posição própria, flutuante: sem a exceção abaixo esta regra o
+   forçava para o fluxo normal e ele cobria o cabeçalho e o título "Projetos". */
+.home.fui-home > *:not(.fui-webgl-camada):not(.lg-right-telemetry) {
   position: relative;
   z-index: 2;
 }
@@ -1243,6 +1357,17 @@ span.chip { cursor: default; }
   border: 1px solid rgba(255, 196, 0, 0.75);
   box-shadow: 0 0 14px rgba(255, 196, 0, 0.35);
 }
+
+/* selos dos itens de texto (notícia, Wikipedia, artigo): link para a fonte original */
+.selo-subtipo.texto {
+  text-decoration: none;
+  background: rgba(13, 14, 18, 0.92);
+  white-space: nowrap;
+}
+.selo-subtipo.noticia { color: #ff5500; border: 1px solid rgba(255, 85, 0, 0.75); box-shadow: 0 0 12px rgba(255, 85, 0, 0.3); }
+.selo-subtipo.wiki { color: #78b4ff; border: 1px solid rgba(120, 180, 255, 0.75); box-shadow: 0 0 12px rgba(120, 180, 255, 0.3); }
+.selo-subtipo.grafico { color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.75); box-shadow: 0 0 12px rgba(74, 222, 128, 0.3); }
+.selo-subtipo.paper { color: #ffc400; border: 1px solid rgba(255, 196, 0, 0.75); box-shadow: 0 0 12px rgba(255, 196, 0, 0.3); }
 
 .selo-subtipo:hover {
   transform: scale(1.06);
@@ -1354,6 +1479,14 @@ span.chip { cursor: default; }
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.fui-yt-falha {
+  margin: 0;
+  padding: 24px;
+  color: #ffb088;
+  font-family: var(--mono);
+  font-size: 13px;
 }
 
 /* Animação 3D de Passar Página / Folhear Slides com a Mão no Viewer */

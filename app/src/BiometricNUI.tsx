@@ -1,7 +1,8 @@
-import { Eye, EyeOff, Mic, MicOff, Send, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
+import { Eye, EyeOff, Globe, Mic, MicOff, PanelLeftClose, PanelLeftOpen, Send, Video, VideoOff, Volume2, VolumeX, X } from 'lucide-react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import type { TelemetriaFUI } from './api'
+import type { RespostaGoogle, TelemetriaFUI } from './api'
 import { fuiAudio } from './FuiAudio'
+import { DetectorFolhear } from './folhear'
 import { biometriaGlobal } from './FuiWebGL'
 
 export type AcoesEspaciaisFUI = {
@@ -11,6 +12,7 @@ export type AcoesEspaciaisFUI = {
   arrastarNo: (id: string, dxScreen: number, dyScreen: number) => void
   soltarArrasteNo: (id: string) => void
   dispararPesquisaAgentes: (query: string) => void
+  perguntarGoogle: (pergunta: string) => Promise<RespostaGoogle>
   comandoVozAcao: (acao: 'aprovar' | 'favoritar' | 'descartar' | 'abrir' | 'fechar' | 'ampliar' | 'reduzir' | 'enquadrar' | 'video') => void
 }
 
@@ -196,6 +198,15 @@ export const BiometricNUI = memo(function BiometricNUI({
   const [transcricao, setTranscricao] = useState('Diga: "Pesquisar arxiv interfaces neurais" ou "Fechar"')
   const [somAtivo, setSomAtivo] = useState(true)
   const [hudCompacto, setHudCompacto] = useState(false)
+  // Recolher esconde o painel SEM desmontar nada: a câmera, o microfone e a detecção das mãos continuam rodando
+  // (o Modo Zen também só esconde com display: none, mas leva junto o resto da tela; aqui é só este painel).
+  const [hudRecolhido, setHudRecolhido] = useState(() => {
+    try { return localStorage.getItem('neo:hud-recolhido') === '1' } catch { return false }
+  })
+  const alternarHudRecolhido = (valor: boolean) => {
+    setHudRecolhido(valor)
+    try { localStorage.setItem('neo:hud-recolhido', valor ? '1' : '0') } catch { /* sem storage */ }
+  }
 
   // Estado React enxuto: só re-renderiza quando muda o MODO ou visibilidade (NUNCA a cada pixel de movimento!)
   const [uiR, setUiR] = useState<{
@@ -222,6 +233,7 @@ export const BiometricNUI = memo(function BiometricNUI({
   const viewerAbertoRef = useRef(!!viewerAberto)
   viewerAbertoRef.current = !!viewerAberto
 
+  const folharRef = useRef(new DetectorFolhear())
   const gestosRef = useRef({
     smoothR: { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5 },
     smoothL: { x: window.innerWidth * 0.35, y: window.innerHeight * 0.5 },
@@ -573,7 +585,6 @@ export const BiometricNUI = memo(function BiometricNUI({
 
           // Quando os dedos começam a fechar para clicar (dist0 < 0.088), congela/amortece a mira em 92% no início do clique!
           const aproximandoPinch = dist0 < 0.088 && g.pinchMoveDist < 22
-          const prevSx = g.smoothR.x
           g.smoothR.x = aproximandoPinch
             ? filtrar1Euro(g.smoothR.x, rawX0, 0.04, 0.12, 90)
             : filtrar1Euro(g.smoothR.x, rawX0)
@@ -582,7 +593,6 @@ export const BiometricNUI = memo(function BiometricNUI({
             : filtrar1Euro(g.smoothR.y, rawY0)
           const sx0 = g.smoothR.x
           const sy0 = g.smoothR.y
-          const vx = sx0 - prevSx
 
           if (cursorRRef.current) {
             cursorRRef.current.style.transform = `translate3d(${sx0.toFixed(1)}px, ${sy0.toFixed(1)}px, 0)`
@@ -607,27 +617,14 @@ export const BiometricNUI = memo(function BiometricNUI({
           // =========================================================================
           // MODO FOLHEAR PÁGINA / PASSAR SLIDES COM A MÃO QUANDO O VIEWER ESTÁ ABERTO
           // =========================================================================
+          // Um detector só (folhear.ts): gesto rápido, longo e horizontal; depois de virar, só vale de novo quando a mão
+          // ASSENTA. Antes o guarda do retorno estava invertido (`lastPageFlipDir !== direcao` deixava passar justamente a
+          // direção oposta), então a volta da mão virava outra página.
           if (viewerAbertoRef.current) {
-            const nowFlip = performance.now()
-            if (Math.abs(vx) > 9.5) {
-              if (g.swipeStartX === null || nowFlip - g.swipeStartTime > 380) {
-                g.swipeStartX = prevSx
-                g.swipeStartTime = nowFlip
-              }
-              const deltaSwipeX = sx0 - g.swipeStartX
-              if (Math.abs(deltaSwipeX) > 105 && nowFlip - g.lastPageFlipTime > 650) {
-                const direcao: 'next' | 'prev' = deltaSwipeX < 0 ? 'next' : 'prev'
-                // Evita disparar a direção oposta no retorno natural da mão em menos de 1.1s
-                if (g.lastPageFlipDir !== direcao || nowFlip - g.lastPageFlipTime > 950) {
-                  g.lastPageFlipTime = nowFlip
-                  g.lastPageFlipDir = direcao
-                  g.swipeStartX = null
-                  window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao } }))
-                }
-              }
-            } else if (nowFlip - g.swipeStartTime > 380) {
-              g.swipeStartX = null
-            }
+            const direcao = folharRef.current.atualizar(sx0, sy0, performance.now(), W)
+            if (direcao) window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao } }))
+          } else {
+            folharRef.current.reiniciar()
           }
 
           // Raycasting DOM Magnético (raio de 30px)
@@ -678,8 +675,9 @@ export const BiometricNUI = memo(function BiometricNUI({
               const dy = sy0 - g.lastPanPos.y
               if (viewerAbertoRef.current) {
                 const nowFlip = performance.now()
-                if (Math.abs(dx) > 62 && nowFlip - g.lastPageFlipTime > 620) {
+                if (Math.abs(dx) > 62 && folharRef.current.podeVirar(nowFlip)) {
                   const direcao: 'next' | 'prev' = dx < 0 ? 'next' : 'prev'
+                  folharRef.current.virou(nowFlip)
                   g.lastPageFlipTime = nowFlip
                   g.lastPageFlipDir = direcao
                   g.lastPanPos = { x: sx0, y: sy0 }
@@ -700,7 +698,7 @@ export const BiometricNUI = memo(function BiometricNUI({
               g.pinchMoveDist = 0
 
               const { btnEl, nodeEl, nodeId: magNodeId } = buscarAlvoMagnetico(sx0, sy0)
-              if (btnEl && (!nodeEl || btnEl.classList.contains('nodrag') || btnEl.closest('.viewer, .fui-hud-painel, .topo, .lg-top-navbar, .barra-selecao'))) {
+              if (btnEl && (!nodeEl || btnEl.classList.contains('nodrag') || btnEl.closest('.viewer, .fui-hud-painel, .fui-hud-alca, .topo, .lg-top-navbar, .barra-selecao'))) {
                 btnEl.click()
                 g.draggedNodeId = null
                 g.wasSelectedOnPinch = false
@@ -721,8 +719,10 @@ export const BiometricNUI = memo(function BiometricNUI({
                 g.pinchMoveDist += step
                 if (viewerAbertoRef.current) {
                   const nowFlip = performance.now()
-                  if (Math.abs(sx0 - g.lastPinchPosR.x) > 68 && nowFlip - g.lastPageFlipTime > 620) {
+                  // pinça: arrastar 150 px (antes 68) e só com o detector armado, o mesmo bloqueio do gesto aberto
+                  if (Math.abs(sx0 - g.lastPinchPosR.x) > 150 && folharRef.current.podeVirar(nowFlip)) {
                     const direcao: 'next' | 'prev' = sx0 - g.lastPinchPosR.x < 0 ? 'next' : 'prev'
+                    folharRef.current.virou(nowFlip)
                     g.lastPageFlipTime = nowFlip
                     g.lastPageFlipDir = direcao
                     g.lastPinchPosR = { x: sx0, y: sy0 }
@@ -927,6 +927,9 @@ export const BiometricNUI = memo(function BiometricNUI({
   }, [telemetria?.ativo])
 
   const [searchQuery, setSearchQuery] = useState('')
+  // "Perguntar ao Google": só em memória. Os termos do Google proíbem guardar ou reutilizar a resposta.
+  const [google, setGoogle] = useState<{ carregando: boolean; erro: string | null; resposta: RespostaGoogle | null }>(
+    { carregando: false, erro: null, resposta: null })
   const [gestoSimulado, setGestoSimulado] = useState<{ label: string; desc: string } | null>(null)
   const [modalCorrAberto, setModalCorrAberto] = useState(false)
   const [abaCorr, setAbaCorr] = useState<'agentes' | 'llms' | 'doutrinas' | 'corr' | 'repos'>('repos')
@@ -992,6 +995,18 @@ export const BiometricNUI = memo(function BiometricNUI({
     fuiAudio.voiceDispatch()
     acoes.dispararPesquisaAgentes(q)
     setSearchQuery('')
+  }
+
+  const perguntarAoGoogle = async () => {
+    const q = searchQuery.trim()
+    if (!q || google.carregando) return
+    fuiAudio.voiceDispatch()
+    setGoogle({ carregando: true, erro: null, resposta: null })
+    try {
+      setGoogle({ carregando: false, erro: null, resposta: await acoes.perguntarGoogle(q) })
+    } catch (e) {
+      setGoogle({ carregando: false, erro: (e as Error).message, resposta: null })
+    }
   }
 
   const grootProb = telemetria?.groot_prob ?? 0.951
@@ -1070,8 +1085,9 @@ export const BiometricNUI = memo(function BiometricNUI({
 
       {/* PAINEL ESQUERDO LIQUID GLASS + LARANJA FLUORESCENTE (#FF5500) - IDÊNTICO AO FUIAGENTSfront */}
       <aside
-        className={`fui-hud-painel liquid-glass-panel ${hudCompacto ? 'compacto' : ''}`}
+        className={`fui-hud-painel liquid-glass-panel ${hudCompacto ? 'compacto' : ''} ${hudRecolhido ? 'recolhido' : ''}`}
         style={{ display: isZenMode ? 'none' : undefined }}
+        inert={hudRecolhido}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="fui-hud-cabecalho">
@@ -1080,6 +1096,14 @@ export const BiometricNUI = memo(function BiometricNUI({
             <strong>FUI AGENTS // COGNITIVE SPATIAL OS</strong>
             <span>ARXIV + YOUTUBE + WEB + GROOT 1</span>
           </div>
+          <button
+            type="button"
+            className="fui-btn-mini"
+            title="Recolher painel (a câmera e a voz continuam ligadas)"
+            onClick={() => alternarHudRecolhido(true)}
+          >
+            <PanelLeftClose size={13} color="#ff5500" />
+          </button>
           <button
             type="button"
             className="fui-btn-mini"
@@ -1212,10 +1236,45 @@ export const BiometricNUI = memo(function BiometricNUI({
                 placeholder={vozAtiva ? transcricao : "Diga ou digite: 'Pesquisar arxiv'..."}
                 className="lg-search-input"
               />
+              <button type="button" className="lg-search-send google" title="Perguntar ao Google (Gemini, grátis, a resposta não é guardada)"
+                disabled={google.carregando || !searchQuery.trim()} onClick={perguntarAoGoogle}>
+                <Globe size={14} color="#ff5500" />
+              </button>
               <button type="submit" className="lg-search-send" title="Disparar Agentes de Pesquisa">
                 <Send size={14} color="#ff5500" />
               </button>
             </form>
+
+            {(google.carregando || google.erro || google.resposta) && (
+              <div className="fui-google-card" role="region" aria-label="Resposta do Google">
+                <div className="fui-google-topo">
+                  <strong><Globe size={12} /> GOOGLE · {google.resposta?.modelo ?? 'Gemini'}</strong>
+                  <button type="button" className="fui-btn-mini" title="Fechar"
+                    onClick={() => setGoogle({ carregando: false, erro: null, resposta: null })}><X size={12} /></button>
+                </div>
+                {google.carregando && <p className="fui-google-aviso">Perguntando ao Google…</p>}
+                {google.erro && <p className="fui-google-erro">{google.erro}</p>}
+                {google.resposta && (
+                  <>
+                    <div className="fui-google-texto">{google.resposta.texto}</div>
+                    {google.resposta.fontes.length > 0 && (
+                      <ul className="fui-google-fontes">
+                        {google.resposta.fontes.slice(0, 5).map((f) => (
+                          <li key={f.url}><a href={f.url} target="_blank" rel="noopener noreferrer" title={f.url}>{f.titulo}</a></li>
+                        ))}
+                      </ul>
+                    )}
+                    {google.resposta.sugestoes_html && (
+                      // HTML que vem do Google: isolado num iframe sem scripts nem acesso ao app. Exigido pelos termos.
+                      <iframe className="fui-google-sugestoes" title="Sugestões de busca do Google" referrerPolicy="no-referrer"
+                        sandbox="allow-popups allow-popups-to-escape-sandbox"
+                        srcDoc={`<base target="_blank">${google.resposta.sugestoes_html}`} />
+                    )}
+                    <small className="fui-google-rodape">restam {google.resposta.restantes_hoje} hoje · não é guardado</small>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Atalhos Inteligência Multi-Fonte (2x2 Grid como no FUIAGENTSfront) */}
             <div className="fui-missoes">
@@ -1296,6 +1355,17 @@ export const BiometricNUI = memo(function BiometricNUI({
           </>
         )}
       </aside>
+
+      {hudRecolhido && !isZenMode && (
+        <button
+          type="button"
+          className="fui-hud-alca"
+          title="Mostrar o painel de câmera e voz"
+          onClick={(e) => { e.stopPropagation(); alternarHudRecolhido(false) }}
+        >
+          <PanelLeftOpen size={16} />
+        </button>
+      )}
 
       {modalCorrAberto && (
         <div className="fui-modal-corr-backdrop" onClick={() => setModalCorrAberto(false)}>

@@ -57,7 +57,10 @@ export type No = {
   groot_veredito?: string
   fonte_url?: string
   agente_id?: string
-  subtipo?: 'imagem' | 'video' | 'youtube' | 'arxiv' | 'web' | 'c4isr'
+  subtipo?: 'imagem' | 'video' | 'youtube' | 'arxiv' | 'web' | 'c4isr' | 'noticia' | 'wiki' | 'paper' | 'grafico'
+  /** de onde veio um item de texto (noticia, wiki, paper): veículo, verbete ou revista */
+  fonte_nome?: string
+  publicado?: string
   youtube_id?: string
   embed_url?: string
   pdf_url?: string
@@ -123,6 +126,16 @@ export type Fogo = { id: string; thumb: string; nome: string; videos: number; im
 
 export type ModeloVideo = { nome: string; duracoes: number[]; resolucoes: string[]; custo_6s: number; preco_s: number; primeiro_ultimo: boolean; tempo_teste_s?: number; nota?: string; ranking?: string; teste?: string }
 
+/** Resposta do "Perguntar ao Google" (Gemini + Google Search). Efêmera: os termos do Google proíbem guardá-la. */
+export type RespostaGoogle = {
+  texto: string
+  fontes: { titulo: string; url: string }[]
+  consultas: string[]
+  sugestoes_html: string
+  modelo: string
+  restantes_hoje: number
+}
+
 export type ResumoProjeto = {
   slug: string
   nome: string
@@ -165,6 +178,8 @@ export const api = {
   enviar: (slug: string, id: string) => req<No>('POST', `${P(slug)}/nos/${id}/enviar`),
   pesquisar: (slug: string, d: { query: string; entradas?: string[]; tela?: string; quantidade?: number }) =>
     req<{ ok: boolean; query: string; quantidade: number }>('POST', `${P(slug)}/pesquisar`, d),
+  perguntarGoogle: (slug: string, pergunta: string) =>
+    req<RespostaGoogle>('POST', `${P(slug)}/google`, { pergunta }),
   comentar: (slug: string, id: string, texto: string, pin: Pin | null) =>
     req<Comentario>('POST', `${P(slug)}/nos/${id}/comentarios`, { texto, pin }),
   apagarComentario: (slug: string, id: string, cid: string) => req('DELETE', `${P(slug)}/nos/${id}/comentarios/${cid}`),

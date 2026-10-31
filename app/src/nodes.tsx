@@ -515,6 +515,20 @@ export const ImagemNode = memo(function ImagemNode({ data, selected }: NodeProps
             📄 {no.arxiv_id || 'ARXIV PAPER'}
           </button>
         )}
+        {(no.subtipo === 'noticia' || no.subtipo === 'wiki' || no.subtipo === 'paper' || no.subtipo === 'grafico') && no.fonte_url && (
+          // item de texto: o selo leva à matéria original (a gente guarda título, resumo e link, não a foto do veículo)
+          <a
+            href={no.fonte_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`selo-subtipo texto ${no.subtipo} nodrag`}
+            title={`Abrir a fonte original: ${no.fonte_nome ?? no.fonte_url}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {no.subtipo === 'noticia' ? 'NOTÍCIA' : no.subtipo === 'wiki' ? 'WIKIPEDIA' : no.subtipo === 'grafico' ? 'GRÁFICO' : 'ARTIGO'}
+            {no.fonte_nome ? ` · ${no.fonte_nome.slice(0, 22)}` : ''} ↗
+          </a>
+        )}
         {!no.gerando && (
           <div className="acoes">
             <Botao titulo="Abrir em Tela Cheia com Som (Duplo Pinch)" onClick={() => abrir(no.id)}>
