@@ -1,0 +1,49 @@
+{
+ "id": "FUI-045",
+ "tipo": "pedido",
+ "criado": "2026-10-31T08:40:34",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] arxiv amilajack reading knowledge graph computer science architecture diagram",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T08:40:34",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-046",
+  "FUI-047",
+  "FUI-048",
+  "FUI-049"
+ ],
+ "atualizado": "2026-10-31T08:40:53",
+ "variacoes": [
+  {
+   "nome": "[0.83] [DIAGRAMA arXiv:2604.08224] Figure 2 :",
+   "prompt": "TRACKING [0.831] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2604.08224 · Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 2 : Community theme evolution across three capability layers. The stacked layers—Weights, Context, and Harness—show how the center of gravity in the LLM agent community has shifted outward over time, from parametric knowledge and prompting toward harness-level infrastructure such as tool ecosystems, protocols, skills, and multi-agent orchestration.",
+   "tese": "TRACKING [0.831] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.81] [ARXIV DIAGRAM #2] Training in Simulat",
+   "prompt": "TRACKING [0.812] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/pdf/2604.08224 · Framework de Treinamento em Simulação Multi-Agente (Scenario Synthesis → Actor Simulation → Autorater Rubric & GRPO RL Update + Radar 6 Eixos).",
+   "tese": "TRACKING [0.812] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.81] [DIAGRAMA arXiv:2604.08224] Figure 1 :",
+   "prompt": "TRACKING [0.807] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2604.08224 · Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 1 : Externalization as the organizing principle of LLM agent design. Upper panel: The arc of human cognitive externalization from thought through language, writing, printing, to digital computation. Middle panel: The corresponding externalization arc for LLM agents, from weights through three externalization dimensions—Memory (externalized state), Skills (externalized expertise), and Protocols (externalized interaction)—to the Harness that unifies them. Lower panel: A literature landscape mapping representative works onto three capability layers—Weights, Context, and Harness—illustrating how research threads have progressively migrated outward. The parallel between the two arcs encodes a recursive claim: LLM agents achieve reliable agency by externalizing cognitive burdens along the same representational dimensions that have driven human cognitive history.",
+   "tese": "TRACKING [0.807] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.79] [ARXIV DIAGRAM #1] Externalization of ",
+   "prompt": "TRACKING [0.791] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/pdf/2604.08224 · Diagrama arquitetural completo (Donald A. Norman Cognitive Externalization → LLM Agent Memory, Skill, Protocol & Harness Ecosystem + CoRR Taxonomy).",
+   "tese": "TRACKING [0.791] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T08:40:53",
+ "custo": 0.0
+}

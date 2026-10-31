@@ -1,0 +1,423 @@
+{
+ "logs": [
+  {
+   "ts": "2026-10-31T10:25:10",
+   "hora": "10:25:10",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"notícias urgentes de hoje\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:10",
+   "hora": "10:25:10",
+   "agente": "ORCHESTRATOR",
+   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"notícias urgentes de hoje\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:18",
+   "hora": "10:25:18",
+   "agente": "AGENT-03 // ARXIV-SCIENTIST",
+   "msg": "2 papers científicos encontrados no ArXiv.org",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:18",
+   "hora": "10:25:18",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "2 streams de vídeo encontrados no YouTube",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:18",
+   "hora": "10:25:18",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "8 imagens táticas indexadas da Web/Wikimedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:18",
+   "hora": "10:25:18",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "4 notícias encontradas nos feeds públicos",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:18",
+   "hora": "10:25:18",
+   "agente": "AGENT-08 // WIKI-SCAN",
+   "msg": "2 verbetes da Wikipedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:19",
+   "hora": "10:25:19",
+   "agente": "AGENT-09 // PAPER-SCAN",
+   "msg": "2 artigos científicos (OpenAlex/Crossref)",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:19",
+   "hora": "10:25:19",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 20 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:25:19",
+   "hora": "10:25:19",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-004 [NOTICIA]: P(relevância) = 0.734 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.734
+  },
+  {
+   "ts": "2026-10-31T10:25:19",
+   "hora": "10:25:19",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-005 [NOTICIA]: P(relevância) = 0.730 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.73
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "Placa FUS-004 [NOTICIA] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.734
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-006 [NOTICIA]: P(relevância) = 0.730 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.73
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "Placa FUS-005 [NOTICIA] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.73
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-007 [NOTICIA]: P(relevância) = 0.720 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.72
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "Placa FUS-006 [NOTICIA] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.73
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "Placa FUS-007 [NOTICIA] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.72
+  },
+  {
+   "ts": "2026-10-31T10:25:20",
+   "hora": "10:25:20",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUS-003]: 4 abas projetadas · Groot 1 P=0.728",
+   "nivel": "READY",
+   "prob": 0.728
+  },
+  {
+   "ts": "2026-10-31T10:39:25",
+   "hora": "10:39:25",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"notícias sobre inteligência artificial\" (Alvo: 8 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:25",
+   "hora": "10:39:25",
+   "agente": "ORCHESTRATOR",
+   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"notícias sobre inteligência artificial\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-03 // ARXIV-SCIENTIST",
+   "msg": "2 papers científicos encontrados no ArXiv.org",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "2 streams de vídeo encontrados no YouTube",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "16 imagens táticas indexadas da Web/Wikimedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "1 notícias encontradas nos feeds públicos",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-08 // WIKI-SCAN",
+   "msg": "2 verbetes da Wikipedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-09 // PAPER-SCAN",
+   "msg": "2 artigos científicos (OpenAlex/Crossref)",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:33",
+   "hora": "10:39:33",
+   "agente": "AGENT-10 // DATA-VIZ",
+   "msg": "gráfico de publicações por ano montado com dados do OpenAlex (\"inteligência artificial\")",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 26 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-010 [NOTICIA]: P(relevância) = 0.801 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.801
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-011 [YOUTUBE]: P(relevância) = 0.941 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.941
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "Placa FUS-011 [YOUTUBE] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.941
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-012 [WIKI]: P(relevância) = 0.851 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.851
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "AGENT-07 // NEWS-WIRE",
+   "msg": "Placa FUS-010 [NOTICIA] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.801
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-013 [GRAFICO]: P(relevância) = 0.859 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.859
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "AGENT-08 // WIKI-SCAN",
+   "msg": "Placa FUS-012 [WIKI] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.851
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-014 [WEB]: P(relevância) = 0.899 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.899
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "AGENT-10 // DATA-VIZ",
+   "msg": "Placa FUS-013 [GRAFICO] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.859
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-015 [YOUTUBE]: P(relevância) = 0.940 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.94
+  },
+  {
+   "ts": "2026-10-31T10:39:34",
+   "hora": "10:39:34",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "Placa FUS-014 [WEB] materializada no canvas (474x266)",
+   "nivel": "DONE",
+   "prob": 0.899
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-016 [WIKI]: P(relevância) = 0.850 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.85
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "Placa FUS-015 [YOUTUBE] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.94
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUS-017 [WEB]: P(relevância) = 0.856 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.856
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "Placa FUS-017 [WEB] materializada no canvas (474x291)",
+   "nivel": "DONE",
+   "prob": 0.856
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "AGENT-08 // WIKI-SCAN",
+   "msg": "Placa FUS-016 [WIKI] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.85
+  },
+  {
+   "ts": "2026-10-31T10:39:35",
+   "hora": "10:39:35",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUS-009]: 8 abas projetadas · Groot 1 P=0.875",
+   "nivel": "READY",
+   "prob": 0.875
+  }
+ ],
+ "agentes": {
+  "ORCHESTRATOR": {
+   "status": "READY",
+   "ultima_msg": "MISSÃO CONCLUÍDA [FUS-009]: 8 abas projetadas · Groot 1 P=0.875",
+   "atualizado": "2026-10-31T10:39:35",
+   "prob": 0.875
+  },
+  "AGENT-03 // ARXIV-SCIENTIST": {
+   "status": "SCANNING",
+   "ultima_msg": "2 papers científicos encontrados no ArXiv.org",
+   "atualizado": "2026-10-31T10:39:33",
+   "prob": null
+  },
+  "AGENT-05 // YOUTUBE-RECON": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUS-015 [YOUTUBE] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T10:39:35",
+   "prob": 0.94
+  },
+  "AGENT-02 // WEB-IMAGE-RECON": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUS-017 [WEB] materializada no canvas (474x291)",
+   "atualizado": "2026-10-31T10:39:35",
+   "prob": 0.856
+  },
+  "AGENT-07 // NEWS-WIRE": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUS-010 [NOTICIA] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T10:39:34",
+   "prob": 0.801
+  },
+  "AGENT-08 // WIKI-SCAN": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUS-016 [WIKI] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T10:39:35",
+   "prob": 0.85
+  },
+  "AGENT-09 // PAPER-SCAN": {
+   "status": "SCANNING",
+   "ultima_msg": "2 artigos científicos (OpenAlex/Crossref)",
+   "atualizado": "2026-10-31T10:39:33",
+   "prob": null
+  },
+  "GROOT-1 // CALIBRATOR": {
+   "status": "LOCKED",
+   "ultima_msg": "FUS-017 [WEB]: P(relevância) = 0.856 → FAVORITA",
+   "atualizado": "2026-10-31T10:39:35",
+   "prob": 0.856
+  },
+  "AGENT-10 // DATA-VIZ": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUS-013 [GRAFICO] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T10:39:34",
+   "prob": 0.859
+  }
+ },
+ "groot_prob": 0.875,
+ "ativo": false,
+ "query": "notícias sobre inteligência artificial"
+}

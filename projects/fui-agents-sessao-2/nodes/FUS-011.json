@@ -1,0 +1,43 @@
+{
+ "id": "FUS-011",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "c00aeed6",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.941] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=OYZb5ePWvyA\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: OYZb5ePWvyA · Query: notícias sobre inteligência artificial",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:34"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.94] ▶ [YT] IA pode acabar com a humanidade",
+ "prompt": "LOCKED [0.941] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=OYZb5ePWvyA · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: OYZb5ePWvyA · Query: notícias sobre inteligência artificial",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.941,
+ "groot_veredito": "LOCKED [0.941] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=OYZb5ePWvyA",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "OYZb5ePWvyA",
+ "embed_url": "https://www.youtube.com/embed/OYZb5ePWvyA?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": null,
+ "publicado": null,
+ "resumo": "Vídeo YouTube: \"IA pode acabar com a humanidade? Como as máquinas poderiam levar ao apocalipse\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T11:04:45",
+ "arquivo": "images/FUS-011.png",
+ "thumb": "thumbs/FUS-011.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

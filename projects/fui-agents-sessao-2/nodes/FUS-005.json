@@ -1,0 +1,43 @@
+{
+ "id": "FUS-005",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:25:19",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "2867b6c1",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-07 // NEWS-WIRE [NOTICIA]\nFonte: https://g1.globo.com/ce/ceara/noticia/2026/10/31/feito-pipa-tem-pre-estreia-em-fortaleza.ghtml\nResumo: Lázaro Ramos comenta expectativa sobre indicação de \"Feito Pipa\" ao Oscar 2027 \"Feito Pipa\", filme cearense gravado em Quixadá e escolhido para representar o Brasil na disputa por uma vaga na categoria de Melhor Filme In",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:25:20"
+  }
+ ],
+ "pedido": "FUS-003",
+ "nome": "[0.73] [NOTÍCIA] Filmado no Ceará e indicado ",
+ "prompt": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://g1.globo.com/ce/ceara/noticia/2026/10/31/feito-pipa-tem-pre-estreia-em-fortaleza.ghtml · Lázaro Ramos comenta expectativa sobre indicação de \"Feito Pipa\" ao Oscar 2027 \"Feito Pipa\", filme cearense gravado em Quixadá e escolhido para representar o Brasil na disputa por uma vaga na categoria de Melhor Filme Internacional do Oscar 2027, estreia em todo o País no dia 5 de novembro. Nesta sexta-feira (30), o longa teve pré-estreia oficial em Fortaleza, com presença do…",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.73,
+ "groot_veredito": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://g1.globo.com/ce/ceara/noticia/2026/10/31/feito-pipa-tem-pre-estreia-em-fortaleza.ghtml",
+ "agente_id": "AGENT-07 // NEWS-WIRE",
+ "subtipo": "noticia",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "G1",
+ "publicado": "31/10/2026",
+ "resumo": "Lázaro Ramos comenta expectativa sobre indicação de \"Feito Pipa\" ao Oscar 2027 \"Feito Pipa\", filme cearense gravado em Quixadá e escolhido para representar o Brasil na disputa por uma vaga na categoria de Melhor Filme Internacional do Oscar 2027, estreia em todo o País no dia 5 de novembro. Nesta sexta-feira (30), o longa teve pré-estreia oficial em Fortaleza, com presença do…",
+ "atualizado": "2026-10-31T10:25:20",
+ "arquivo": "images/FUS-005.png",
+ "thumb": "thumbs/FUS-005.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

@@ -1,254 +1,6 @@
 {
  "logs": [
   {
-   "ts": "2026-10-31T01:03:13",
-   "hora": "01:03:13",
-   "agente": "AGENT-06 // DIAGRAM-VISION-CV",
-   "msg": "Placa FUI-029 [ARXIV] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.891
-  },
-  {
-   "ts": "2026-10-31T01:03:14",
-   "hora": "01:03:14",
-   "agente": "ORCHESTRATOR",
-   "msg": "MISSÃO CONCLUÍDA [FUI-026]: 3 abas projetadas · Groot 1 P=0.895",
-   "nivel": "READY",
-   "prob": 0.895
-  },
-  {
-   "ts": "2026-10-31T01:18:26",
-   "hora": "01:18:26",
-   "agente": "ORCHESTRATOR",
-   "msg": "MISSÃO INICIADA: \"youtube FUI HUD interface reel Territory Studio cockpit\" (Alvo: 4 placas FUI)",
-   "nivel": "ACTIVE",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T01:18:30",
-   "hora": "01:18:30",
-   "agente": "ORCHESTRATOR",
-   "msg": "Despachando 5 agentes em paralelo (Web Images, Wikimedia, ArXiv.org, YouTube, Openverse) para \"youtube FUI HUD interface reel Territory Studio cockpit\"...",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T01:18:44",
-   "hora": "01:18:44",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "4 streams de vídeo encontrados no YouTube",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T01:18:44",
-   "hora": "01:18:44",
-   "agente": "AGENT-02 // WEB-IMAGE-RECON",
-   "msg": "4 imagens táticas indexadas da Web/Wikimedia",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T01:18:44",
-   "hora": "01:18:44",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "Auditando 8 referências via SystemOneRequest (marcyano/Groot-1)...",
-   "nivel": "CALIBRATING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T01:18:46",
-   "hora": "01:18:46",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-031 [YOUTUBE]: P(relevância) = 0.952 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.952
-  },
-  {
-   "ts": "2026-10-31T01:18:46",
-   "hora": "01:18:46",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-032 [YOUTUBE]: P(relevância) = 0.952 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.952
-  },
-  {
-   "ts": "2026-10-31T01:18:47",
-   "hora": "01:18:47",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-033 [YOUTUBE]: P(relevância) = 0.950 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.95
-  },
-  {
-   "ts": "2026-10-31T01:18:48",
-   "hora": "01:18:48",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-034 [YOUTUBE]: P(relevância) = 0.950 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.95
-  },
-  {
-   "ts": "2026-10-31T01:18:53",
-   "hora": "01:18:53",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-033 [YOUTUBE] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.95
-  },
-  {
-   "ts": "2026-10-31T01:18:54",
-   "hora": "01:18:54",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-032 [YOUTUBE] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.952
-  },
-  {
-   "ts": "2026-10-31T01:18:55",
-   "hora": "01:18:55",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-031 [YOUTUBE] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.952
-  },
-  {
-   "ts": "2026-10-31T01:18:58",
-   "hora": "01:18:58",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-034 [YOUTUBE] materializada no canvas (480x360)",
-   "nivel": "DONE",
-   "prob": 0.95
-  },
-  {
-   "ts": "2026-10-31T01:19:01",
-   "hora": "01:19:01",
-   "agente": "ORCHESTRATOR",
-   "msg": "MISSÃO CONCLUÍDA [FUI-030]: 4 abas projetadas · Groot 1 P=0.951",
-   "nivel": "READY",
-   "prob": 0.951
-  },
-  {
-   "ts": "2026-10-31T05:18:09",
-   "hora": "05:18:09",
-   "agente": "ORCHESTRATOR",
-   "msg": "MISSÃO INICIADA: \"OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture\" (Alvo: 4 placas FUI)",
-   "nivel": "ACTIVE",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:09",
-   "hora": "05:18:09",
-   "agente": "ORCHESTRATOR",
-   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture\"...",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:28",
-   "hora": "05:18:28",
-   "agente": "AGENT-03 // ARXIV-SCIENTIST",
-   "msg": "2 papers científicos encontrados no ArXiv.org",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:28",
-   "hora": "05:18:28",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "2 streams de vídeo encontrados no YouTube",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:28",
-   "hora": "05:18:28",
-   "agente": "AGENT-02 // WEB-IMAGE-RECON",
-   "msg": "1 imagens táticas indexadas da Web/Wikimedia",
-   "nivel": "SCANNING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:28",
-   "hora": "05:18:28",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "Auditando 5 referências via SystemOneRequest (marcyano/Groot-1)...",
-   "nivel": "CALIBRATING",
-   "prob": null
-  },
-  {
-   "ts": "2026-10-31T05:18:29",
-   "hora": "05:18:29",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-036 [WEB]: P(relevância) = 0.721 → NEUTRA",
-   "nivel": "LOCKED",
-   "prob": 0.721
-  },
-  {
-   "ts": "2026-10-31T05:18:29",
-   "hora": "05:18:29",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-037 [YOUTUBE]: P(relevância) = 0.940 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.94
-  },
-  {
-   "ts": "2026-10-31T05:18:30",
-   "hora": "05:18:30",
-   "agente": "AGENT-02 // WEB-IMAGE-RECON",
-   "msg": "Placa FUI-036 [WEB] materializada no canvas (474x315)",
-   "nivel": "DONE",
-   "prob": 0.721
-  },
-  {
-   "ts": "2026-10-31T05:18:30",
-   "hora": "05:18:30",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-038 [ARXIV]: P(relevância) = 0.825 → FAVORITA",
-   "nivel": "LOCKED",
-   "prob": 0.825
-  },
-  {
-   "ts": "2026-10-31T05:18:30",
-   "hora": "05:18:30",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-037 [YOUTUBE] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.94
-  },
-  {
-   "ts": "2026-10-31T05:18:30",
-   "hora": "05:18:30",
-   "agente": "GROOT-1 // CALIBRATOR",
-   "msg": "FUI-039 [YOUTUBE]: P(relevância) = 0.940 → APROVADA",
-   "nivel": "LOCKED",
-   "prob": 0.94
-  },
-  {
-   "ts": "2026-10-31T05:18:31",
-   "hora": "05:18:31",
-   "agente": "AGENT-05 // YOUTUBE-RECON",
-   "msg": "Placa FUI-039 [YOUTUBE] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.94
-  },
-  {
-   "ts": "2026-10-31T05:18:33",
-   "hora": "05:18:33",
-   "agente": "AGENT-03 // ARXIV-SCIENTIST",
-   "msg": "Placa FUI-038 [ARXIV] materializada no canvas (1280x720)",
-   "nivel": "DONE",
-   "prob": 0.825
-  },
-  {
-   "ts": "2026-10-31T05:18:33",
-   "hora": "05:18:33",
-   "agente": "ORCHESTRATOR",
-   "msg": "MISSÃO CONCLUÍDA [FUI-035]: 4 abas projetadas · Groot 1 P=0.856",
-   "nivel": "READY",
-   "prob": 0.856
-  },
-  {
    "ts": "2026-10-31T06:36:38",
    "hora": "06:36:38",
    "agente": "ORCHESTRATOR",
@@ -367,14 +119,262 @@
    "msg": "MISSÃO CONCLUÍDA [FUI-040]: 4 abas projetadas · Groot 1 P=0.807",
    "nivel": "READY",
    "prob": 0.807
+  },
+  {
+   "ts": "2026-10-31T08:40:33",
+   "hora": "08:40:33",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"arxiv amilajack reading knowledge graph computer science architecture diagram\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:34",
+   "hora": "08:40:34",
+   "agente": "ORCHESTRATOR",
+   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"arxiv amilajack reading knowledge graph computer science architecture diagram\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "AGENT-06 // ARXIV-DIAGRAM-CV",
+   "msg": "4 diagramas arquiteturais de IA extraídos/sintetizados (Zero-GPU CV)",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "AGENT-03 // ARXIV-SCIENTIST",
+   "msg": "4 papers científicos encontrados no ArXiv.org",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "2 streams de vídeo encontrados no YouTube",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "4 imagens táticas indexadas da Web/Wikimedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 14 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-046 [ARXIV]: P(relevância) = 0.831 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.831
+  },
+  {
+   "ts": "2026-10-31T08:40:50",
+   "hora": "08:40:50",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-047 [ARXIV_DIAGRAM_SYNTH]: P(relevância) = 0.812 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.812
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "AGENT-06 // ARXIV-DIAGRAM-CV",
+   "msg": "Placa FUI-047 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.812
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-048 [ARXIV]: P(relevância) = 0.807 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.807
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "AGENT-06 // DIAGRAM-VISION-CV",
+   "msg": "Placa FUI-046 [ARXIV] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.831
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-049 [ARXIV_DIAGRAM_SYNTH]: P(relevância) = 0.791 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.791
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "AGENT-06 // ARXIV-DIAGRAM-CV",
+   "msg": "Placa FUI-049 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.791
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "AGENT-06 // DIAGRAM-VISION-CV",
+   "msg": "Placa FUI-048 [ARXIV] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.807
+  },
+  {
+   "ts": "2026-10-31T08:40:53",
+   "hora": "08:40:53",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-045]: 4 abas projetadas · Groot 1 P=0.810",
+   "nivel": "READY",
+   "prob": 0.81
+  },
+  {
+   "ts": "2026-10-31T08:48:38",
+   "hora": "08:48:38",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"NORAD C4ISR command control radar F-35 cockpit display\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:40",
+   "hora": "08:48:40",
+   "agente": "ORCHESTRATOR",
+   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"NORAD C4ISR command control radar F-35 cockpit display\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "AGENT-03 // ARXIV-SCIENTIST",
+   "msg": "2 papers científicos encontrados no ArXiv.org",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "2 streams de vídeo encontrados no YouTube",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "4 imagens táticas indexadas da Web/Wikimedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 8 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-051 [WEB]: P(relevância) = 0.819 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.819
+  },
+  {
+   "ts": "2026-10-31T08:48:42",
+   "hora": "08:48:42",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-052 [WEB]: P(relevância) = 0.777 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.777
+  },
+  {
+   "ts": "2026-10-31T08:48:45",
+   "hora": "08:48:45",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "Placa FUI-051 [WEB] materializada no canvas (474x248)",
+   "nivel": "DONE",
+   "prob": 0.819
+  },
+  {
+   "ts": "2026-10-31T08:48:45",
+   "hora": "08:48:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-053 [YOUTUBE]: P(relevância) = 0.953 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.953
+  },
+  {
+   "ts": "2026-10-31T08:48:45",
+   "hora": "08:48:45",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "Placa FUI-052 [WEB] materializada no canvas (474x355)",
+   "nivel": "DONE",
+   "prob": 0.777
+  },
+  {
+   "ts": "2026-10-31T08:48:45",
+   "hora": "08:48:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-054 [ARXIV]: P(relevância) = 0.810 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.81
+  },
+  {
+   "ts": "2026-10-31T08:48:45",
+   "hora": "08:48:45",
+   "agente": "AGENT-03 // ARXIV-SCIENTIST",
+   "msg": "Placa FUI-054 [ARXIV] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.81
+  },
+  {
+   "ts": "2026-10-31T08:48:46",
+   "hora": "08:48:46",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "Placa FUI-053 [YOUTUBE] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.953
+  },
+  {
+   "ts": "2026-10-31T08:48:46",
+   "hora": "08:48:46",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-050]: 4 abas projetadas · Groot 1 P=0.840",
+   "nivel": "READY",
+   "prob": 0.84
   }
  ],
  "agentes": {
   "ORCHESTRATOR": {
    "status": "READY",
-   "ultima_msg": "MISSÃO CONCLUÍDA [FUI-040]: 4 abas projetadas · Groot 1 P=0.807",
-   "atualizado": "2026-10-31T06:36:58",
-   "prob": 0.807
+   "ultima_msg": "MISSÃO CONCLUÍDA [FUI-050]: 4 abas projetadas · Groot 1 P=0.840",
+   "atualizado": "2026-10-31T08:48:46",
+   "prob": 0.84
   },
   "AGENT-01 // VISUAL-MINER": {
    "status": "DONE",
@@ -384,8 +384,8 @@
   },
   "GROOT-1 // CALIBRATOR": {
    "status": "LOCKED",
-   "ultima_msg": "FUI-044 [ARXIV]: P(relevância) = 0.810 → FAVORITA",
-   "atualizado": "2026-10-31T06:36:56",
+   "ultima_msg": "FUI-054 [ARXIV]: P(relevância) = 0.810 → FAVORITA",
+   "atualizado": "2026-10-31T08:48:45",
    "prob": 0.81
   },
   "AGENT-04 // SYNTH-CORE": {
@@ -396,36 +396,36 @@
   },
   "AGENT-06 // ARXIV-DIAGRAM-CV": {
    "status": "DONE",
-   "ultima_msg": "Placa FUI-028 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1400x820)",
-   "atualizado": "2026-10-31T01:03:09",
-   "prob": 0.894
+   "ultima_msg": "Placa FUI-049 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T08:40:53",
+   "prob": 0.791
   },
   "AGENT-05 // YOUTUBE-RECON": {
    "status": "DONE",
-   "ultima_msg": "Placa FUI-043 [YOUTUBE] materializada no canvas (480x360)",
-   "atualizado": "2026-10-31T06:36:58",
-   "prob": 0.951
+   "ultima_msg": "Placa FUI-053 [YOUTUBE] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T08:48:46",
+   "prob": 0.953
   },
   "AGENT-02 // WEB-IMAGE-RECON": {
    "status": "DONE",
-   "ultima_msg": "Placa FUI-042 [WEB] materializada no canvas (142x225)",
-   "atualizado": "2026-10-31T06:36:56",
-   "prob": 0.732
+   "ultima_msg": "Placa FUI-052 [WEB] materializada no canvas (474x355)",
+   "atualizado": "2026-10-31T08:48:45",
+   "prob": 0.777
   },
   "AGENT-06 // DIAGRAM-VISION-CV": {
    "status": "DONE",
-   "ultima_msg": "Placa FUI-029 [ARXIV] materializada no canvas (1280x720)",
-   "atualizado": "2026-10-31T01:03:13",
-   "prob": 0.891
+   "ultima_msg": "Placa FUI-048 [ARXIV] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T08:40:53",
+   "prob": 0.807
   },
   "AGENT-03 // ARXIV-SCIENTIST": {
    "status": "DONE",
-   "ultima_msg": "Placa FUI-044 [ARXIV] materializada no canvas (1280x720)",
-   "atualizado": "2026-10-31T06:36:56",
+   "ultima_msg": "Placa FUI-054 [ARXIV] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T08:48:45",
    "prob": 0.81
   }
  },
- "groot_prob": 0.807,
+ "groot_prob": 0.84,
  "ativo": false,
  "query": "NORAD C4ISR command control radar F-35 cockpit display"
 }

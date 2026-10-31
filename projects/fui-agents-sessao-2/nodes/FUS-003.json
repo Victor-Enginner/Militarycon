@@ -1,0 +1,49 @@
+{
+ "id": "FUS-003",
+ "tipo": "pedido",
+ "criado": "2026-10-31T10:25:10",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUS-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] notícias urgentes de hoje",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T10:25:10",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUS-004",
+  "FUS-005",
+  "FUS-006",
+  "FUS-007"
+ ],
+ "atualizado": "2026-10-31T10:25:20",
+ "variacoes": [
+  {
+   "nome": "[0.73] [NOTÍCIA] Evacuees from Russia-occupie",
+   "prompt": "SCAN [0.734] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.bbc.co.uk/news/articles/cqx2818elrnzo?at_medium=RSS&at_campaign=rss · Residents left the devastated city on Friday following a ceasefire brokered by US First Lady Melania Trump.",
+   "tese": "SCAN [0.734] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.73] [NOTÍCIA] Filmado no Ceará e indicado ",
+   "prompt": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://g1.globo.com/ce/ceara/noticia/2026/10/31/feito-pipa-tem-pre-estreia-em-fortaleza.ghtml · Lázaro Ramos comenta expectativa sobre indicação de \"Feito Pipa\" ao Oscar 2027 \"Feito Pipa\", filme cearense gravado em Quixadá e escolhido para representar o Brasil na disputa por uma vaga na categoria de Melhor Filme Internacional do Oscar 2027, estreia em todo o País no dia 5 de novembro. Nesta sexta-feira (30), o longa teve pré-estreia oficial em Fortaleza, com presença do…",
+   "tese": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.73] [NOTÍCIA] On the Norway-Russia border,",
+   "prompt": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.aljazeera.com/features/longform/2026/10/31/on-the-norway-russia-border-the-sami-people-face-a-growing-divide?traffic_source=rss · As Russia’s war in Ukraine reshapes this Arctic frontier, Sámi communities struggle to sustain cross-border traditions.",
+   "tese": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.72] [NOTÍCIA] Cena Musical, da TV Brasil e",
+   "prompt": "SCAN [0.720] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://agenciabrasil.ebc.com.br/cultura/noticia/2026-10/cena-musical-da-tv-brasil-exibe-show-exclusivo-do-sambista-caxtrinho · Com o show exclusivo Queda Livre , o cantor e compositor Caxtrinho repensa o samba a partir de uma estética experimental e enxerga o país pela perspectiva da Baixada Fluminense no programa Cena Musical que a TV Brasil exibe neste sábado (31), às 23h. A performance baseada no repertório autoral do álbum homônimo mostra o reflexo de um Rio de Janeiro pouco visto pela mídia e…",
+   "tese": "SCAN [0.720] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T10:25:20",
+ "custo": 0.0
+}

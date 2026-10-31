@@ -1,0 +1,45 @@
+{
+ "id": "FUI-047",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:40:50",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "8ddc9219",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.812] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-06 // ARXIV-DIAGRAM-CV [ARXIV_DIAGRAM_SYNTH]\nFonte: https://arxiv.org/pdf/2604.08224\nResumo: Framework de Treinamento em Simulação Multi-Agente (Scenario Synthesis → Actor Simulation → Autorater Rubric & GRPO RL Update + Radar 6 Eixos).",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:40:53"
+  }
+ ],
+ "pedido": "FUI-045",
+ "nome": "[0.81] [ARXIV DIAGRAM #2] Training in Simulat",
+ "prompt": "TRACKING [0.812] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/pdf/2604.08224 · Framework de Treinamento em Simulação Multi-Agente (Scenario Synthesis → Actor Simulation → Autorater Rubric & GRPO RL Update + Radar 6 Eixos).",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.812,
+ "groot_veredito": "TRACKING [0.812] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://arxiv.org/pdf/2604.08224",
+ "agente_id": "AGENT-06 // ARXIV-DIAGRAM-CV",
+ "subtipo": "arxiv_diagram_synth",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": "https://arxiv.org/pdf/2604.08224",
+ "arxiv_id": "arXiv:2604.08224 [cs.LG / cs.CL]",
+ "autores": null,
+ "resumo": "Framework de Treinamento em Simulação Multi-Agente (Scenario Synthesis → Actor Simulation → Autorater Rubric & GRPO RL Update + Radar 6 Eixos).",
+ "atualizado": "2026-10-31T08:49:21",
+ "arquivo": "images/FUI-047.png",
+ "thumb": "thumbs/FUI-047.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0,
+ "desloc": {
+  "x": 1152,
+  "y": -273
+ }
+}

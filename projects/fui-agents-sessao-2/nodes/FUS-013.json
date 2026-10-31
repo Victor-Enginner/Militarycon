@@ -1,0 +1,44 @@
+{
+ "id": "FUS-013",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "79da25b0",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.859] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-10 // DATA-VIZ [GRAFICO]\nFonte: https://openalex.org/works?search=intelig%C3%AAncia%20artificial\nResumo: 264.168 obras citam \"inteligência artificial\" entre 2011 e 2026; o pico foi em 2026 (68.399). 2026 está em andamento.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:34"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.86] [GRÁFICO] Publicações por ano: intelig",
+ "prompt": "TRACKING [0.859] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://openalex.org/works?search=intelig%C3%AAncia%20artificial · 264.168 obras citam \"inteligência artificial\" entre 2011 e 2026; o pico foi em 2026 (68.399). 2026 está em andamento.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.859,
+ "groot_veredito": "TRACKING [0.859] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://openalex.org/works?search=intelig%C3%AAncia%20artificial",
+ "agente_id": "AGENT-10 // DATA-VIZ",
+ "subtipo": "grafico",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "OpenAlex",
+ "publicado": "2026",
+ "resumo": "264.168 obras citam \"inteligência artificial\" entre 2011 e 2026; o pico foi em 2026 (68.399). 2026 está em andamento.",
+ "atualizado": "2026-10-31T11:02:07",
+ "arquivo": "images/FUS-013.png",
+ "thumb": "thumbs/FUS-013.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0,
+ "recolhido": true
+}

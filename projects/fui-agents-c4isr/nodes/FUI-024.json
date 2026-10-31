@@ -11,12 +11,14 @@
  "intencao": "🔍 [VOZ // AGENTES] cyberpunk FUI holographic interface HUD radar",
  "quantidade": 4,
  "modelo": "marciano/groot-1-research",
- "status": "trabalhando",
+ "status": "erro",
  "iniciado_em": "2026-10-30T23:17:27",
  "midia": "imagem",
  "aspecto": "16:9",
  "resolucao": "1K",
  "literal": false,
  "saidas": [],
- "atualizado": "2026-10-30T23:17:27"
+ "atualizado": "2026-10-31T08:52:08",
+ "erro": "interrompida: o servidor parou antes de a missão terminar",
+ "concluido_em": "2026-10-31T08:52:08"
 }

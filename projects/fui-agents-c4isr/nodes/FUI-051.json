@@ -1,0 +1,45 @@
+{
+ "id": "FUI-051",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:48:42",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "11456d00",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.819] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics\nResumo: Imagem Web indexada em tempo real · Origem: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:48:45"
+  }
+ ],
+ "pedido": "FUI-050",
+ "nome": "[0.82] panoramic display F-35 cockpit avionic",
+ "prompt": "TRACKING [0.819] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics · Imagem Web indexada em tempo real · Origem: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.819,
+ "groot_veredito": "TRACKING [0.819] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics",
+ "atualizado": "2026-10-31T08:50:37",
+ "arquivo": "images/FUI-051.png",
+ "thumb": "thumbs/FUI-051.jpg",
+ "largura": 474,
+ "altura": 248,
+ "custo": 0.0,
+ "desloc": {
+  "x": -1157,
+  "y": -825
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "id": "FUS-017",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "1edccd6f",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.856] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html\nResumo: Imagem Web indexada em tempo real · Origem: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:35"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.86] A.C.S. Tech Finance: As 5 notícias mai",
+ "prompt": "TRACKING [0.856] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html · Imagem Web indexada em tempo real · Origem: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.856,
+ "groot_veredito": "TRACKING [0.856] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": null,
+ "publicado": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html",
+ "atualizado": "2026-10-31T10:39:35",
+ "arquivo": "images/FUS-017.png",
+ "thumb": "thumbs/FUS-017.jpg",
+ "largura": 474,
+ "altura": 291,
+ "custo": 0.0
+}

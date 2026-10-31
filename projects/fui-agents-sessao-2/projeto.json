@@ -1,0 +1,20 @@
+{
+ "slug": "fui-agents-sessao-2",
+ "nome": "FUI Agents Sessão 2",
+ "prefixo": "FUS",
+ "tipo": "webapp",
+ "criado": "2026-10-31T09:00:36",
+ "padroes": {
+  "modelo": "openai/gpt-image-2",
+  "aspecto": "16:9",
+  "resolucao": "1K",
+  "quantidade": 3
+ },
+ "tetos": {
+  "imagens_por_pedido": 6,
+  "diario_usd": 20.0,
+  "video_por_pedido_usd": 2.0
+ },
+ "contador": 19,
+ "layout": "pilha"
+}

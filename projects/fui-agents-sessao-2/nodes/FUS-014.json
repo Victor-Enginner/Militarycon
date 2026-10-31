@@ -1,0 +1,43 @@
+{
+ "id": "FUS-014",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "8f42547c",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.899] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf\nResumo: Imagem Web indexada em tempo real · Origem: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:34"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.90] Inteligência Artificial em Foco: As Pr",
+ "prompt": "LOCKED [0.899] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf · Imagem Web indexada em tempo real · Origem: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.899,
+ "groot_veredito": "LOCKED [0.899] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": null,
+ "publicado": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf",
+ "atualizado": "2026-10-31T10:39:34",
+ "arquivo": "images/FUS-014.png",
+ "thumb": "thumbs/FUS-014.jpg",
+ "largura": 474,
+ "altura": 266,
+ "custo": 0.0
+}

@@ -1,0 +1,43 @@
+{
+ "id": "FUS-004",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:25:19",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "1c443ae6",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.734] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-07 // NEWS-WIRE [NOTICIA]\nFonte: https://www.bbc.co.uk/news/articles/cqx2818elrnzo?at_medium=RSS&at_campaign=rss\nResumo: Residents left the devastated city on Friday following a ceasefire brokered by US First Lady Melania Trump.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:25:20"
+  }
+ ],
+ "pedido": "FUS-003",
+ "nome": "[0.73] [NOTÍCIA] Evacuees from Russia-occupie",
+ "prompt": "SCAN [0.734] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.bbc.co.uk/news/articles/cqx2818elrnzo?at_medium=RSS&at_campaign=rss · Residents left the devastated city on Friday following a ceasefire brokered by US First Lady Melania Trump.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.734,
+ "groot_veredito": "SCAN [0.734] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.bbc.co.uk/news/articles/cqx2818elrnzo?at_medium=RSS&at_campaign=rss",
+ "agente_id": "AGENT-07 // NEWS-WIRE",
+ "subtipo": "noticia",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "BBC News",
+ "publicado": "31/10/2026",
+ "resumo": "Residents left the devastated city on Friday following a ceasefire brokered by US First Lady Melania Trump.",
+ "atualizado": "2026-10-31T10:25:20",
+ "arquivo": "images/FUS-004.png",
+ "thumb": "thumbs/FUS-004.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

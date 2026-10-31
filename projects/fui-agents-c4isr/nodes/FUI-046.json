@@ -1,0 +1,45 @@
+{
+ "id": "FUI-046",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:40:50",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "4d931930",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.831] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-06 // DIAGRAM-VISION-CV [ARXIV]\nFonte: https://arxiv.org/abs/2604.08224\nResumo: Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 2 : Community theme evolution across three capability layers. The stacked layers—Weights, Context, and Harness—show",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:40:53"
+  }
+ ],
+ "pedido": "FUI-045",
+ "nome": "[0.83] [DIAGRAMA arXiv:2604.08224] Figure 2 :",
+ "prompt": "TRACKING [0.831] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2604.08224 · Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 2 : Community theme evolution across three capability layers. The stacked layers—Weights, Context, and Harness—show how the center of gravity in the LLM agent community has shifted outward over time, from parametric knowledge and prompting toward harness-level infrastructure such as tool ecosystems, protocols, skills, and multi-agent orchestration.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.831,
+ "groot_veredito": "TRACKING [0.831] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://arxiv.org/abs/2604.08224",
+ "agente_id": "AGENT-06 // DIAGRAM-VISION-CV",
+ "subtipo": "arxiv",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": "https://arxiv.org/pdf/2604.08224.pdf",
+ "arxiv_id": "2604.08224 [DIAGRAM CV]",
+ "autores": null,
+ "resumo": "Figure 2 : Community theme evolution across three capability layers. The stacked layers—Weights, Context, and Harness—show how the center of gravity in the LLM agent community has shifted outward over time, from parametric knowledge and prompting toward harness-level infrastructure such as tool ecosystems, protocols, skills, and multi-agent orchestration.",
+ "atualizado": "2026-10-31T08:49:18",
+ "arquivo": "images/FUI-046.png",
+ "thumb": "thumbs/FUI-046.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0,
+ "desloc": {
+  "x": 1003,
+  "y": -352
+ }
+}

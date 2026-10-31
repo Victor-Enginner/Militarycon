@@ -1,0 +1,43 @@
+{
+ "id": "FUS-016",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "d4449e9e",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.850] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-08 // WIKI-SCAN [WIKI]\nFonte: https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_generativa\nResumo: Inteligência artificial generativa (IA generativa ou GenAI) é um ramo da inteligência artificial que usa modelos generativos para produzir texto, imagens, vídeo, áudio, código de programação e outros tipos de dados digit",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:35"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.85] [WIKIPEDIA] Inteligência artificial ge",
+ "prompt": "TRACKING [0.850] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_generativa · Inteligência artificial generativa (IA generativa ou GenAI) é um ramo da inteligência artificial que usa modelos generativos para produzir texto, imagens, vídeo, áudio, código de programação e outros tipos de dados digitais. Esses modelos aprendem os padrões e as estruturas presentes nos seus dados de treinamento e os usam para criar conteúdo novo em resposta a uma entrada…",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.85,
+ "groot_veredito": "TRACKING [0.850] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_generativa",
+ "agente_id": "AGENT-08 // WIKI-SCAN",
+ "subtipo": "wiki",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "Wikipedia (pt)",
+ "publicado": null,
+ "resumo": "Inteligência artificial generativa (IA generativa ou GenAI) é um ramo da inteligência artificial que usa modelos generativos para produzir texto, imagens, vídeo, áudio, código de programação e outros tipos de dados digitais. Esses modelos aprendem os padrões e as estruturas presentes nos seus dados de treinamento e os usam para criar conteúdo novo em resposta a uma entrada…",
+ "atualizado": "2026-10-31T10:39:35",
+ "arquivo": "images/FUS-016.png",
+ "thumb": "thumbs/FUS-016.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

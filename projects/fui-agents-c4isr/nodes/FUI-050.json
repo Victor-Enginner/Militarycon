@@ -1,0 +1,49 @@
+{
+ "id": "FUI-050",
+ "tipo": "pedido",
+ "criado": "2026-10-31T08:48:40",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] NORAD C4ISR command control radar F-35 cockpit display",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T08:48:40",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-051",
+  "FUI-052",
+  "FUI-053",
+  "FUI-054"
+ ],
+ "atualizado": "2026-10-31T08:48:46",
+ "variacoes": [
+  {
+   "nome": "[0.82] panoramic display F-35 cockpit avionic",
+   "prompt": "TRACKING [0.819] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics · Imagem Web indexada em tempo real · Origem: https://www.militaryaerospace.com/sensors/article/14276510/panoramic-display-f35-cockpit-avionics",
+   "tese": "TRACKING [0.819] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.78] The F-35 Cockpit | PPTX",
+   "prompt": "SCAN [0.777] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694 · Imagem Web indexada em tempo real · Origem: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694",
+   "tese": "SCAN [0.777] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.95] ▶ [YT] How the F-35 Works (3D Animatio",
+   "prompt": "LOCKED [0.953] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=rdCb2vyEgYE · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: rdCb2vyEgYE · Query: NORAD C4ISR command control radar F-35 cockpit display",
+   "tese": "LOCKED [0.953] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.81] [ArXiv:2406.04723v3] A Deep Automotive",
+   "prompt": "TRACKING [0.810] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2406.04723v3 · [eess.SP · 2024-06-07] Autores: Ignacio Roldan, Andras Palffy, Julian F. P. Kooij, Dariu M. Gavrila +2. Abstract: The detection of multiple extended targets in complex environments using high-resolution automotive radar is considered. A data-driven approach is proposed where unlabeled synchronized lidar data is used as ground truth to train a neural network with only radar data as input. To this end, the novel, large-scale, real-life, and multi-sensor RaDelft dataset has been recorded using a demonstrator vehicle in different locations in the city of Delft. The dataset, as well as the documentation and example code, is publicly available for those researchers in the field of automotive radar or machine perception. The proposed data-driven detector is able to generate lidar-like point clouds using only radar data from a high-resolution system, which preserves the shape and size of extended targets. The results are compared against conventional CFAR detectors as well as variations of the method to emulate the available approaches in the literature, using the probability of detection, the probability of false alarm, and the Chamfer distance as performance metrics. Moreover, an ablation study was carried out to assess the impact of Doppler and temporal information on detection performance. The proposed method outperforms the different baselines in terms of Chamfer distance, achieving a reduction of 75% against conventional CFAR detectors and 10% against the modified state-of-the-art deep learning-based approaches.",
+   "tese": "TRACKING [0.810] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T08:48:46",
+ "custo": 0.0
+}

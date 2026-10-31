@@ -1,0 +1,43 @@
+{
+ "id": "FUS-007",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:25:19",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "c0431dfa",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.720] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-07 // NEWS-WIRE [NOTICIA]\nFonte: https://agenciabrasil.ebc.com.br/cultura/noticia/2026-10/cena-musical-da-tv-brasil-exibe-show-exclusivo-do-sambista-caxtrinho\nResumo: Com o show exclusivo Queda Livre , o cantor e compositor Caxtrinho repensa o samba a partir de uma estética experimental e enxerga o país pela perspectiva da Baixada Fluminense no programa Cena Musical que a TV Brasil ex",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:25:20"
+  }
+ ],
+ "pedido": "FUS-003",
+ "nome": "[0.72] [NOTÍCIA] Cena Musical, da TV Brasil e",
+ "prompt": "SCAN [0.720] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://agenciabrasil.ebc.com.br/cultura/noticia/2026-10/cena-musical-da-tv-brasil-exibe-show-exclusivo-do-sambista-caxtrinho · Com o show exclusivo Queda Livre , o cantor e compositor Caxtrinho repensa o samba a partir de uma estética experimental e enxerga o país pela perspectiva da Baixada Fluminense no programa Cena Musical que a TV Brasil exibe neste sábado (31), às 23h. A performance baseada no repertório autoral do álbum homônimo mostra o reflexo de um Rio de Janeiro pouco visto pela mídia e…",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.72,
+ "groot_veredito": "SCAN [0.720] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://agenciabrasil.ebc.com.br/cultura/noticia/2026-10/cena-musical-da-tv-brasil-exibe-show-exclusivo-do-sambista-caxtrinho",
+ "agente_id": "AGENT-07 // NEWS-WIRE",
+ "subtipo": "noticia",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "Agência Brasil",
+ "publicado": "31/10/2026",
+ "resumo": "Com o show exclusivo Queda Livre , o cantor e compositor Caxtrinho repensa o samba a partir de uma estética experimental e enxerga o país pela perspectiva da Baixada Fluminense no programa Cena Musical que a TV Brasil exibe neste sábado (31), às 23h. A performance baseada no repertório autoral do álbum homônimo mostra o reflexo de um Rio de Janeiro pouco visto pela mídia e…",
+ "atualizado": "2026-10-31T10:25:20",
+ "arquivo": "images/FUS-007.png",
+ "thumb": "thumbs/FUS-007.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

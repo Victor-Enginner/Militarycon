@@ -1,0 +1,73 @@
+{
+ "id": "FUS-009",
+ "tipo": "pedido",
+ "criado": "2026-10-31T10:39:25",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUS-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] notícias sobre inteligência artificial",
+ "quantidade": 8,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T10:39:25",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUS-010",
+  "FUS-011",
+  "FUS-012",
+  "FUS-013",
+  "FUS-014",
+  "FUS-015",
+  "FUS-016",
+  "FUS-017"
+ ],
+ "atualizado": "2026-10-31T10:39:35",
+ "variacoes": [
+  {
+   "nome": "[0.80] [NOTÍCIA] EU promotes sovereign, trust",
+   "prompt": "TRACKING [0.801] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.dw.com/en/eu-promotes-sovereign-trusted-ai-as-it-struggles-to-catch-us-and-china/a-79667770?maca=en-rss-en-all-1573-rdf · At an international AI summit in Dublin, EU leaders promoted trusted and independent artificial intelligence. Critics question whether the bloc can close the gap with the US and China while maintaining strict regulation.",
+   "tese": "TRACKING [0.801] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.94] ▶ [YT] IA pode acabar com a humanidade",
+   "prompt": "LOCKED [0.941] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=OYZb5ePWvyA · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: OYZb5ePWvyA · Query: notícias sobre inteligência artificial",
+   "tese": "LOCKED [0.941] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.85] [WIKIPEDIA] Aplicações da inteligência",
+   "prompt": "TRACKING [0.851] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.wikipedia.org/wiki/Aplica%C3%A7%C3%B5es_da_intelig%C3%AAncia_artificial · As aplicações da inteligência artificial são várias e em diversas áreas, como na indústria e no meio acadêmico. A inteligência artificial (IA) é a capacidade dos sistemas computacionais de realizar tarefas tipicamente associadas à inteligência humana, tais como aprendizagem, raciocínio, resolução de problemas, percepção e tomada de decisões. O subcampo do aprendizado de…",
+   "tese": "TRACKING [0.851] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.86] [GRÁFICO] Publicações por ano: intelig",
+   "prompt": "TRACKING [0.859] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://openalex.org/works?search=intelig%C3%AAncia%20artificial · 264.168 obras citam \"inteligência artificial\" entre 2011 e 2026; o pico foi em 2026 (68.399). 2026 está em andamento.",
+   "tese": "TRACKING [0.859] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.90] Inteligência Artificial em Foco: As Pr",
+   "prompt": "LOCKED [0.899] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf · Imagem Web indexada em tempo real · Origem: https://pt.linkedin.com/pulse/inteligência-artificial-em-foco-principais-notícias-da-bruno-mello-a8qnf",
+   "tese": "LOCKED [0.899] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.94] ▶ [YT] Fantástico: Futuro das inteligê",
+   "prompt": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=D2KIu_yDeJk · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: D2KIu_yDeJk · Query: notícias sobre inteligência artificial",
+   "tese": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.85] [WIKIPEDIA] Inteligência artificial ge",
+   "prompt": "TRACKING [0.850] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.wikipedia.org/wiki/Intelig%C3%AAncia_artificial_generativa · Inteligência artificial generativa (IA generativa ou GenAI) é um ramo da inteligência artificial que usa modelos generativos para produzir texto, imagens, vídeo, áudio, código de programação e outros tipos de dados digitais. Esses modelos aprendem os padrões e as estruturas presentes nos seus dados de treinamento e os usam para criar conteúdo novo em resposta a uma entrada…",
+   "tese": "TRACKING [0.850] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.86] A.C.S. Tech Finance: As 5 notícias mai",
+   "prompt": "TRACKING [0.856] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html · Imagem Web indexada em tempo real · Origem: https://acstechfinance.blogspot.com/2025/02/as-5-noticias-mais-importantes-sobre.html",
+   "tese": "TRACKING [0.856] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T10:39:35",
+ "custo": 0.0
+}

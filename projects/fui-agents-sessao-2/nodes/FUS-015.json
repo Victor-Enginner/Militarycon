@@ -1,0 +1,43 @@
+{
+ "id": "FUS-015",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "71f6f7f6",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=D2KIu_yDeJk\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: D2KIu_yDeJk · Query: notícias sobre inteligência artificial",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:35"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.94] ▶ [YT] Fantástico: Futuro das inteligê",
+ "prompt": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=D2KIu_yDeJk · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: D2KIu_yDeJk · Query: notícias sobre inteligência artificial",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.94,
+ "groot_veredito": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=D2KIu_yDeJk",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "D2KIu_yDeJk",
+ "embed_url": "https://www.youtube.com/embed/D2KIu_yDeJk?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": null,
+ "publicado": null,
+ "resumo": "Vídeo YouTube: \"Fantástico: Futuro das inteligências artificiais e os perigos para a humanidade\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T10:39:35",
+ "arquivo": "images/FUS-015.png",
+ "thumb": "thumbs/FUS-015.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

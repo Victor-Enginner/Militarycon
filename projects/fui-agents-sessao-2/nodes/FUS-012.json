@@ -1,0 +1,43 @@
+{
+ "id": "FUS-012",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "a222585c",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.851] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-08 // WIKI-SCAN [WIKI]\nFonte: https://pt.wikipedia.org/wiki/Aplica%C3%A7%C3%B5es_da_intelig%C3%AAncia_artificial\nResumo: As aplicações da inteligência artificial são várias e em diversas áreas, como na indústria e no meio acadêmico. A inteligência artificial (IA) é a capacidade dos sistemas computacionais de realizar tarefas tipicamente as",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:34"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.85] [WIKIPEDIA] Aplicações da inteligência",
+ "prompt": "TRACKING [0.851] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://pt.wikipedia.org/wiki/Aplica%C3%A7%C3%B5es_da_intelig%C3%AAncia_artificial · As aplicações da inteligência artificial são várias e em diversas áreas, como na indústria e no meio acadêmico. A inteligência artificial (IA) é a capacidade dos sistemas computacionais de realizar tarefas tipicamente associadas à inteligência humana, tais como aprendizagem, raciocínio, resolução de problemas, percepção e tomada de decisões. O subcampo do aprendizado de…",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.851,
+ "groot_veredito": "TRACKING [0.851] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://pt.wikipedia.org/wiki/Aplica%C3%A7%C3%B5es_da_intelig%C3%AAncia_artificial",
+ "agente_id": "AGENT-08 // WIKI-SCAN",
+ "subtipo": "wiki",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "Wikipedia (pt)",
+ "publicado": null,
+ "resumo": "As aplicações da inteligência artificial são várias e em diversas áreas, como na indústria e no meio acadêmico. A inteligência artificial (IA) é a capacidade dos sistemas computacionais de realizar tarefas tipicamente associadas à inteligência humana, tais como aprendizagem, raciocínio, resolução de problemas, percepção e tomada de decisões. O subcampo do aprendizado de…",
+ "atualizado": "2026-10-31T10:39:34",
+ "arquivo": "images/FUS-012.png",
+ "thumb": "thumbs/FUS-012.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

@@ -25,14 +25,14 @@
  "groot_veredito": "SCAN [0.702] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
  "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic6_2010-07-01.jpg",
  "agente_id": "AGENT-01 // VISUAL-MINER",
- "atualizado": "2026-10-31T00:32:08",
+ "atualizado": "2026-10-31T08:49:08",
  "arquivo": "images/FUI-015.png",
  "thumb": "thumbs/FUI-015.jpg",
  "largura": 1280,
  "altura": 1920,
  "custo": 0.0,
  "desloc": {
-  "x": 1282,
-  "y": -162
+  "x": 1374,
+  "y": 229
  }
 }

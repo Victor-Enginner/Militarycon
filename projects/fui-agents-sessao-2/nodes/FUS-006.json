@@ -1,0 +1,43 @@
+{
+ "id": "FUS-006",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:25:19",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "f5bd9c3f",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-07 // NEWS-WIRE [NOTICIA]\nFonte: https://www.aljazeera.com/features/longform/2026/10/31/on-the-norway-russia-border-the-sami-people-face-a-growing-divide?traffic_source=rss\nResumo: As Russia’s war in Ukraine reshapes this Arctic frontier, Sámi communities struggle to sustain cross-border traditions.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:25:20"
+  }
+ ],
+ "pedido": "FUS-003",
+ "nome": "[0.73] [NOTÍCIA] On the Norway-Russia border,",
+ "prompt": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.aljazeera.com/features/longform/2026/10/31/on-the-norway-russia-border-the-sami-people-face-a-growing-divide?traffic_source=rss · As Russia’s war in Ukraine reshapes this Arctic frontier, Sámi communities struggle to sustain cross-border traditions.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.73,
+ "groot_veredito": "SCAN [0.730] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.aljazeera.com/features/longform/2026/10/31/on-the-norway-russia-border-the-sami-people-face-a-growing-divide?traffic_source=rss",
+ "agente_id": "AGENT-07 // NEWS-WIRE",
+ "subtipo": "noticia",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "Al Jazeera",
+ "publicado": "31/10/2026",
+ "resumo": "As Russia’s war in Ukraine reshapes this Arctic frontier, Sámi communities struggle to sustain cross-border traditions.",
+ "atualizado": "2026-10-31T10:25:20",
+ "arquivo": "images/FUS-006.png",
+ "thumb": "thumbs/FUS-006.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

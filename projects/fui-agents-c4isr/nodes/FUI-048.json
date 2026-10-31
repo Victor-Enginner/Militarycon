@@ -1,0 +1,45 @@
+{
+ "id": "FUI-048",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:40:50",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "46d13db4",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.807] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-06 // DIAGRAM-VISION-CV [ARXIV]\nFonte: https://arxiv.org/abs/2604.08224\nResumo: Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 1 : Externalization as the organizing principle of LLM agent design. Upper panel: The arc of human cognitive extern",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:40:53"
+  }
+ ],
+ "pedido": "FUI-045",
+ "nome": "[0.81] [DIAGRAMA arXiv:2604.08224] Figure 1 :",
+ "prompt": "TRACKING [0.807] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2604.08224 · Diagrama científico extraído por Visão Computacional Zero-GPU do paper arXiv:2604.08224. Legenda: Figure 1 : Externalization as the organizing principle of LLM agent design. Upper panel: The arc of human cognitive externalization from thought through language, writing, printing, to digital computation. Middle panel: The corresponding externalization arc for LLM agents, from weights through three externalization dimensions—Memory (externalized state), Skills (externalized expertise), and Protocols (externalized interaction)—to the Harness that unifies them. Lower panel: A literature landscape mapping representative works onto three capability layers—Weights, Context, and Harness—illustrating how research threads have progressively migrated outward. The parallel between the two arcs encodes a recursive claim: LLM agents achieve reliable agency by externalizing cognitive burdens along the same representational dimensions that have driven human cognitive history.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.807,
+ "groot_veredito": "TRACKING [0.807] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://arxiv.org/abs/2604.08224",
+ "agente_id": "AGENT-06 // DIAGRAM-VISION-CV",
+ "subtipo": "arxiv",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": "https://arxiv.org/pdf/2604.08224.pdf",
+ "arxiv_id": "2604.08224 [DIAGRAM CV]",
+ "autores": null,
+ "resumo": "Figure 1 : Externalization as the organizing principle of LLM agent design. Upper panel: The arc of human cognitive externalization from thought through language, writing, printing, to digital computation. Middle panel: The corresponding externalization arc for LLM agents, from weights through three externalization dimensions—Memory (externalized state), Skills (externalized expertise), and Protocols (externalized interaction)—to the Harness that unifies them. Lower panel: A literature landscape mapping representative works onto three capability layers—Weights, Context, and Harness—illustrating how research threads have progressively migrated outward. The parallel between the two arcs encodes a recursive claim: LLM agents achieve reliable agency by externalizing cognitive burdens along the same representational dimensions that have driven human cognitive history.",
+ "atualizado": "2026-10-31T08:49:43",
+ "arquivo": "images/FUI-048.png",
+ "thumb": "thumbs/FUI-048.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0,
+ "desloc": {
+  "x": 1117,
+  "y": -44
+ }
+}

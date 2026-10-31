@@ -1,0 +1,43 @@
+{
+ "id": "FUS-010",
+ "tipo": "imagem",
+ "criado": "2026-10-31T10:39:34",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "b968d68e",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.801] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-07 // NEWS-WIRE [NOTICIA]\nFonte: https://www.dw.com/en/eu-promotes-sovereign-trusted-ai-as-it-struggles-to-catch-us-and-china/a-79667770?maca=en-rss-en-all-1573-rdf\nResumo: At an international AI summit in Dublin, EU leaders promoted trusted and independent artificial intelligence. Critics question whether the bloc can close the gap with the US and China while maintaining strict regulation.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T10:39:34"
+  }
+ ],
+ "pedido": "FUS-009",
+ "nome": "[0.80] [NOTÍCIA] EU promotes sovereign, trust",
+ "prompt": "TRACKING [0.801] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.dw.com/en/eu-promotes-sovereign-trusted-ai-as-it-struggles-to-catch-us-and-china/a-79667770?maca=en-rss-en-all-1573-rdf · At an international AI summit in Dublin, EU leaders promoted trusted and independent artificial intelligence. Critics question whether the bloc can close the gap with the US and China while maintaining strict regulation.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.801,
+ "groot_veredito": "TRACKING [0.801] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.dw.com/en/eu-promotes-sovereign-trusted-ai-as-it-struggles-to-catch-us-and-china/a-79667770?maca=en-rss-en-all-1573-rdf",
+ "agente_id": "AGENT-07 // NEWS-WIRE",
+ "subtipo": "noticia",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "fonte_nome": "Deutsche Welle",
+ "publicado": "16/10/2026",
+ "resumo": "At an international AI summit in Dublin, EU leaders promoted trusted and independent artificial intelligence. Critics question whether the bloc can close the gap with the US and China while maintaining strict regulation.",
+ "atualizado": "2026-10-31T10:39:34",
+ "arquivo": "images/FUS-010.png",
+ "thumb": "thumbs/FUS-010.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

@@ -1,0 +1,41 @@
+{
+ "id": "FUI-054",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:48:42",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "b9ad75f7",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.810] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-03 // ARXIV-SCIENTIST [ARXIV]\nFonte: https://arxiv.org/abs/2406.04723v3\nResumo: [eess.SP · 2024-06-07] Autores: Ignacio Roldan, Andras Palffy, Julian F. P. Kooij, Dariu M. Gavrila +2. Abstract: The detection of multiple extended targets in complex environments using high-resolution automotive radar ",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:48:45"
+  }
+ ],
+ "pedido": "FUI-050",
+ "nome": "[0.81] [ArXiv:2406.04723v3] A Deep Automotive",
+ "prompt": "TRACKING [0.810] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2406.04723v3 · [eess.SP · 2024-06-07] Autores: Ignacio Roldan, Andras Palffy, Julian F. P. Kooij, Dariu M. Gavrila +2. Abstract: The detection of multiple extended targets in complex environments using high-resolution automotive radar is considered. A data-driven approach is proposed where unlabeled synchronized lidar data is used as ground truth to train a neural network with only radar data as input. To this end, the novel, large-scale, real-life, and multi-sensor RaDelft dataset has been recorded using a demonstrator vehicle in different locations in the city of Delft. The dataset, as well as the documentation and example code, is publicly available for those researchers in the field of automotive radar or machine perception. The proposed data-driven detector is able to generate lidar-like point clouds using only radar data from a high-resolution system, which preserves the shape and size of extended targets. The results are compared against conventional CFAR detectors as well as variations of the method to emulate the available approaches in the literature, using the probability of detection, the probability of false alarm, and the Chamfer distance as performance metrics. Moreover, an ablation study was carried out to assess the impact of Doppler and temporal information on detection performance. The proposed method outperforms the different baselines in terms of Chamfer distance, achieving a reduction of 75% against conventional CFAR detectors and 10% against the modified state-of-the-art deep learning-based approaches.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.81,
+ "groot_veredito": "TRACKING [0.810] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://arxiv.org/abs/2406.04723v3",
+ "agente_id": "AGENT-03 // ARXIV-SCIENTIST",
+ "subtipo": "arxiv",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": "https://arxiv.org/pdf/2406.04723v3.pdf",
+ "arxiv_id": "2406.04723v3 [eess.SP]",
+ "autores": "Ignacio Roldan, Andras Palffy, Julian F. P. Kooij, Dariu M. Gavrila +2 (2024-06-07) · Categoria: eess.SP",
+ "resumo": "The detection of multiple extended targets in complex environments using high-resolution automotive radar is considered. A data-driven approach is proposed where unlabeled synchronized lidar data is used as ground truth to train a neural network with only radar data as input. To this end, the novel, large-scale, real-life, and multi-sensor RaDelft dataset has been recorded using a demonstrator vehicle in different locations in the city of Delft. The dataset, as well as the documentation and example code, is publicly available for those researchers in the field of automotive radar or machine perception. The proposed data-driven detector is able to generate lidar-like point clouds using only radar data from a high-resolution system, which preserves the shape and size of extended targets. The results are compared against conventional CFAR detectors as well as variations of the method to emulate the available approaches in the literature, using the probability of detection, the probability of false alarm, and the Chamfer distance as performance metrics. Moreover, an ablation study was carried out to assess the impact of Doppler and temporal information on detection performance. The proposed method outperforms the different baselines in terms of Chamfer distance, achieving a reduction of 75% against conventional CFAR detectors and 10% against the modified state-of-the-art deep learning-based approaches.",
+ "atualizado": "2026-10-31T08:48:45",
+ "arquivo": "images/FUI-054.png",
+ "thumb": "thumbs/FUI-054.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

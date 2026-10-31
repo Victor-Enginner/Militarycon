@@ -1,0 +1,13 @@
+{
+ "id": "FUS-002",
+ "tipo": "tela",
+ "criado": "2026-10-31T09:00:36",
+ "pos": {
+  "x": 460,
+  "y": 0
+ },
+ "comentarios": [],
+ "titulo": "Principal",
+ "pai": "FUS-001",
+ "atualizado": "2026-10-31T09:00:36"
+}

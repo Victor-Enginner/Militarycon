@@ -1,0 +1,45 @@
+{
+ "id": "FUI-052",
+ "tipo": "imagem",
+ "criado": "2026-10-31T08:48:42",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "1cfd7067",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.777] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694\nResumo: Imagem Web indexada em tempo real · Origem: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T08:48:45"
+  }
+ ],
+ "pedido": "FUI-050",
+ "nome": "[0.78] The F-35 Cockpit | PPTX",
+ "prompt": "SCAN [0.777] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694 · Imagem Web indexada em tempo real · Origem: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.777,
+ "groot_veredito": "SCAN [0.777] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.slideshare.net/slideshow/the-f35-cockpit/12572694",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://www.slideshare.net/slideshow/the-f35-cockpit/12572694",
+ "atualizado": "2026-10-31T08:50:53",
+ "arquivo": "images/FUI-052.png",
+ "thumb": "thumbs/FUI-052.jpg",
+ "largura": 474,
+ "altura": 355,
+ "custo": 0.0,
+ "desloc": {
+  "x": -1141,
+  "y": -685
+ }
+}
