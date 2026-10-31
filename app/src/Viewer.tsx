@@ -5,6 +5,32 @@ import { useCanvas } from './ctx'
 import { ESTADOS, alternarEstado, estadoDaTecla } from './estados'
 import { fuiAudio } from './FuiAudio'
 
+// Player oficial do YouTube (IFrame API): o único jeito de ligar/desligar o som SEM recarregar o vídeo. Antes o botão só mexia
+// no <video> local e o iframe era recarregado pedindo `mute=0`, que o navegador bloqueia (som automático).
+type YTPlayer = { mute(): void; unMute(): void; isMuted(): boolean; setVolume(v: number): void; destroy(): void }
+declare global {
+  interface Window {
+    YT?: { Player: new (el: HTMLElement, opts: unknown) => YTPlayer }
+    onYouTubeIframeAPIReady?: () => void
+  }
+}
+let apiYT: Promise<void> | null = null
+function carregarYT(): Promise<void> {
+  if (window.YT?.Player) return Promise.resolve()
+  if (!apiYT) {
+    apiYT = new Promise<void>((ok, falhou) => {
+      const anterior = window.onYouTubeIframeAPIReady
+      window.onYouTubeIframeAPIReady = () => { anterior?.(); ok() }
+      const s = document.createElement('script')
+      s.src = 'https://www.youtube.com/iframe_api'
+      s.async = true
+      s.onerror = () => { apiYT = null; falhou(new Error('sem acesso ao youtube.com')) }
+      document.head.appendChild(s)
+    })
+  }
+  return apiYT
+}
+
 /** A imagem, vídeo, stream YouTube ou artigo ArXiv em tela cheia: operação 1 mão (Gesto ✌️ ou Pinça 👌), comentários e linhagem. */
 export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void; navegar: (id: string) => void }) {
   const { porId, arv, slug, mudar, acao, copiar, novoPedido, pedidoVideo, estado: projeto } = useCanvas()
@@ -14,7 +40,14 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
   const ehYoutube = no.subtipo === 'youtube' && !!(no.youtube_id || no.embed_url)
   const ehArxiv = no.subtipo === 'arxiv'
   const [verPdfArxiv, setVerPdfArxiv] = useState(false)
-  const [somVideo, setSomVideo] = useState(true)
+  // O vídeo SEMPRE sobe mudo (é o único jeito de o navegador deixar tocar sozinho); o som é ligado depois e o estado mostrado
+  // é o REAL, conferido no player, nunca o desejado.
+  const [somVideo, setSomVideo] = useState(false)
+  const [somBloqueado, setSomBloqueado] = useState(false)
+  const [falhaYT, setFalhaYT] = useState(false)
+  const ytPalcoRef = useRef<HTMLDivElement>(null)
+  const ytRef = useRef<YTPlayer | null>(null)
+  const silenciouRef = useRef(false)  // o usuário pediu mudo: nada religa o som sozinho
   const videoRef = useRef<HTMLVideoElement>(null)
   const [tempo, setTempo] = useState(0)
   const [rodando, setRodando] = useState(true)
@@ -70,6 +103,85 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
     window.addEventListener('fui:viewer-slide', aoPassarPagina)
     return () => window.removeEventListener('fui:viewer-slide', aoPassarPagina)
   }, [irProxima, irAnterior])
+
+  // ---- som do vídeo (YouTube e arquivo local) ----
+  const ligarSomLocal = useCallback((v: HTMLVideoElement) => {
+    v.muted = false
+    v.volume = 1
+    v.play().then(() => { setSomVideo(true); setSomBloqueado(false) }).catch(() => {
+      v.muted = true  // o navegador recusou o som: volta mudo e segue tocando, e avisa
+      void v.play().catch(() => { /* já tocando */ })
+      setSomVideo(false)
+      setSomBloqueado(true)
+    })
+  }, [])
+
+  const aplicarSom = useCallback((ligar: boolean, doUsuario = true) => {
+    if (doUsuario) silenciouRef.current = !ligar
+    const v = videoRef.current
+    if (v) {
+      if (ligar) ligarSomLocal(v)
+      else { v.muted = true; setSomVideo(false); setSomBloqueado(false) }
+    }
+    const p = ytRef.current
+    if (p) {
+      try { if (ligar) { p.unMute(); p.setVolume(100) } else p.mute() } catch { /* player ainda não está pronto */ }
+      if (!ligar) { setSomVideo(false); setSomBloqueado(false) }
+      else {
+        // confere o estado REAL: se o navegador recusou o som, o botão não pode dizer "ON"
+        window.setTimeout(() => {
+          try {
+            const mudo = !ytRef.current || ytRef.current.isMuted()
+            setSomVideo(!mudo)
+            setSomBloqueado(mudo)
+          } catch { /* destruído */ }
+        }, 600)
+      }
+    }
+  }, [ligarSomLocal])
+
+  // cria o player do YouTube mudo; ao ficar pronto, tenta ligar o som (a menos que o usuário tenha pedido mudo)
+  useEffect(() => {
+    if (!ehYoutube || !no.youtube_id) return
+    let cancelado = false
+    setFalhaYT(false)
+    setSomVideo(false)
+    setSomBloqueado(false)
+    carregarYT().then(() => {
+      const palco = ytPalcoRef.current
+      if (cancelado || !palco || !window.YT) return
+      palco.replaceChildren()
+      const alvo = document.createElement('div')
+      palco.appendChild(alvo)
+      ytRef.current = new window.YT.Player(alvo, {
+        videoId: no.youtube_id,
+        width: '100%',
+        height: '100%',
+        playerVars: { autoplay: 1, mute: 1, rel: 0, controls: 1, playsinline: 1, origin: window.location.origin },
+        events: { onReady: () => { if (!cancelado && !silenciouRef.current) aplicarSom(true, false) } },
+      })
+    }).catch(() => { if (!cancelado) setFalhaYT(true) })
+    return () => {
+      cancelado = true
+      try { ytRef.current?.destroy() } catch { /* já destruído */ }
+      ytRef.current = null
+    }
+  }, [ehYoutube, no.youtube_id, aplicarSom])
+
+  // a 1ª interação REAL do usuário (clique, toque ou tecla) libera o som: o navegador só aceita som depois de um gesto de
+  // verdade, e clique sintético (o da mão/pinça) não conta. O próprio botão de som fica de fora para não desfazer o clique dele.
+  useEffect(() => {
+    if (!ehYoutube && !ehVideo) return
+    const aoInteragir = (e: Event) => {
+      if (!e.isTrusted || silenciouRef.current) return
+      if ((e.target as Element | null)?.closest?.('[data-som]')) return
+      aplicarSom(true, false)
+    }
+    window.addEventListener('pointerdown', aoInteragir, { once: true })
+    window.addEventListener('keydown', aoInteragir, { once: true })
+    return () => { window.removeEventListener('pointerdown', aoInteragir); window.removeEventListener('keydown', aoInteragir) }
+  }, [ehYoutube, ehVideo, no.id, aplicarSom])
+  const rotuloSom = somVideo ? 'SOM DO VÍDEO: ON' : somBloqueado ? 'SOM BLOQUEADO: CLIQUE AQUI' : 'SOM DO VÍDEO: MUDO'
   const faixaRef = useRef<HTMLDivElement>(null)
   const pedido = no.tipo === 'imagem' || ehVideo ? porId.get(no.pedido || '') : undefined
   // linhagem: de onde esta imagem (ou vídeo) veio (as entradas do pedido que a gerou) e o que saiu dela (pedidos que a usaram)
@@ -149,16 +261,13 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
           {(ehVideo || ehYoutube) && (
             <button
               type="button"
+              data-som
               className={`fui-btn-nav-1mao ${somVideo ? 'ativo' : ''}`}
-              onClick={() => {
-                const novo = !somVideo
-                setSomVideo(novo)
-                if (videoRef.current) videoRef.current.muted = !novo
-              }}
-              title="Alternar Som do Vídeo no Sistema"
+              onClick={() => aplicarSom(!somVideo)}
+              title={somBloqueado ? 'O navegador bloqueou o som: um clique de mouse ou uma tecla libera' : 'Alternar o som do vídeo'}
             >
               {somVideo ? <Volume2 size={15} /> : <VolumeX size={15} />}
-              {somVideo ? 'SOM DO VÍDEO: ON' : 'SOM DO VÍDEO: MUDO'}
+              {rotuloSom}
             </button>
           )}
           {ehArxiv && no.pdf_url && (
@@ -182,22 +291,28 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
         )}
         <div className={`viewer-img ${animFlip ? `flip-${animFlip}` : ''}`} onClick={clicarImagem} title="Clique para comentar num ponto · Passe a mão ⬅️/➡️ para mudar de página">
           {ehYoutube ? (
-            <div className="fui-embed-palco" onClick={(e) => e.stopPropagation()}>
-              <iframe
-                src={no.youtube_id ? `https://www.youtube.com/embed/${no.youtube_id}?autoplay=1&mute=${somVideo ? 0 : 1}&rel=0&controls=1` : no.embed_url}
-                title={no.nome || no.id}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <div className="fui-embed-palco" ref={ytPalcoRef} onClick={(e) => e.stopPropagation()}>
+              {/* com youtube_id o player é montado por carregarYT() dentro deste contêiner (sem filhos do React); sem ele, o
+                  embed antigo. Se o script do YouTube não carregar (sem internet), a mensagem abaixo substitui o player. */}
+              {falhaYT && <p className="fui-yt-falha">Não consegui carregar o player do YouTube (sem internet?). Use FONTE ORIGINAL.</p>}
+              {!no.youtube_id && no.embed_url && (
+                <iframe src={no.embed_url} title={no.nome || no.id}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+              )}
             </div>
           ) : ehArxiv && verPdfArxiv && no.pdf_url ? (
             <div className="fui-embed-palco" onClick={(e) => e.stopPropagation()}>
               <iframe src={no.pdf_url} title={no.nome || no.id} />
             </div>
           ) : ehVideo ? (
-            <video ref={videoRef} src={arquivoUrl(slug, no.arquivo)} autoPlay muted={!somVideo} loop playsInline
+            <video ref={videoRef} src={arquivoUrl(slug, no.arquivo)} autoPlay muted loop playsInline
               onTimeUpdate={(e) => setTempo(e.currentTarget.currentTime)}
-              onLoadedMetadata={(e) => { e.currentTarget.volume = 1.0; setTotal(e.currentTarget.duration || 0) }} onPlay={() => setRodando(true)} onPause={() => setRodando(false)} />
+              onLoadedMetadata={(e) => {
+                e.currentTarget.volume = 1.0
+                setTotal(e.currentTarget.duration || 0)
+                setSomVideo(false); setSomBloqueado(false)
+                if (!silenciouRef.current) ligarSomLocal(e.currentTarget)  // sobe mudo (autoplay) e tenta o som; se recusarem, avisa
+              }} onPlay={() => setRodando(true)} onPause={() => setRodando(false)} />
           ) : (
             <img src={arquivoUrl(slug, no.arquivo)} alt={no.nome || no.titulo || no.id} draggable={false} />
           )}
@@ -216,8 +331,8 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
               onClick={alternarVideo}>
               {rodando ? <Pause size={16} /> : <Play size={16} />}
             </button>
-            <button type="button" className="ico" title={somVideo ? 'Silenciar vídeo' : 'Ouvir som do vídeo'}
-              onClick={() => { const novo = !somVideo; setSomVideo(novo); if (videoRef.current) videoRef.current.muted = !novo }}>
+            <button type="button" data-som className="ico" title={somVideo ? 'Silenciar vídeo' : somBloqueado ? 'O navegador bloqueou o som: clique para liberar' : 'Ouvir som do vídeo'}
+              onClick={() => aplicarSom(!somVideo)}>
               {somVideo ? <Volume2 size={16} /> : <VolumeX size={16} />}
             </button>
             <span className="tempo">{mmss(tempo)} / {mmss(duracao)}</span>
