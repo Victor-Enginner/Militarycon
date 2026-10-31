@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react'
 import { Canvas } from './Canvas'
 import { PaginaFogo } from './Fogo'
-import { Home } from './Home'
 
-/** #/p/<slug> é o canvas; #/p/<slug>/f/<código> é a página de uma imagem com fogo. */
+/** #/ abre a Visão Geral (Hero); #/p/<slug> abre Agentes Espaciais; #/p/<slug>/f/<código> abre a página de fogo. */
 function rota() {
   const m = location.hash.match(/^#\/p\/([a-z0-9-]+)(?:\/f\/([A-Z]+-\d+))?/)
-  return m ? { slug: m[1], fogo: m[2] || null } : null
+  if (m) return { slug: m[1], fogo: m[2] || null, aba: 'agents' as const }
+  if (location.hash === '#/camera') return { slug: 'fui-agents-c4isr', fogo: null, aba: 'camera' as const }
+  return { slug: 'fui-agents-c4isr', fogo: null, aba: 'hero' as const }
 }
 
 export default function App() {
   const [r, setR] = useState(rota)
-  const slug = r?.slug
   useEffect(() => {
     const mudou = () => setR(rota())
     window.addEventListener('hashchange', mudou)
     return () => window.removeEventListener('hashchange', mudou)
   }, [])
   useEffect(() => {
-    document.title = r?.fogo ? `${r.fogo} · Neo Stitch` : slug ? `${slug} · Neo Stitch` : 'Neo Stitch'
-  }, [slug, r?.fogo])
-  if (r?.fogo) return <PaginaFogo key={`${r.slug}/${r.fogo}`} slug={r.slug} id={r.fogo} />
-  return slug ? <Canvas key={slug} slug={slug} /> : <Home />
+    document.title = r.fogo
+      ? `${r.fogo} · AGENTES FUI`
+      : r.aba === 'hero'
+        ? 'AGENTES FUI · Cognitive Spatial OS'
+        : `${r.slug} · AGENTES FUI`
+  }, [r.slug, r.fogo, r.aba])
+  if (r.fogo) return <PaginaFogo key={`${r.slug}/${r.fogo}`} slug={r.slug} id={r.fogo} />
+  return <Canvas key={r.slug} slug={r.slug} abaInicial={r.aba} />
 }

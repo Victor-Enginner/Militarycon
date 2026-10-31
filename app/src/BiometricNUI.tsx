@@ -1,4 +1,4 @@
-import { Activity, BookOpen, Camera, CameraOff, Cpu, Eye, Hand, Mic, MicOff, Play, Radar, Sparkles, Volume2, VolumeX, Zap } from 'lucide-react'
+import { Eye, EyeOff, Mic, MicOff, Send, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import type { TelemetriaFUI } from './api'
 import { fuiAudio } from './FuiAudio'
@@ -13,13 +13,6 @@ export type AcoesEspaciaisFUI = {
   dispararPesquisaAgentes: (query: string) => void
   comandoVozAcao: (acao: 'aprovar' | 'favoritar' | 'descartar' | 'abrir' | 'fechar' | 'ampliar' | 'reduzir' | 'enquadrar' | 'video') => void
 }
-
-const MISSOES_RAPIDAS = [
-  { rotulo: 'ArXiv 2604.08224: Diagramas IA', query: 'arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar', icone: 'arxiv' },
-  { rotulo: 'YouTube: FUI & Iron Man HUD', query: 'youtube FUI HUD interface reel Territory Studio cockpit', icone: 'yt' },
-  { rotulo: 'Militar: AirForce Command Stack', query: 'NORAD C4ISR command control radar F-35 cockpit display', icone: 'mil' },
-  { rotulo: 'CERN LHC & Telemetria Web', query: 'CERN LHC control room particle detector telemetry interface', icone: 'web' },
-]
 
 declare global {
   interface Window {
@@ -145,10 +138,18 @@ export const BiometricNUI = memo(function BiometricNUI({
   telemetria,
   acoes,
   viewerAberto,
+  isZenMode = false,
+  onToggleZenMode,
+  audioAtivo,
+  onToggleAudio,
 }: {
   telemetria?: TelemetriaFUI
   acoes: AcoesEspaciaisFUI
   viewerAberto?: boolean
+  isZenMode?: boolean
+  onToggleZenMode?: () => void
+  audioAtivo?: boolean
+  onToggleAudio?: () => void
 }) {
   const [camAtiva, setCamAtiva] = useState(false)
   const [camStatus, setCamStatus] = useState<'OFFLINE' | 'LOADING ML...' | 'BIOMETRIC LOCK' | '2-HAND ZOOM' | 'SEARCHING HANDS'>('OFFLINE')
@@ -801,6 +802,8 @@ export const BiometricNUI = memo(function BiometricNUI({
     ultimoAtivoRef.current = agoraAtivo
   }, [telemetria?.ativo])
 
+  const [searchQuery, setSearchQuery] = useState('')
+  const [gestoSimulado, setGestoSimulado] = useState<{ label: string; desc: string } | null>(null)
   const [modalCorrAberto, setModalCorrAberto] = useState(false)
   const [abaCorr, setAbaCorr] = useState<'agentes' | 'llms' | 'doutrinas' | 'corr'>('agentes')
   const [dadosCorr, setDadosCorr] = useState<{
@@ -822,8 +825,47 @@ export const BiometricNUI = memo(function BiometricNUI({
     }
   }, [dadosCorr])
 
-  const grootProb = telemetria?.groot_prob ?? 0.879
-  const logs = (telemetria?.logs || []).slice(-5)
+  const acionarGestoRapido = (tipo: 'pan' | 'zoom' | 'pinch' | 'reset') => {
+    fuiAudio.pinchLock()
+    if (tipo === 'pan') {
+      acoes.panBy(65, 0)
+      setGestoSimulado({ label: '1 MÃO FECHADA', desc: 'Mover Cenário (Pan)' })
+    } else if (tipo === 'zoom') {
+      acoes.zoomByFactor(1.18)
+      setGestoSimulado({ label: '2 MÃOS FECHADAS', desc: 'Ampliar / Reduzir Cena' })
+    } else if (tipo === 'pinch') {
+      acoes.selecionarNoEm(window.innerWidth / 2, window.innerHeight / 2, false)
+      setGestoSimulado({ label: 'PINÇA DETECTADA', desc: 'Clicar / Arrastar Aba' })
+    } else {
+      acoes.comandoVozAcao('fechar')
+      acoes.comandoVozAcao('enquadrar')
+      setGestoSimulado({ label: 'GESTO "V"', desc: 'Fechar Tela / Reset' })
+    }
+  }
+
+  const enviarPesquisaForm = (e: React.FormEvent) => {
+    e.preventDefault()
+    const q = searchQuery.trim()
+    if (!q) return
+    fuiAudio.voiceDispatch()
+    acoes.dispararPesquisaAgentes(q)
+    setSearchQuery('')
+  }
+
+  const grootProb = telemetria?.groot_prob ?? 0.951
+  const logs = (telemetria?.logs || []).slice(-6)
+  const labelGestoAtivo = pinchScaleAtivo
+    ? 'MODO: 2H ZOOM'
+    : uiR.active
+      ? `MODO: ${uiR.modo}`
+      : gestoSimulado?.label || 'MODO: OPEN'
+  const descGestoAtivo = pinchScaleAtivo
+    ? '2 Mãos Ampliando Cena'
+    : uiR.active
+      ? uiR.hoverId
+        ? `Alvo: ${uiR.hoverId}`
+        : 'Mão aberta / Rastreando'
+      : gestoSimulado?.desc || 'Mão aberta / Rastreando'
 
   return (
     <>
@@ -876,7 +918,7 @@ export const BiometricNUI = memo(function BiometricNUI({
           ref={zoomLabelRef}
           x={0}
           y={0}
-          fill="#00ffcc"
+          fill="#ff5500"
           fontSize="11"
           fontWeight="700"
           fontFamily="monospace"
@@ -886,32 +928,43 @@ export const BiometricNUI = memo(function BiometricNUI({
         </text>
       </svg>
 
-      {/* HUD TÁTICO C4ISR / GROOT 1 / BIOMETRIA / VOZ */}
-      <aside className={`fui-hud-painel ${hudCompacto ? 'compacto' : ''}`} onClick={(e) => e.stopPropagation()}>
+      {/* PAINEL ESQUERDO LIQUID GLASS + LARANJA FLUORESCENTE (#FF5500) - IDÊNTICO AO FUIAGENTSfront */}
+      <aside
+        className={`fui-hud-painel liquid-glass-panel ${hudCompacto ? 'compacto' : ''}`}
+        style={{ display: isZenMode ? 'none' : undefined }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="fui-hud-cabecalho">
-          <span className="fui-led-vivo" />
+          <span className="lg-orange-dot" />
           <div className="fui-hud-titulos">
             <strong>FUI AGENTS // COGNITIVE SPATIAL OS</strong>
-            <span>ARXIV + YOUTUBE + WEB + GROOT 1 (MARCIANO THEORY)</span>
+            <span>ARXIV + YOUTUBE + WEB + GROOT 1</span>
           </div>
           <button
             type="button"
             className="fui-btn-mini"
-            title={somAtivo ? 'Silenciar sintetizador FUI' : 'Ativar som FUI'}
+            title={(audioAtivo ?? somAtivo) ? 'Silenciar sintetizador FUI' : 'Ativar som FUI'}
             onClick={() => {
-              fuiAudio.muted = somAtivo
-              setSomAtivo(!somAtivo)
+              const atual = audioAtivo ?? somAtivo
+              fuiAudio.muted = atual
+              setSomAtivo(!atual)
+              onToggleAudio?.()
             }}
           >
-            {somAtivo ? <Volume2 size={13} /> : <VolumeX size={13} />}
+            {(audioAtivo ?? somAtivo) ? <Volume2 size={13} color="#ff5500" /> : <VolumeX size={13} />}
           </button>
           <button
             type="button"
             className="fui-btn-mini"
-            title={hudCompacto ? 'Expandir telemetria FUI' : 'Minimizar telemetria FUI'}
-            onClick={() => setHudCompacto(!hudCompacto)}
+            title={hudCompacto ? 'Expandir console FUI' : 'Minimizar console FUI / Modo Zen'}
+            onClick={() => {
+              setHudCompacto(!hudCompacto)
+              if (hudCompacto && onToggleZenMode) {
+                /* mantém sincronizado */
+              }
+            }}
           >
-            <Eye size={13} />
+            {hudCompacto ? <EyeOff size={13} /> : <Eye size={13} color="#ff5500" />}
           </button>
         </div>
 
@@ -922,8 +975,8 @@ export const BiometricNUI = memo(function BiometricNUI({
             onClick={() => setCamAtiva(!camAtiva)}
             title="Ativar controle espacial pelas Mãos (1 Mão Fechada = Mover, 2 Mãos Fechadas Puxando = Ampliar/Zoom)"
           >
-            {camAtiva ? <Camera size={14} /> : <CameraOff size={14} />}
-            <span>{camAtiva ? 'MÃOS & ROSTO: ON' : 'LIGAR MÃOS (WEBCAM)'}</span>
+            {camAtiva ? <Video size={14} color="#ff5500" /> : <VideoOff size={14} />}
+            <span>{camAtiva ? 'MÃOS: ON' : 'LIGAR MÃOS'}</span>
           </button>
 
           <button
@@ -932,84 +985,152 @@ export const BiometricNUI = memo(function BiometricNUI({
             onClick={() => setVozAtiva(!vozAtiva)}
             title="Ativar escuta contínua por Voz para comandar agentes e manipular a FUI sem teclado"
           >
-            {vozAtiva ? <Mic size={14} /> : <MicOff size={14} />}
-            <span>{vozAtiva ? 'VOZ CONTÍNUA: ON' : 'LIGAR VOZ (MIC)'}</span>
+            {vozAtiva ? <Mic size={14} color="#ff5500" /> : <MicOff size={14} />}
+            <span>{vozAtiva ? 'VOZ: ON' : 'LIGAR VOZ'}</span>
           </button>
         </div>
 
         {!hudCompacto && (
           <>
+            {/* Monitor de Câmera (Sempre visível como no protótipo do Google AI Studio!) */}
+            <div className="lg-cam-monitor-box">
+              {camAtiva ? (
+                <canvas ref={overlayCanvasRef} width={280} height={110} className="fui-cam-canvas" />
+              ) : (
+                <div className="lg-cam-idle-reticle">
+                  <div className="lg-idle-circle">
+                    <span className="lg-orange-dot" />
+                  </div>
+                </div>
+              )}
+              <div className="lg-cam-badge-top">
+                <span className="lg-orange-dot" />
+                <span>{labelGestoAtivo}</span>
+              </div>
+              <div className="lg-cam-bar-bottom">
+                <span className="branco">{camAtiva ? `CV 60FPS // ${camStatus}` : 'CAMERA OFF'}</span>
+                <span>{descGestoAtivo}</span>
+              </div>
+            </div>
+
+            {/* Linha de Pílulas Interativas de Gestos */}
+            <div className="lg-gestos-row">
+              <span className="lg-gestos-lbl">GESTOS:</span>
+              <button type="button" onClick={() => acionarGestoRapido('pan')} className="lg-gesto-chip">
+                ✊ Pan
+              </button>
+              <button type="button" onClick={() => acionarGestoRapido('zoom')} className="lg-gesto-chip">
+                ✊+✊ Zoom
+              </button>
+              <button type="button" onClick={() => acionarGestoRapido('pinch')} className="lg-gesto-chip">
+                👌 Pinça
+              </button>
+              <button type="button" onClick={() => acionarGestoRapido('reset')} className="lg-gesto-chip">
+                ✌ Reset
+              </button>
+            </div>
+
+            {/* Barra de Calibração Groot-1 em Laranja Fluorescente (#ff5500) */}
             <div className="fui-groot-box">
               <div className="fui-groot-medidor">
-                <Cpu size={14} className={telemetria?.ativo ? 'gira' : ''} />
-                <span>GROOT 1 DECISION CALIBRATION:</span>
-                <strong className={grootProb >= 0.85 ? 'alta' : ''}>{grootProb.toFixed(3)}</strong>
+                <span className="lg-orange-dot" />
+                <span>GROOT 1 CALIBRATION:</span>
+                <strong className="alta">{grootProb.toFixed(3)}</strong>
               </div>
               <div className="fui-groot-barra">
                 <div className="fui-groot-fill" style={{ width: `${Math.round(grootProb * 100)}%` }} />
               </div>
             </div>
 
-            {camAtiva && (
-              <div className="fui-cam-radar">
-                <canvas ref={overlayCanvasRef} width={220} height={100} className="fui-cam-canvas" />
-                <div className="fui-cam-meta">
-                  <span><Hand size={11} /> {camStatus}</span>
-                  <span>MODO: {pinchScaleAtivo ? '2H-ZOOM' : uiR.modo}</span>
-                </div>
-              </div>
-            )}
+            {/* Campo Híbrido: Digite ou Fale sua pesquisa direto no Console! */}
+            <form onSubmit={enviarPesquisaForm} className="lg-search-form">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={vozAtiva ? transcricao : "Diga ou digite: 'Pesquisar arxiv'..."}
+                className="lg-search-input"
+              />
+              <button type="submit" className="lg-search-send" title="Disparar Agentes de Pesquisa">
+                <Send size={14} color="#ff5500" />
+              </button>
+            </form>
 
-            <div className={`fui-voz-box ${vozAtiva ? 'ouvindo' : ''}`}>
-              <Activity size={13} className="fui-voz-ico" />
-              <p>{transcricao}</p>
-            </div>
-
+            {/* Atalhos Inteligência Multi-Fonte (2x2 Grid como no FUIAGENTSfront) */}
             <div className="fui-missoes">
-              <span className="fui-label"><Radar size={11} /> INTELIGÊNCIA MULTI-FONTE (ARXIV / YOUTUBE / WEB):</span>
+              <span className="fui-label">INTELIGÊNCIA MULTI-FONTE:</span>
               <div className="fui-missoes-grade">
-                {MISSOES_RAPIDAS.map((m) => (
-                  <button
-                    key={m.rotulo}
-                    type="button"
-                    className="fui-chip-missao"
-                    disabled={!!telemetria?.ativo}
-                    onClick={() => {
-                      fuiAudio.voiceDispatch()
-                      acoes.dispararPesquisaAgentes(m.query)
-                    }}
-                  >
-                    {m.icone === 'arxiv' ? <BookOpen size={10} /> : m.icone === 'yt' ? <Play size={10} /> : <Zap size={10} />} {m.rotulo}
-                  </button>
-                ))}
+                <button
+                  type="button"
+                  className="lg-multi-card"
+                  disabled={!!telemetria?.ativo}
+                  onClick={() => {
+                    fuiAudio.voiceDispatch()
+                    acoes.dispararPesquisaAgentes('arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar')
+                  }}
+                >
+                  <strong className="branco">ArXiv 2604.08224:</strong>
+                  <span>Diagramas IA</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="lg-multi-card"
+                  disabled={!!telemetria?.ativo}
+                  onClick={() => {
+                    fuiAudio.voiceDispatch()
+                    acoes.dispararPesquisaAgentes('youtube FUI HUD interface reel Territory Studio cockpit')
+                  }}
+                >
+                  <strong className="laranja">YouTube:</strong>
+                  <span>FUI Recon HUD</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="lg-multi-card"
+                  disabled={!!telemetria?.ativo}
+                  onClick={() => {
+                    fuiAudio.voiceDispatch()
+                    acoes.dispararPesquisaAgentes('NORAD C4ISR command control radar F-35 cockpit display')
+                  }}
+                >
+                  <strong className="branco">Militar:</strong>
+                  <span>Command Stack</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="lg-multi-card"
+                  disabled={!!telemetria?.ativo}
+                  onClick={() => {
+                    fuiAudio.voiceDispatch()
+                    acoes.dispararPesquisaAgentes('CERN LHC control room particle detector telemetry interface')
+                  }}
+                >
+                  <strong className="laranja">CERN LHC:</strong>
+                  <span>Telemetria Web</span>
+                </button>
               </div>
-              <button
-                type="button"
-                className="fui-chip-missao"
-                style={{ width: '100%', marginTop: 6, justifyContent: 'center', borderColor: '#00f0ff', color: '#00f0ff' }}
-                onClick={abrirModalCorr}
-              >
-                <Cpu size={11} /> AIRLLM + ARXIV CoRR + AGENTES LEVES (0% GPU)
+
+              <button type="button" className="lg-airllm-banner" onClick={abrirModalCorr}>
+                AIRLLM + ARXIV CORR + AGENTES (0% GPU)
               </button>
             </div>
 
-            <div className="fui-terminal-logs">
-              {logs.length === 0 ? (
-                <div className="fui-log-linha">&gt; SYSTEM READY // AGUARDANDO COMANDO DE VOZ OU GESTO...</div>
-              ) : (
-                logs.map((l, i) => (
-                  <div key={`${l.ts}-${i}`} className={`fui-log-linha nv-${l.nivel.toLowerCase()}`}>
-                    <span className="hora">[{l.hora}]</span> <b>{l.agente}:</b> {l.msg}
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="fui-gestos-guia">
-              <span><Sparkles size={10} /> <b>✊ 1 Mão Fechada:</b> Mover Cenário (Pan)</span>
-              <span><b>✊+✊ 2 Mãos Fechadas (Puxar):</b> Ampliar / Reduzir Cena</span>
-              <span><b>👌 Pinça (1 Mão):</b> Clicar / Arrastar Aba</span>
-              <span><b>✌️ Gesto "V" (1 Mão):</b> Fechar Tela</span>
+            <div className="lg-logs-wrap">
+              <span className="fui-label">LOGS DE EXECUÇÃO EM TEMPO REAL:</span>
+              <div className="fui-terminal-logs">
+                {logs.length === 0 ? (
+                  <div className="fui-log-linha">&gt; SYSTEM READY // AGUARDANDO COMANDO DE VOZ OU GESTO...</div>
+                ) : (
+                  logs.map((l, i) => (
+                    <div key={`${l.ts}-${i}`} className={`fui-log-linha nv-${l.nivel.toLowerCase()}`}>
+                      <span className="hora">[{l.hora}]</span> <b>{l.agente}:</b> {l.msg}
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </>
         )}

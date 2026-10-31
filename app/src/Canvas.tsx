@@ -4,12 +4,13 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import {
-  ArrowUp, BadgeCheck, BookOpen, CircleDot, Clapperboard, ListTree, Check, ChevronLeft, ChevronRight, ClipboardPaste, Copy, Eye, EyeOff, FileText, GitBranchPlus, ImagePlus,
-  LayoutGrid, Maximize, Maximize2, Monitor, Radar, Star, Trash2, UnfoldHorizontal, X,
+  ArrowRight, ArrowUp, BadgeCheck, BookOpen, CircleDot, Clapperboard, Cpu, ListTree, Check, ChevronLeft, ChevronRight, ClipboardPaste, Copy, Eye, EyeOff, FileText, GitBranchPlus, ImagePlus,
+  LayoutGrid, Maximize, Maximize2, Monitor, Radar, SlidersHorizontal, Star, Trash2, UnfoldHorizontal, Video, Volume2, VolumeX, X,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, type Estado, type No } from './api'
 import { BiometricNUI, type AcoesEspaciaisFUI } from './BiometricNUI'
+import { CameraGesturesLab } from './CameraGesturesLab'
 import { CanvasCtx, type Ctx } from './ctx'
 import { FuiWebGL } from './FuiWebGL'
 import { TrilhoFogo } from './Fogo'
@@ -17,21 +18,41 @@ import { arestas, arvore, caminhoAprovadas, descendentes, ehPonto, galhoCompleto
 import { Menu, type ItemMenu } from './Menu'
 import { nodeTypes, type NoRF } from './nodes'
 import { Painel } from './Painel'
+import { SciFiLoadingScreen } from './SciFiLoadingScreen'
 import { useHistorico } from './useHistorico'
 import { useProjeto } from './useProjeto'
 import { Viewer } from './Viewer'
 
-export function Canvas({ slug }: { slug: string }) {
+export type AbaNavegacaoFUI = 'hero' | 'agents' | 'camera'
+
+export function Canvas({ slug, abaInicial = 'agents' }: { slug: string; abaInicial?: AbaNavegacaoFUI }) {
   return (
     <ReactFlowProvider>
-      <CanvasInterno slug={slug} />
+      <CanvasInterno slug={slug} abaInicial={abaInicial} />
     </ReactFlowProvider>
   )
 }
 
-function CanvasInterno({ slug }: { slug: string }) {
+function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNavegacaoFUI }) {
   const { estado, erro, setErro, mudar: mudarCru, posicoes: posicoesCru, acao } = useProjeto(slug)
   const rf = useReactFlow()
+  const [abaNavegacao, setAbaNavegacao] = useState<AbaNavegacaoFUI>(abaInicial)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isZenMode, setIsZenMode] = useState(false)
+  const [audioAtivo, setAudioAtivo] = useState(true)
+  const [mostrarBarraNeo, setMostrarBarraNeo] = useState(false)
+  useEffect(() => { setAbaNavegacao(abaInicial) }, [abaInicial])
+
+  const irParaAba = useCallback((novaAba: AbaNavegacaoFUI, comLoading = false) => {
+    if (comLoading && novaAba === 'agents') {
+      setIsLoading(true)
+      return
+    }
+    setAbaNavegacao(novaAba)
+    if (novaAba === 'hero') history.replaceState(null, '', '#/')
+    else if (novaAba === 'camera') history.replaceState(null, '', '#/camera')
+    else history.replaceState(null, '', `#/p/${slug}`)
+  }, [slug])
   const [nodes, setNodes] = useState<NoRF[]>([])
   const [selecao, setSelecao] = useState<string[]>([])
   const [visto, setVisto] = useState<string | null>(null)
@@ -714,37 +735,188 @@ function CanvasInterno({ slug }: { slug: string }) {
         onDrop={(e) => { e.preventDefault(); subir([...e.dataTransfer.files], rf.screenToFlowPosition({ x: e.clientX, y: e.clientY })) }}>
         {modoFui && (
           <FuiWebGL
-            grootProb={estado.telemetria?.groot_prob ?? 0.879}
+            grootProb={estado.telemetria?.groot_prob ?? 0.952}
             agenteAtivo={!!estado.telemetria?.ativo}
+            modoHero={abaNavegacao === 'hero'}
+            zenMode={isZenMode}
           />
         )}
-        {nodes.length > 0 && <ReactFlow
-          nodes={nodes} edges={edges} nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange} onNodeDragStop={onNodeDragStop}
-          onConnect={onConnect} isValidConnection={conexaoValida}
-          onSelectionChange={aoSelecionar}
-          onPaneContextMenu={(e) => abrirMenu(e)}
-          onNodeContextMenu={(e, n) => abrirMenu(e, n.data.no)}
-          onSelectionContextMenu={(e, ns) => abrirMenu(e, ns[0]?.data.no)}
-          deleteKeyCode={null} selectionKeyCode={null} multiSelectionKeyCode={['Meta', 'Control']}
-          minZoom={0.05} maxZoom={2.5} proOptions={{ hideAttribution: true }}
-          // roda do mouse = zoom · arrastar no vazio = navegar · ⌘ + arrastar (em qualquer lugar) = caixa de seleção · ⌘ + clique = seleção
-          onlyRenderVisibleElements zoomOnScroll panOnScroll={false} zoomOnPinch
-          panOnDrag={[0, 1]} panActivationKeyCode={null} selectionOnDrag={false} selectionMode={SelectionMode.Partial}
-          defaultEdgeOptions={{ type: 'default' }} connectionRadius={36}
-          zoomOnDoubleClick={false}
-        >
-          <Background variant={BackgroundVariant.Dots} gap={22} size={1.3} color="var(--ponto)" />
-          <Controls showInteractive={false} showFitView={false} position="bottom-left">
-            <ControlButton title="Mostrar tudo (duplo clique no vazio)" onClick={() => enquadrar(undefined, { folga: 0.05 })}><Maximize size={12} /></ControlButton>
-          </Controls>
-          <MiniMap position="bottom-right" pannable zoomable nodeColor={corMinimapa} nodeStrokeWidth={0} maskColor="var(--mascara)" />
-        </ReactFlow>}
-        <BiometricNUI telemetria={estado.telemetria} acoes={acoesEspaciais} viewerAberto={!!visto || !!aba} />
-        <TrilhoFogo slug={slug} estado={estado} />
-        <header className="topo">
-          <a href="#/" className="marca-app" title="Projetos">
-            <img src="/favicon.svg" alt="" width={22} height={22} />
+
+        {isLoading && (
+          <SciFiLoadingScreen
+            onComplete={() => {
+              setIsLoading(false)
+              setAbaNavegacao('agents')
+              history.replaceState(null, '', `#/p/${slug}`)
+            }}
+          />
+        )}
+
+        {/* TOP NAVBAR LIQUID GLASS (Visão Geral | Agentes Espaciais | Câmera & Gestos) */}
+        <header className="lg-top-navbar">
+          <div className="lg-nav-left">
+            <button
+              type="button"
+              onClick={() => irParaAba('hero')}
+              className="liquid-glass-panel lg-brand-capsule"
+              title="Voltar para Visão Geral"
+            >
+              <div className="lg-brand-badge">N</div>
+              <span className="lg-brand-title">AGENTES FUI</span>
+            </button>
+            {abaNavegacao === 'agents' && !isZenMode && (
+              <button
+                type="button"
+                onClick={() => setMostrarBarraNeo((v) => !v)}
+                className={`liquid-glass-button lg-btn-ferramentas ${mostrarBarraNeo ? 'ativo' : ''}`}
+                title="Abrir/Fechar Ferramentas do Canvas Neo Stitch"
+              >
+                <SlidersHorizontal size={14} />
+                <span>Canvas</span>
+              </button>
+            )}
+          </div>
+
+          <div className="liquid-glass-panel lg-nav-center">
+            <button
+              type="button"
+              onClick={() => irParaAba('hero')}
+              className={`lg-nav-tab ${abaNavegacao === 'hero' ? 'ativo' : ''}`}
+            >
+              Visão Geral
+            </button>
+            <button
+              type="button"
+              onClick={() => irParaAba('agents')}
+              className={`lg-nav-tab ${abaNavegacao === 'agents' ? 'ativo' : ''}`}
+            >
+              <Cpu size={14} className="lg-tab-ico" />
+              Agentes Espaciais
+            </button>
+            <button
+              type="button"
+              onClick={() => irParaAba('camera')}
+              className={`lg-nav-tab ${abaNavegacao === 'camera' ? 'ativo' : ''}`}
+            >
+              <Video size={14} className="lg-tab-ico" />
+              Câmera & Gestos
+            </button>
+          </div>
+
+          <div className="liquid-glass-panel lg-nav-right">
+            <button
+              type="button"
+              onClick={() => setAudioAtivo((v) => !v)}
+              className={`lg-nav-icon-btn ${audioAtivo ? 'ativo' : ''}`}
+              title={audioAtivo ? 'Silenciar Áudio' : 'Ativar Áudio'}
+            >
+              {audioAtivo ? <Volume2 size={15} /> : <VolumeX size={15} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsZenMode((v) => !v)}
+              className={`lg-nav-icon-btn ${isZenMode ? 'ativo' : ''}`}
+              title={isZenMode ? 'Mostrar Interface HUD' : 'Modo Zen (Ocultar HUD)'}
+            >
+              {isZenMode ? <EyeOff size={15} /> : <Eye size={15} />}
+            </button>
+            <div className="lg-nav-divider" />
+            <div className="lg-g1-pill" title="Calibração Bayesiana Groot-1">
+              <span className="lg-g1-dot" />
+              <span className="lg-g1-text">G1 · {(estado.telemetria?.groot_prob ?? 0.952).toFixed(3)}</span>
+            </div>
+          </div>
+        </header>
+
+        {/* ABA 1: VISÃO GERAL (HERO SECTION - FUIAGENTSfront) */}
+        {abaNavegacao === 'hero' && !isZenMode && (
+          <section className="lg-hero-section">
+            <div className="lg-hero-container">
+              <div className="liquid-glass-panel lg-hero-badge">
+                <span className="lg-g1-dot" />
+                <span>SISTEMA OPERACIONAL ESPACIAL COGNITIVO · AGENTES AUTÔNOMOS</span>
+              </div>
+
+              <h1 className="lg-hero-title">
+                CRIAMOS SISTEMAS COMPLETOS DE AUTOMAÇÃO COM IA.
+              </h1>
+
+              <p className="lg-hero-subtitle">
+                Oferecemos soluções completas de automação, extração científica ArXiv CoRR, inteligência C4ISR e agentes espaciais inteligentes em um só lugar.
+              </p>
+
+              <div className="lg-hero-actions">
+                <button
+                  type="button"
+                  onClick={() => irParaAba('agents', true)}
+                  className="liquid-glass-button lg-hero-cta-primary"
+                >
+                  <span>ACESSAR AGENTES FUI</span>
+                  <ArrowRight size={16} className="lg-cta-arrow" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => irParaAba('camera')}
+                  className="liquid-glass-panel lg-hero-cta-secondary"
+                >
+                  <Video size={16} className="lg-cta-ico" />
+                  <span>CÂMERA & GESTOS</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ABA 3: LABORATÓRIO DE CÂMERA & GESTOS */}
+        {abaNavegacao === 'camera' && !isZenMode && (
+          <CameraGesturesLab onVoltarAgentes={() => irParaAba('agents')} />
+        )}
+
+        {/* ABA 2: AGENTES ESPACIAIS (REACT FLOW REAL + LEFT OS PANEL + NEO STITCH TOOLS) */}
+        <div className={`lg-rf-stage ${abaNavegacao === 'agents' ? 'ativo' : 'oculto'}`}>
+          {nodes.length > 0 && <ReactFlow
+            nodes={nodes} edges={edges} nodeTypes={nodeTypes}
+            onNodesChange={onNodesChange} onNodeDragStop={onNodeDragStop}
+            onConnect={onConnect} isValidConnection={conexaoValida}
+            onSelectionChange={aoSelecionar}
+            onPaneContextMenu={(e) => abrirMenu(e)}
+            onNodeContextMenu={(e, n) => abrirMenu(e, n.data.no)}
+            onSelectionContextMenu={(e, ns) => abrirMenu(e, ns[0]?.data.no)}
+            deleteKeyCode={null} selectionKeyCode={null} multiSelectionKeyCode={['Meta', 'Control']}
+            minZoom={0.05} maxZoom={2.5} proOptions={{ hideAttribution: true }}
+            onlyRenderVisibleElements zoomOnScroll panOnScroll={false} zoomOnPinch
+            panOnDrag={[0, 1]} panActivationKeyCode={null} selectionOnDrag={false} selectionMode={SelectionMode.Partial}
+            defaultEdgeOptions={{ type: 'default' }} connectionRadius={36}
+            zoomOnDoubleClick={false}
+          >
+            <Background variant={BackgroundVariant.Dots} gap={22} size={1.3} color="var(--ponto)" />
+            <Controls showInteractive={false} showFitView={false} position="bottom-right">
+              <ControlButton title="Mostrar tudo (duplo clique no vazio)" onClick={() => enquadrar(undefined, { folga: 0.05 })}><Maximize size={12} /></ControlButton>
+            </Controls>
+            <MiniMap position="bottom-right" style={{ marginBottom: 46 }} pannable zoomable nodeColor={corMinimapa} nodeStrokeWidth={0} maskColor="var(--mascara)" />
+          </ReactFlow>}
+        </div>
+
+        {abaNavegacao === 'agents' && (
+          <>
+            <BiometricNUI
+              telemetria={estado.telemetria}
+              acoes={acoesEspaciais}
+              viewerAberto={!!visto || !!aba}
+              isZenMode={isZenMode}
+              onToggleZenMode={() => setIsZenMode((v) => !v)}
+              audioAtivo={audioAtivo}
+              onToggleAudio={() => setAudioAtivo((v) => !v)}
+            />
+            {!isZenMode && <TrilhoFogo slug={slug} estado={estado} />}
+          </>
+        )}
+
+        {abaNavegacao === 'agents' && mostrarBarraNeo && !isZenMode && (
+        <header className="topo lg-topo-secundario">
+          <a href="#/" className="marca-app" title="Visão Geral">
+            <img src="/favicon.svg" alt="" width={20} height={20} />
           </a>
           <span className="projeto-nome">{estado.projeto.nome}</span>
           <span className="prefixo">{estado.projeto.prefixo}</span>
@@ -825,6 +997,7 @@ function CanvasInterno({ slug }: { slug: string }) {
             <BookOpen size={16} />
           </button>
         </header>
+        )}
 
         {imgsSel.length > 0 && (
           <div className="barra-selecao">

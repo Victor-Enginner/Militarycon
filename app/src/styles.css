@@ -1344,143 +1344,1382 @@ span.chip { cursor: default; }
 }
 
 /* =========================================================================
-   TOPOGRAPHIC ISOLINE RADAR + GAUGES "Frequency [Z]" & "Pulse [XY]" (TRANSPARENTE)
+   FUIAGENTSFRONT // LIQUID GLASS + FLUORESCENT ORANGE (#ff5500) DESIGN SYSTEM
    ========================================================================= */
-.fui-anel-ambar {
-  fill: none;
-  stroke: #ff9d00;
-  stroke-width: 1.4;
-  opacity: 0.72;
-  transform-origin: center;
+
+.liquid-glass-panel {
+  background: rgba(18, 18, 20, 0.65);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.fui-isolinha {
-  fill: rgba(0, 178, 255, 0.035);
-  stroke: rgba(0, 212, 255, 0.55);
-  stroke-width: 1.3;
-  transform-origin: center;
+.liquid-glass-button {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 20px -4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
 }
 
-.fui-isolinha.interna {
-  stroke: rgba(0, 255, 204, 0.65);
-  stroke-dasharray: 12 4;
+.liquid-glass-button:hover {
+  background: rgba(255, 85, 0, 0.15);
+  border-color: rgba(255, 85, 0, 0.5);
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 24px -4px rgba(255, 85, 0, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-.fui-isolinha.nucleo {
-  fill: rgba(255, 157, 0, 0.04);
-  stroke: rgba(255, 166, 0, 0.75);
-  stroke-width: 1.5;
+/* Override do Canvas FUI Mode para Smoked Liquid Glass + Laranja Fluorescente (#ff5500) */
+.canvas.fui-mode {
+  --fundo: #0a0a0c;
+  --ponto: rgba(255, 255, 255, 0.12);
+  --superficie: rgba(18, 18, 20, 0.78);
+  --tinta: #f5f5f7;
+  --tinta-2: rgba(255, 255, 255, 0.68);
+  --tinta-3: rgba(255, 255, 255, 0.42);
+  --linha: rgba(255, 255, 255, 0.14);
+  --linha-forte: rgba(255, 85, 0, 0.55);
+  --acento: #ff5500;
+  --acento-suave: rgba(255, 85, 0, 0.16);
+  --mascara: rgba(8, 8, 10, 0.82);
+  background: #0a0a0c;
+  color: #f5f5f7;
 }
 
-.fui-vetor-ambar {
-  stroke: rgba(255, 157, 0, 0.55);
-  stroke-width: 1.2;
-  stroke-dasharray: 6 4;
+.canvas.fui-mode .no {
+  background: rgba(18, 18, 22, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
-.fui-vetor-ciano {
-  stroke: rgba(0, 229, 255, 0.45);
-  stroke-width: 1;
+.canvas.fui-mode .no:hover {
+  border-color: rgba(255, 85, 0, 0.7);
+  box-shadow: 0 0 24px rgba(255, 85, 0, 0.28);
 }
 
-.fui-alvo-ext {
-  fill: rgba(255, 157, 0, 0.08);
-  stroke: #ff9d00;
-  stroke-width: 1.4;
+.canvas.fui-mode .no.sel {
+  border-color: #ff5500;
+  box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
 }
 
-.fui-alvo-ponto {
-  fill: #fff3d1;
+.canvas.fui-mode .aresta path {
+  stroke: rgba(255, 85, 0, 0.52) !important;
+  stroke-width: 1.7px;
 }
 
-/* Painel de Telemetria Direito: Frequency [Z] & Pulse [XY] + Data Stream */
-.fui-telemetria-direita {
+.selo-groot,
+.selo-groot.alta {
+  background: rgba(18, 18, 20, 0.88);
+  color: #ff5500;
+  border: 1px solid rgba(255, 85, 0, 0.55);
+  box-shadow: 0 0 12px rgba(255, 85, 0, 0.25);
+}
+
+.fui-btn-abrir-card {
+  background: rgba(255, 85, 0, 0.16);
+  border: 1px solid #ff5500;
+  color: #ff5500;
+}
+
+.fui-btn-abrir-card:hover {
+  background: #ff5500;
+  color: #fff;
+}
+
+/* =========================================================================
+   BACKGROUND VIDEO 3D PLEXUS & GOLDEN FLARES + MONOCHROME RINGS (z-index: 0)
+   ========================================================================= */
+.fui-video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: opacity 0.6s ease, filter 0.6s ease;
+}
+
+.fui-video-bg.modo-hero {
+  opacity: 1;
+  filter: contrast(1.06) brightness(0.96);
+}
+
+.fui-video-bg.modo-agentes {
+  opacity: 0.68;
+  filter: contrast(1.08) brightness(0.75);
+}
+
+.fui-video-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.6s ease;
+}
+
+.fui-video-vignette.hero {
+  background: radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 0.08) 0%, rgba(10, 10, 12, 0.42) 100%);
+}
+
+.fui-video-vignette.agentes {
+  background: radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 0.28) 0%, rgba(10, 10, 12, 0.72) 100%);
+}
+
+.fui-radar-rings-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fui-radar-ring-mono {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fui-radar-ring-mono.r1 { width: 820px; height: 820px; }
+.fui-radar-ring-mono.r2 { width: 590px; height: 590px; border-color: rgba(255, 255, 255, 0.06); }
+.fui-radar-ring-mono.r3 { width: 360px; height: 360px; border-color: rgba(255, 255, 255, 0.05); }
+
+/* =========================================================================
+   TOP NAVBAR LIQUID GLASS (Visão Geral | Agentes Espaciais | Câmera & Gestos)
+   ========================================================================= */
+.lg-top-navbar {
   position: fixed;
-  top: 56px;
-  right: 14px;
-  width: 248px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  pointer-events: none;
+}
+
+.lg-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.lg-brand-capsule {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 18px 8px 10px;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.lg-brand-capsule:hover {
+  transform: scale(1.02);
+}
+
+.lg-brand-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ff5500;
+  color: #000;
+  font-weight: 800;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 14px rgba(255, 85, 0, 0.65);
+}
+
+.lg-brand-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.lg-btn-ferramentas {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.lg-btn-ferramentas.ativo {
+  background: rgba(255, 85, 0, 0.2);
+  border-color: #ff5500;
+  color: #fff;
+}
+
+.lg-nav-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.lg-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lg-nav-tab:hover {
+  color: #fff;
+}
+
+.lg-nav-tab.ativo {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.lg-tab-ico {
+  color: #ff5500;
+}
+
+.lg-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.lg-nav-icon-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+
+.lg-nav-icon-btn:hover,
+.lg-nav-icon-btn.ativo {
+  color: #ff5500;
+}
+
+.lg-nav-divider {
+  width: 1px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lg-g1-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff5500;
+}
+
+.lg-g1-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5500;
+  box-shadow: 0 0 8px #ff5500;
+  animation: fuiPulsoLed 1.6s infinite;
+}
+
+.lg-topo-secundario {
+  top: 68px !important;
+  z-index: 52 !important;
+}
+
+/* =========================================================================
+   ABA 1: HERO SECTION (VISÃO GERAL - FUIAGENTSfront)
+   ========================================================================= */
+.lg-hero-section {
+  position: relative;
+  z-index: 15;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 56px;
+  pointer-events: none;
+}
+
+.lg-hero-container {
+  max-width: 760px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-  z-index: 5;
-  font-family: var(--mono);
+  align-items: flex-start;
+  gap: 20px;
+  pointer-events: auto;
 }
 
-.fui-gauges-duplos {
+.lg-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.lg-hero-title {
+  margin: 0;
+  font-size: clamp(32px, 4.4vw, 54px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  text-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.lg-hero-subtitle {
+  margin: 0;
+  max-width: 520px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.lg-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.lg-hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.lg-cta-arrow {
+  color: #ff5500;
+  transition: transform 0.2s;
+}
+
+.lg-hero-cta-primary:hover .lg-cta-arrow {
+  transform: translateX(4px);
+}
+
+.lg-hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lg-hero-cta-secondary:hover {
+  border-color: rgba(255, 85, 0, 0.5);
+  color: #fff;
+}
+
+.lg-cta-ico {
+  color: #ff5500;
+}
+
+/* Estágio do ReactFlow (mantém medidas ativas mesmo em outra aba) */
+.lg-rf-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transition: opacity 0.25s ease;
+}
+
+.lg-rf-stage.oculto {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* =========================================================================
+   LEFT OS PANEL (BiometricNUI.tsx — idêntico a LeftOSPanel.tsx)
+   ========================================================================= */
+.fui-hud-painel.lg-left-os-panel {
+  position: fixed;
+  top: 78px;
+  bottom: auto;
+  left: 20px;
+  width: 356px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  border-radius: 26px;
+  padding: 18px;
+  color: #f5f5f7;
+  font-family: inherit;
+  gap: 11px;
+  z-index: 42;
+}
+
+.lg-os-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lg-os-title-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.lg-os-dot-orange {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff5500;
+  box-shadow: 0 0 10px #ff5500;
+  flex-shrink: 0;
+}
+
+.lg-os-dot-orange.small {
+  width: 6px;
+  height: 6px;
+}
+
+.lg-os-main-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.lg-os-subtitle {
+  margin: 4px 0 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.lg-os-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lg-os-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.65);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.lg-os-icon-btn:hover,
+.lg-os-icon-btn.ativo {
+  color: #ff5500;
+  border-color: rgba(255, 85, 0, 0.4);
+  background: rgba(255, 85, 0, 0.12);
+}
+
+.lg-os-nui-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
 
-.fui-gauge-card {
-  background: rgba(4, 14, 26, 0.82);
-  border: 1px solid rgba(0, 195, 255, 0.35);
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  padding: 7px 8px;
+.lg-os-nui-btn {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  box-shadow: inset 0 0 16px rgba(0, 170, 255, 0.12);
-}
-
-.fui-gauge-header {
-  font-size: 9.5px;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
   font-weight: 700;
-  color: #cbefff;
-  align-self: flex-start;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.fui-gauge-sub {
-  font-size: 7.5px;
-  color: #5ea8c8;
-  align-self: flex-start;
-  margin-bottom: 6px;
+.lg-os-nui-btn.ativo {
+  background: rgba(255, 85, 0, 0.22);
+  border-color: #ff5500;
+  color: #fff;
+  box-shadow: 0 0 18px rgba(255, 85, 0, 0.35);
 }
 
-.fui-gauge-anel {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  border: 2.5px solid rgba(0, 212, 255, 0.75);
-  box-shadow: 0 0 14px rgba(0, 212, 255, 0.25), inset 0 0 10px rgba(0, 212, 255, 0.15);
-}
-
-.fui-gauge-anel.ambar {
-  border-color: rgba(255, 166, 0, 0.85);
-  box-shadow: 0 0 14px rgba(255, 166, 0, 0.28), inset 0 0 10px rgba(255, 166, 0, 0.15);
-}
-
-.fui-gauge-num {
-  font-size: 14px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
-.fui-datastream-box {
-  height: 84px;
-  background: rgba(3, 11, 20, 0.78);
-  border: 1px solid rgba(0, 195, 255, 0.28);
-  border-left: 2.5px solid #ff9d00;
-  padding: 5px 8px;
+.lg-os-camera-box {
+  position: relative;
+  height: 112px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  font-size: 8px;
-  color: rgba(158, 230, 255, 0.75);
-}
-
-.fui-datastream-track {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+
+.lg-os-camera-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.lg-os-camera-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lg-os-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lg-os-camera-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.lg-os-gestures-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+}
+
+.lg-os-label-muted {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.lg-os-gestures-chips {
+  display: flex;
+  align-items: center;
   gap: 4px;
 }
 
-.fui-datastream-item {
+.lg-os-gesture-chip {
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--mono);
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lg-os-gesture-chip:hover,
+.lg-os-gesture-chip.ativo {
+  border-color: #ff5500;
+  background: rgba(255, 85, 0, 0.18);
+  color: #fff;
+}
+
+.lg-os-groot-box {
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 9px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lg-os-groot-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.lg-os-groot-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lg-os-groot-val {
+  color: #ff5500;
+  font-size: 11px;
+}
+
+.lg-os-groot-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.lg-os-groot-fill {
+  height: 100%;
+  background: #ff5500;
+  box-shadow: 0 0 10px #ff5500;
+  transition: width 0.35s ease;
+}
+
+.lg-os-search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lg-os-search-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 9px 34px 9px 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.lg-os-search-input:focus {
+  border-color: rgba(255, 85, 0, 0.65);
+}
+
+.lg-os-search-send {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #ff5500;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.lg-os-multifonte {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lg-os-sources-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.lg-os-source-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 8px 10px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.lg-os-source-card:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 85, 0, 0.45);
+}
+
+.lg-os-source-card strong {
+  font-size: 10px;
+  color: #fff;
+}
+
+.lg-os-source-card.accent strong {
+  color: #ff5500;
+}
+
+.lg-os-source-card span {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.lg-os-airllm-bar {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.lg-os-airllm-bar:hover {
+  border-color: #ff5500;
+  color: #ff5500;
+}
+
+.lg-os-logs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lg-os-logs-box {
+  background: rgba(0, 0, 0, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  padding: 8px 10px;
+  height: 82px;
+  overflow-y: auto;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  line-height: 1.42;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lg-os-log-line {
+  margin-bottom: 3px;
+}
+
+.lg-os-log-time {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* =========================================================================
+   RIGHT TELEMETRY PANEL (FuiWebGL.tsx — Frequência [Z] & Pulso [XY])
+   ========================================================================= */
+.lg-right-telemetry {
+  position: fixed;
+  top: 78px;
+  right: 20px;
+  z-index: 42;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.lg-telemetry-toggle-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lg-telemetry-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.lg-telemetry-body {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lg-telemetry-gauges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lg-gauge-card {
+  border-radius: 18px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lg-gauge-head {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+}
+
+.lg-gauge-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.lg-gauge-sub {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.lg-gauge-ring {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lg-gauge-ring.white {
+  border: 3px solid rgba(255, 255, 255, 0.78);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+.lg-gauge-ring.orange {
+  border: 3px solid #ff5500;
+  box-shadow: 0 0 18px rgba(255, 85, 0, 0.42);
+}
+
+.lg-telemetry-stream {
+  border-radius: 16px;
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  border-left: 2px solid #ff5500;
+}
+
+.lg-stream-line {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* =========================================================================
+   ABA 3: CAMERA & GESTURES LAB (CameraGesturesLab.tsx)
+   ========================================================================= */
+.lg-camlab-wrap {
+  position: relative;
+  z-index: 20;
+  min-height: 100vh;
+  padding: 88px 32px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lg-camlab-grid {
+  width: min(1240px, 100%);
+  height: calc(100vh - 124px);
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 20px;
+}
+
+.lg-camlab-left,
+.lg-camlab-right {
+  border-radius: 26px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.lg-camlab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lg-camlab-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lg-camlab-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 85, 0, 0.16);
+  border: 1px solid rgba(255, 85, 0, 0.4);
+  color: #ff5500;
+  display: grid;
+  place-items: center;
+}
+
+.lg-camlab-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.lg-camlab-sub {
+  margin: 2px 0 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lg-camlab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.lg-camlab-btn.ativo {
+  background: rgba(255, 85, 0, 0.22);
+  border-color: #ff5500;
+  color: #ff5500;
+}
+
+.lg-camlab-viewport {
+  position: relative;
+  flex: 1;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lg-camlab-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.lg-camlab-video.oculto {
+  display: none;
+}
+
+.lg-camlab-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.lg-camlab-placeholder p {
+  max-width: 340px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.42);
+  margin: 0;
+}
+
+.lg-camlab-hud-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lg-camlab-hud-top,
+.lg-camlab-hud-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lg-camlab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #fff;
+}
+
+.lg-camlab-pill.orange {
+  border-color: rgba(255, 85, 0, 0.45);
+  color: #ff5500;
+}
+
+.lg-camlab-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.lg-camlab-dot.vivo {
+  background: #ff5500;
+  box-shadow: 0 0 8px #ff5500;
+}
+
+.lg-camlab-reticle {
+  align-self: center;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+}
+
+.lg-camlab-reticle-inner {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 85, 0, 0.28);
+}
+
+.lg-camlab-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.lg-camlab-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+}
+
+.lg-camlab-tab.ativo {
+  background: rgba(255, 85, 0, 0.18);
+  border-color: rgba(255, 85, 0, 0.45);
+  color: #ff5500;
+}
+
+.lg-camlab-tab.ml-auto {
+  margin-left: auto;
+}
+
+.lg-camlab-learn,
+.lg-camlab-create {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.lg-camlab-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lg-camlab-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.lg-camlab-card.ativo {
+  background: rgba(255, 85, 0, 0.12);
+  border-color: #ff5500;
+}
+
+.lg-camlab-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.lg-camlab-emoji {
+  font-size: 22px;
+}
+
+.lg-camlab-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lg-camlab-card p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.lg-camlab-detail,
+.lg-camlab-form {
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lg-camlab-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lg-camlab-emoji-lg {
+  font-size: 32px;
+}
+
+.lg-camlab-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #ff5500;
+}
+
+.lg-camlab-howto {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.lg-camlab-howto span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lg-camlab-howto p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.lg-camlab-practice-row,
+.lg-camlab-progress-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.lg-camlab-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.lg-camlab-saved-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11.5px;
+  margin-top: 6px;
+}
+
+.lg-camlab-saved-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #ff5500;
+}
+
+/* =========================================================================
+   SCI-FI LOADING SCREEN (SciFiLoadingScreen.tsx)
+   ========================================================================= */
+.lg-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(8, 8, 10, 0.92);
+  backdrop-filter: blur(28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lg-loading-center {
+  width: min(420px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.lg-loading-pct {
+  font-family: var(--mono);
+  font-size: 54px;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: -0.04em;
+}
+
+.lg-loading-pct span {
+  font-size: 22px;
+  color: #ff5500;
+}
+
+.lg-loading-bar-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.lg-loading-bar-fill {
+  height: 100%;
+  background: #ff5500;
+  box-shadow: 0 0 14px #ff5500;
+  transition: width 0.08s linear;
+}
+
+.lg-loading-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lg-loading-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5500;
+  box-shadow: 0 0 8px #ff5500;
+}
+
+.lg-loading-skip {
+  margin-top: 12px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
 }
 
 /* Modal / Painel AirLLM + Diagram Design + Reading + ArXiv CoRR */
@@ -1583,6 +2822,876 @@ span.chip { cursor: default; }
   font-size: 10px;
   word-break: break-all;
 }
+
+/* =========================================================================
+   EXACT COMPONENT CLASSES FOR FuiWebGL, BiometricNUI, CameraGesturesLab, SciFiLoadingScreen
+   ========================================================================= */
+
+.lg-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.lg-radar-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.lg-radar-r1,
+.lg-radar-r2,
+.lg-radar-r3 {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lg-radar-r1 { width: 820px; height: 820px; }
+.lg-radar-r2 { width: 590px; height: 590px; border-color: rgba(255, 255, 255, 0.06); }
+.lg-radar-r3 { width: 360px; height: 360px; border-color: rgba(255, 255, 255, 0.05); }
+
+.lg-orange-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5500;
+  box-shadow: 0 0 10px #ff5500;
+  flex-shrink: 0;
+}
+
+/* Painel Esquerdo (BiometricNUI.tsx — idêntico a LeftOSPanel.tsx) */
+.fui-hud-painel {
+  position: fixed;
+  top: 78px;
+  bottom: auto;
+  left: 20px;
+  width: 348px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  border-radius: 26px;
+  padding: 18px;
+  color: #f5f5f7;
+  font-family: var(--mono);
+  gap: 10px;
+  z-index: 42;
+}
+
+.fui-hud-painel .fui-hud-cabecalho {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.fui-hud-painel .fui-hud-titulos strong {
+  color: #ffffff;
+  font-size: 11.5px;
+}
+
+.fui-hud-painel .fui-hud-titulos span {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.fui-hud-painel .fui-btn-mini {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+}
+
+.fui-hud-painel .fui-btn-nui {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 9px 10px;
+}
+
+.fui-hud-painel .fui-btn-nui:hover,
+.fui-hud-painel .fui-btn-nui.ativo,
+.fui-hud-painel .fui-btn-nui.voz.ativo {
+  background: rgba(255, 85, 0, 0.2);
+  border-color: #ff5500;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 85, 0, 0.35);
+}
+
+.lg-cam-monitor-box {
+  position: relative;
+  height: 112px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+
+.lg-cam-idle-reticle {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.lg-idle-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  display: grid;
+  place-items: center;
+}
+
+.lg-cam-badge-top {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lg-cam-bar-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.65);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.lg-gestos-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 9px;
+}
+
+.lg-gestos-lbl {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 9px;
+}
+
+.lg-gesto-chip {
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--mono);
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lg-gesto-chip:hover {
+  border-color: #ff5500;
+  background: rgba(255, 85, 0, 0.18);
+  color: #fff;
+}
+
+.fui-hud-painel .fui-groot-box {
+  background: rgba(0, 0, 0, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.fui-hud-painel .fui-groot-medidor strong.alta {
+  color: #ff5500;
+  text-shadow: 0 0 8px rgba(255, 85, 0, 0.6);
+}
+
+.fui-hud-painel .fui-groot-barra {
+  background: rgba(255, 255, 255, 0.1);
+  height: 5px;
+  border-radius: 999px;
+}
+
+.fui-hud-painel .fui-groot-fill {
+  background: #ff5500;
+  box-shadow: 0 0 10px #ff5500;
+}
+
+.lg-search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lg-search-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 9px 34px 9px 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: #fff;
+  outline: none;
+}
+
+.lg-search-input:focus {
+  border-color: #ff5500;
+}
+
+.lg-search-send {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.fui-hud-painel .fui-label {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lg-multi-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 8px 10px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  cursor: pointer;
+  transition: all 0.16s;
+}
+
+.lg-multi-card:hover:not(:disabled) {
+  background: rgba(255, 85, 0, 0.12);
+  border-color: rgba(255, 85, 0, 0.5);
+}
+
+.lg-multi-card strong.branco,
+.branco,
+.branco-bold {
+  color: #fff;
+  font-size: 10px;
+}
+
+.lg-multi-card strong.laranja,
+.laranja,
+.laranja-bold {
+  color: #ff5500;
+  font-size: 10px;
+}
+
+.lg-multi-card span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+.lg-airllm-banner {
+  width: 100%;
+  margin-top: 4px;
+  background: rgba(0, 0, 0, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.16s;
+}
+
+.lg-airllm-banner:hover {
+  border-color: #ff5500;
+  color: #ff5500;
+}
+
+.lg-logs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fui-hud-painel .fui-terminal-logs {
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.78);
+  max-height: 82px;
+}
+
+.fui-hud-painel .fui-log-linha .hora {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Painel Direito Colapsável de Telemetria (FuiWebGL.tsx) */
+.lg-right-telemetry {
+  position: fixed;
+  top: 78px;
+  right: 20px;
+  z-index: 42;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lg-right-telemetry.recolhido {
+  transform: translateX(calc(100% - 34px));
+}
+
+.lg-telemetry-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(18, 18, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.lg-telemetry-toggle:hover {
+  border-color: #ff5500;
+  color: #ff5500;
+}
+
+.lg-telemetry-card {
+  width: 268px;
+  border-radius: 22px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--mono);
+}
+
+.lg-gauges-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.lg-gauge-box {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lg-gauge-label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.lg-gauge-label small {
+  font-size: 7.5px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.lg-gauge-svg-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+
+.lg-gauge-svg {
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg);
+}
+
+.lg-gauge-val {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lg-protocol-box {
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 2.5px solid #ff5500;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 8.5px;
+  line-height: 1.48;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lg-protocol-box .cinza {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Classes adicionais do CameraGesturesLab.tsx */
+.lg-camlab-wrap {
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lg-camlab-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lg-camlab-title-row h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.lg-camlab-header p {
+  margin: 4px 0 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.lg-camlab-monitor {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  flex: 1;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.lg-camlab-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lg-badge-dark,
+.lg-badge-orange {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.lg-badge-orange {
+  color: #ff5500;
+  border-color: rgba(255, 85, 0, 0.45);
+}
+
+.lg-reticle-outer {
+  position: relative;
+  z-index: 2;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  display: grid;
+  place-items: center;
+}
+
+.lg-reticle-inner {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 85, 0, 0.35);
+}
+
+.lg-btn-pill {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.lg-camlab-diag {
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+}
+
+.lg-diag-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lg-diag-ico {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 85, 0, 0.15);
+  border: 1px solid rgba(255, 85, 0, 0.4);
+  display: grid;
+  place-items: center;
+}
+
+.lg-diag-left small,
+.lg-diag-right small {
+  display: block;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lg-diag-left strong {
+  font-size: 11px;
+  color: #fff;
+}
+
+.lg-diag-right strong {
+  font-size: 14px;
+  color: #ff5500;
+}
+
+.lg-tutorial-list,
+.lg-create-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.lg-tutorial-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.lg-tutorial-card {
+  border-radius: 16px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.lg-tutorial-card.selecionado {
+  border-color: #ff5500;
+  box-shadow: 0 0 22px rgba(255, 85, 0, 0.22);
+}
+
+.lg-tut-top,
+.lg-tut-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lg-tut-title strong {
+  font-size: 12.5px;
+  color: #fff;
+}
+
+.lg-tut-title span {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: 5px;
+}
+
+.lg-tut-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lg-tut-badge.ativo {
+  background: rgba(255, 85, 0, 0.2);
+  color: #ff5500;
+}
+
+.lg-tut-desc {
+  margin: 6px 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lg-tut-foot span {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.lg-tut-btn {
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+}
+
+.lg-tut-btn.ativo {
+  background: #ff5500;
+  border-color: #ff5500;
+  color: #000;
+}
+
+.lg-create-card {
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lg-create-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lg-create-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #fff;
+  font-size: 11px;
+}
+
+.lg-create-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lg-create-inputs label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.lg-create-inputs input,
+.lg-create-inputs select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9px;
+  padding: 8px 10px;
+  color: #fff;
+  font-size: 11.5px;
+}
+
+.lg-btn-orange-full {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 11px;
+  background: #ff5500;
+  border: none;
+  color: #000;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lg-custom-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.lg-custom-item {
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lg-custom-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lg-custom-info strong {
+  display: block;
+  font-size: 12px;
+  color: #fff;
+}
+
+.lg-custom-info small {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lg-custom-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #ff5500;
+}
+
+.lg-custom-meta button {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 85, 0, 0.16);
+  border: 1px solid rgba(255, 85, 0, 0.45);
+  color: #ff5500;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  cursor: pointer;
+}
+
+/* Classes adicionais do SciFiLoadingScreen.tsx */
+.lg-loading-card {
+  width: min(480px, 92vw);
+  border-radius: 26px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.lg-loading-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.lg-loading-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.lg-loading-bar-bg {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.lg-loading-stage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.lg-orange-chevron {
+  color: #ff5500;
+  font-weight: 800;
+}
+
+.lg-loading-meta {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 9.5px;
+}
+
+.lg-loading-meta small {
+  display: block;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 8px;
+}
+
+.lg-loading-meta strong {
+  color: #fff;
+}
+
 
 
 
