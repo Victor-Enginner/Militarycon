@@ -10,6 +10,9 @@
 Opções: --modelo (alias ou slug; padrão: o do pedido) · --aspecto · --resolucao · --qualidade · --confirmado
 (passa por cima dos tetos de custo; só depois do usuário dizer sim).
 
+Modelos GRATUITOS (provedores_imagem.py): `aihorde/...` e `cloudflare/...` (aliases: horde, horde-flux, horde-z, cf, flux-gratis).
+Não usam o OpenRouter nem pedem OPENROUTER_API_KEY; ignoram as imagens de referência e custam $0.
+
 O que faz:
 1. Grava as variações no pedido e cria os nós de imagem já com `gerando: true` (o canvas mostra os placeholders).
 2. Manda TODAS as entradas do pedido (imagens e referências) como `input_references` e gera em paralelo.
@@ -30,6 +33,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 import base as B  # noqa: E402
+import provedores_imagem as PI  # noqa: E402
 from openrouter import chave, data_url, pedir  # noqa: E402
 
 
@@ -63,7 +67,8 @@ def main() -> None:
 
     projeto = B.ler_projeto(slug)
     mod = B.modelo(a.modelo or pedido.get('modelo'))
-    aspecto = a.aspecto or pedido.get('aspecto') or projeto['padroes']['aspecto']
+    gratis = PI.eh_gratis(mod)
+    aspecto =a.aspecto or pedido.get('aspecto') or projeto['padroes']['aspecto']
     resolucao = a.resolucao or pedido.get('resolucao') or projeto['padroes']['resolucao']
     preco = B.MODELOS.get(mod, {}).get('preco', 0.15)
     tetos = projeto.get('tetos', B.TETOS)
@@ -105,8 +110,10 @@ def main() -> None:
         pedido.pop('erro', None)
         B.gravar_no(slug, pedido)
 
-    key = chave()
-    entradas = [{'type': 'image_url', 'image_url': {'url': data_url(r)}} for r in refs]
+    key = None if gratis else chave()  # modelo grátis não passa pelo OpenRouter: não exige OPENROUTER_API_KEY
+    entradas = [] if gratis else [{'type': 'image_url', 'image_url': {'url': data_url(r)}} for r in refs]
+    if gratis and refs:
+        print(f'AVISO: {mod} não aceita imagens de referência; as {len(refs)} entrada(s) foram ignoradas e só o texto foi usado.', flush=True)
 
     def uma(par):
         iid, v = par
@@ -117,16 +124,23 @@ def main() -> None:
             corpo['input_references'] = entradas
         t0 = time.time()
         try:
-            dados = pedir('POST', '/images', key, corpo, timeout=600)
-            item = (dados.get('data') or [{}])[0]
-            if not item.get('b64_json'):
-                raise RuntimeError(f'sem imagem na resposta: {json.dumps(dados)[:300]}')
+            extra: dict = {}
+            if gratis:
+                imagem, meta = PI.gerar(mod, v['prompt'], aspecto)
+                dados = {'usage': {'cost': 0.0}}
+                extra = {k: meta[k] for k in ('provedor', 'aviso', 'segundos_na_fila') if k in meta}
+            else:
+                dados = pedir('POST', '/images', key, corpo, timeout=600)
+                item = (dados.get('data') or [{}])[0]
+                if not item.get('b64_json'):
+                    raise RuntimeError(f'sem imagem na resposta: {json.dumps(dados)[:300]}')
+                imagem = base64.b64decode(item['b64_json'])
             arq = pasta / 'images' / f'{iid}.png'
-            arq.write_bytes(base64.b64decode(item['b64_json']))
+            arq.write_bytes(imagem)
             B.miniatura(arq, pasta / 'thumbs' / f'{iid}.jpg')
             med = B.medidas(arq) or (None, None)
             campos = {'arquivo': f'images/{iid}.png', 'thumb': f'thumbs/{iid}.jpg', 'largura': med[0], 'altura': med[1],
-                      'custo': (dados.get('usage') or {}).get('cost'), 'segundos': round(time.time() - t0, 1)}
+                      'custo': (dados.get('usage') or {}).get('cost'), 'segundos': round(time.time() - t0, 1), **extra}
             ok = True
         except Exception as e:  # noqa: BLE001
             campos, ok = {'erro': str(e)[:600]}, False
@@ -138,7 +152,7 @@ def main() -> None:
         print(f'{iid} {"ok" if ok else "ERRO"} {campos.get("custo") or campos.get("erro", "")}', flush=True)
         return ok
 
-    with ThreadPoolExecutor(max_workers=min(6, len(variacoes))) as ex:
+    with ThreadPoolExecutor(max_workers=min(PI.paralelismo(mod) if gratis else 6, len(variacoes))) as ex:
         resultados = list(ex.map(uma, zip(imagens, variacoes)))
 
     with B.travado(slug):

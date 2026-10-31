@@ -63,6 +63,12 @@ ALIASES = {'gpt': 'openai/gpt-image-2', 'gpt2': 'openai/gpt-image-2', 'sunburst'
            'flare': 'openai/gpt-image-2.5-flare', 'pro': 'google/gemini-3-pro-image',
            'flash': 'google/gemini-3.1-flash-image', 'seedream': 'bytedance-seed/seedream-5-0-pro',
            'flux': 'black-forest-labs/flux.2-pro'}
+try:  # provedores gratuitos (AI Horde, Cloudflare): entram no menu do app com preço 0; sem o módulo, tudo segue como antes
+    import provedores_imagem as _PI
+    MODELOS.update(_PI.MODELOS_GRATIS)
+    ALIASES.update(_PI.ALIASES_GRATIS)
+except ImportError:
+    pass
 ASPECTOS = ('16:9', '9:16', '4:3', '3:4', '1:1', '21:9', '2:3', '3:2')
 PADROES_POR_TIPO = {
     'site': {'aspecto': '16:9'}, 'webapp': {'aspecto': '16:9'}, 'dashboard': {'aspecto': '16:9'},
