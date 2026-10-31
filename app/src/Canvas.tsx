@@ -9,7 +9,6 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, type Estado, type No } from './api'
-import { AsciiProductionBg } from './AsciiProductionBg'
 import { BiometricNUI, type AcoesEspaciaisFUI } from './BiometricNUI'
 import { CameraGesturesLab } from './CameraGesturesLab'
 import { CanvasCtx, type Ctx } from './ctx'
@@ -626,11 +625,41 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
     [slug, estado, porId, arv, alternar, mudar, apagar, acao, novoPedido, pedidoVideo, novaTela, enviar, copiar, focar, pontos],
   )
 
+  // ---------- MOTOR DE INÉRCIA ZERO-GC (ESTILO HYDRA / ACTIVE THEORY) ----------
+  // `vx/vy` guardam a velocidade da mão; o rAF decai e aplica no viewport sem alocar nada por frame.
+  const inerciaRef = useRef({ vx: 0, vy: 0, raf: 0 })
+  useEffect(() => {
+    const st = inerciaRef.current
+    return () => {
+      if (st.raf) cancelAnimationFrame(st.raf)
+      st.raf = 0
+    }
+  }, [])
+
   // ---------- AÇÕES ESPACIAIS (MÃOS, ROSTO E VOZ -> REACT FLOW + AGENTES) ----------
   const acoesEspaciais = useMemo<AcoesEspaciaisFUI>(() => ({
     panBy: (dx: number, dy: number) => {
       const vp = rf.getViewport()
       rf.setViewport({ x: vp.x + dx, y: vp.y + dy, zoom: vp.zoom })
+      const st = inerciaRef.current
+      st.vx = st.vx * 0.45 + dx * 0.35
+      st.vy = st.vy * 0.45 + dy * 0.35
+      if (!st.raf) {
+        const anim = () => {
+          if (Math.abs(st.vx) > 0.25 || Math.abs(st.vy) > 0.25) {
+            const cur = rf.getViewport()
+            rf.setViewport({ x: cur.x + st.vx, y: cur.y + st.vy, zoom: cur.zoom })
+            st.vx *= 0.88
+            st.vy *= 0.88
+            st.raf = requestAnimationFrame(anim)
+          } else {
+            st.vx = 0
+            st.vy = 0
+            st.raf = 0
+          }
+        }
+        st.raf = requestAnimationFrame(anim)
+      }
     },
     zoomByFactor: (fator: number, centerX?: number, centerY?: number) => {
       const vp = rf.getViewport()
@@ -884,7 +913,6 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
 
         {/* ABA 2: AGENTES ESPACIAIS (REACT FLOW REAL + LOOP DE BACKGROUNDS ASCII + LEFT OS PANEL) */}
         <div className={`lg-rf-stage ${abaNavegacao === 'agents' ? 'ativo' : 'oculto'}`}>
-          {modoFui && abaNavegacao === 'agents' && <AsciiProductionBg zenMode={isZenMode} />}
           {nodes.length > 0 && <ReactFlow
             nodes={nodes} edges={edges} nodeTypes={nodeTypes}
             onNodesChange={onNodesChange} onNodeDragStop={onNodeDragStop}
@@ -900,7 +928,8 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
             defaultEdgeOptions={{ type: 'default' }} connectionRadius={36}
             zoomOnDoubleClick={false}
           >
-            <Background variant={BackgroundVariant.Dots} gap={22} size={1.3} color="var(--ponto)" />
+            {/* bgColor transparente: o SVG do Background é opaco por padrão e cobriria o ASCII/Hydra (z-0). */}
+            <Background variant={BackgroundVariant.Dots} gap={22} size={1.3} color="var(--ponto)" bgColor="transparent" />
             <Controls showInteractive={false} showFitView={false} position="bottom-right">
               <ControlButton title="Mostrar tudo (duplo clique no vazio)" onClick={() => enquadrar(undefined, { folga: 0.05 })}><Maximize size={12} /></ControlButton>
             </Controls>

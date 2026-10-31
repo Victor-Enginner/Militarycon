@@ -1,0 +1,41 @@
+{
+ "id": "FUI-043",
+ "tipo": "imagem",
+ "criado": "2026-10-31T06:36:54",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "27faa620",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.951] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=5lPZDc8mzsY\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: 5lPZDc8mzsY · Query: NORAD C4ISR command control radar F-35 cockpit display",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T06:36:58"
+  }
+ ],
+ "pedido": "FUI-040",
+ "nome": "[0.95] ▶ [YT] F-35 Simulator - AA and AG Mode",
+ "prompt": "LOCKED [0.951] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=5lPZDc8mzsY · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: 5lPZDc8mzsY · Query: NORAD C4ISR command control radar F-35 cockpit display",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.951,
+ "groot_veredito": "LOCKED [0.951] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=5lPZDc8mzsY",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "5lPZDc8mzsY",
+ "embed_url": "https://www.youtube.com/embed/5lPZDc8mzsY?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Vídeo YouTube: \"F-35 Simulator - AA and AG Modes / Avionics\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T06:36:58",
+ "arquivo": "images/FUI-043.png",
+ "thumb": "thumbs/FUI-043.jpg",
+ "largura": 480,
+ "altura": 360,
+ "custo": 0.0
+}

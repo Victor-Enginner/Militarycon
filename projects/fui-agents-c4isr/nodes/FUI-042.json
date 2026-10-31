@@ -1,0 +1,41 @@
+{
+ "id": "FUI-042",
+ "tipo": "imagem",
+ "criado": "2026-10-31T06:36:54",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "99d12527",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.732] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars\nResumo: Imagem Web indexada em tempo real · Origem: https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T06:36:56"
+  }
+ ],
+ "pedido": "FUI-040",
+ "nome": "[0.73] Download #0000FF Ballot Box Behind Bar",
+ "prompt": "SCAN [0.732] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars · Imagem Web indexada em tempo real · Origem: https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.732,
+ "groot_veredito": "SCAN [0.732] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://freepngimg.com/svg/color/0000FF/121236-ballot-box-behind-bars",
+ "atualizado": "2026-10-31T06:36:56",
+ "arquivo": "images/FUI-042.png",
+ "thumb": "thumbs/FUI-042.jpg",
+ "largura": 142,
+ "altura": 225,
+ "custo": 0.0
+}

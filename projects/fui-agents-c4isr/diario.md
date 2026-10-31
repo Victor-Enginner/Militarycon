@@ -10,3 +10,4 @@
 - 01:03 · Pesquisa FUI [FUI-026] "arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar" → 3 referências calibradas pelo Groot 1 (P_média=0.895): FUI-027, FUI-028, FUI-029
 - 01:18 · Pesquisa FUI [FUI-030] "youtube FUI HUD interface reel Territory Studio cockpit" → 4 referências calibradas pelo Groot 1 (P_média=0.951): FUI-031, FUI-032, FUI-033, FUI-034
 - 05:18 · Pesquisa FUI [FUI-035] "OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture" → 4 referências calibradas pelo Groot 1 (P_média=0.856): FUI-036, FUI-037, FUI-038, FUI-039
+- 06:36 · Pesquisa FUI [FUI-040] "NORAD C4ISR command control radar F-35 cockpit display" → 4 referências calibradas pelo Groot 1 (P_média=0.807): FUI-041, FUI-042, FUI-043, FUI-044

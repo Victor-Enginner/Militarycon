@@ -340,5 +340,57 @@ REPOSITORIOS_ECOSSISTEMA_FUI: list[dict[str, str]] = [
         ),
         'query_pesquisa': 'system architecture diagram design visual topology dataflow',
     },
+    {
+        'id': 'pschroen/alien.js',
+        'nome': 'Alien.js // Arquitetura Hydra-Like WebGL + Shaders MVC',
+        'url': 'https://github.com/pschroen/alien.js',
+        'camada': 'HYDRA STACK // ACTIVE THEORY ARCHITECTURE',
+        'linguagem': 'JavaScript / GLSL / Zero-GC Render Loop',
+        'comando_clone': 'git clone --depth 1 https://github.com/pschroen/alien.js.git',
+        'papel_no_sistema': (
+            'Framework educacional e de produção criado por Patrick Schroen diretamente inspirado na '
+            'engine Hydra da Active Theory: MVC 3D, FBO Ping-Pong Particles, Curl Noise e Uber-Shaders.'
+        ),
+        'query_pesquisa': 'WebGL GPGPU FBO ping pong particles curl noise shader architecture diagram',
+    },
+    {
+        'id': 'pschroen/space.js',
+        'nome': 'Space.js // FUI HUD Espacial + WebAudio + 3D UI',
+        'url': 'https://github.com/pschroen/space.js',
+        'camada': 'HYDRA STACK // FUI SPATIAL INTERFACE',
+        'linguagem': 'JavaScript / WebGL / WebAudio Synth',
+        'comando_clone': 'git clone --depth 1 https://github.com/pschroen/space.js.git',
+        'papel_no_sistema': (
+            'Biblioteca de componentes FUI (Futuristic User Interface), retículas táticas, '
+            'telemetria animada e transições 3D fluidas a 60 FPS no estilo atlab.io e upp.cz.'
+        ),
+        'query_pesquisa': 'Futuristic User Interface FUI WebGL HUD spatial telemetry architecture',
+    },
+    {
+        'id': 'oframe/ogl',
+        'nome': 'OGL // Minimal WebGL2 Core (Estilo Hydra Renderer)',
+        'url': 'https://github.com/oframe/ogl',
+        'camada': 'HYDRA STACK // LOW-LEVEL WEBGL2 ENGINE',
+        'linguagem': 'JavaScript / WebGL2 / GPGPU FBO',
+        'comando_clone': 'git clone --depth 1 https://github.com/oframe/ogl.git',
+        'papel_no_sistema': (
+            'Camada WebGL2 ultra-leve e próxima do metal (sem abstrações pesadas), ideal para '
+            'aprender e construir sistemas de partículas GPGPU, pós-processamento e Motion Blur.'
+        ),
+        'query_pesquisa': 'OGL WebGL2 minimal renderer framebuffer postprocessing shader pipeline',
+    },
+    {
+        'id': 'mrdoob/three.js',
+        'nome': 'Three.js // WebGPURenderer + TSL (Three.js Shading Language)',
+        'url': 'https://github.com/mrdoob/three.js',
+        'camada': 'HYDRA STACK // WEBGPU COMPUTE & TSL',
+        'linguagem': 'JavaScript / WGSL / GLSL / TSL',
+        'comando_clone': 'git clone --depth 1 https://github.com/mrdoob/three.js.git',
+        'papel_no_sistema': (
+            'Motor padrão da indústria com GPUComputationRenderer (FBO) e o novo TSL para '
+            'escrever Compute Shaders em WebGPU capazes de animar 1 milhão de partículas no browser.'
+        ),
+        'query_pesquisa': 'Three.js WebGPU compute shader TSL GPUComputationRenderer particle system',
+    },
 ]
 

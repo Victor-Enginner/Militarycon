@@ -64,11 +64,21 @@ def sincronizar_repositorios(apenas_listar: bool = False, filtro: str = "") -> l
             relatorio.append({**item, "local": str(destino), "clonado": True})
             continue
 
-        print(f"   ⏳ Clonando shallow (--depth 1) {url}.git ...")
-        cmd = ["git", "clone", "--depth", "1", f"{url}.git", str(destino)]
+        print(f"   ⏳ Clonando (--filter=blob:none --depth 1) {url}.git ...")
+        cmd = [
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "--depth",
+            "1",
+            "-c",
+            "core.longpaths=true",
+            f"{url}.git",
+            str(destino),
+        ]
         try:
             res = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            ok = res.returncode == 0
+            ok = res.returncode == 0 or (destino / ".git").exists()
             if ok:
                 print(f"   ✅ Clonado com sucesso em {destino}")
             else:
@@ -76,7 +86,7 @@ def sincronizar_repositorios(apenas_listar: bool = False, filtro: str = "") -> l
             relatorio.append({**item, "local": str(destino), "clonado": ok})
         except Exception as exc:
             print(f"   ⚠️ Falha de rede/tempo ao clonar {repo}: {exc}")
-            relatorio.append({**item, "local": str(destino), "clonado": False})
+            relatorio.append({**item, "local": str(destino), "clonado": (destino / ".git").exists()})
 
     print("\n" + "=" * 82)
     clonados = sum(1 for r in relatorio if r["clonado"])

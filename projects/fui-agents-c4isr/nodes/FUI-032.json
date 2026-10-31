@@ -32,10 +32,14 @@
  "arxiv_id": null,
  "autores": null,
  "resumo": "Vídeo YouTube: \"Prometheus Head Scanner Screen | Screen Graphics | Territory Studio\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
- "atualizado": "2026-10-31T01:18:54",
+ "atualizado": "2026-10-31T07:04:22",
  "arquivo": "images/FUI-032.png",
  "thumb": "thumbs/FUI-032.jpg",
  "largura": 1280,
  "altura": 720,
- "custo": 0.0
+ "custo": 0.0,
+ "desloc": {
+  "x": -600,
+  "y": -123
+ }
 }

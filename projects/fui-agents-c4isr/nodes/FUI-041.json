@@ -1,0 +1,41 @@
+{
+ "id": "FUI-041",
+ "tipo": "imagem",
+ "criado": "2026-10-31T06:36:54",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "6fbfff24",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.736] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box\nResumo: Imagem Web indexada em tempo real · Origem: https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T06:36:56"
+  }
+ ],
+ "pedido": "FUI-040",
+ "nome": "[0.74] Vote ,voting , Voting Ballot, Box Free",
+ "prompt": "SCAN [0.736] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box · Imagem Web indexada em tempo real · Origem: https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.736,
+ "groot_veredito": "SCAN [0.736] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://www.publicdomainpictures.net/en/view-image.php?image=263239&picture=vote-voting-voting-ballot-box",
+ "atualizado": "2026-10-31T06:36:56",
+ "arquivo": "images/FUI-041.png",
+ "thumb": "thumbs/FUI-041.jpg",
+ "largura": 220,
+ "altura": 220,
+ "custo": 0.0
+}

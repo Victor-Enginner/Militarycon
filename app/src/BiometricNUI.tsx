@@ -1275,7 +1275,7 @@ export const BiometricNUI = memo(function BiometricNUI({
               </div>
 
               <button type="button" className="lg-airllm-banner" onClick={() => abrirModalCorr('repos')}>
-                ECOSSISTEMA GITHUB + AIRLLM + ARXIV CORR (8 REPOS)
+                ECOSSISTEMA GITHUB + HYDRA WEBGL + AIRLLM (12 REPOS)
               </button>
             </div>
 
@@ -1316,7 +1316,7 @@ export const BiometricNUI = memo(function BiometricNUI({
 
             <div className="fui-modal-corr-tabs">
               <button type="button" className={`fui-tab-btn ${abaCorr === 'repos' ? 'ativo' : ''}`} onClick={() => setAbaCorr('repos')}>
-                1. ECOSSISTEMA GITHUB (8 REPOS DE ESTUDO)
+                1. ECOSSISTEMA GITHUB + HYDRA (12 REPOS CLONADOS)
               </button>
               <button type="button" className={`fui-tab-btn ${abaCorr === 'agentes' ? 'ativo' : ''}`} onClick={() => setAbaCorr('agentes')}>
                 2. QUAIS AGENTES RODAR (PC LEVE + AIRLLM)

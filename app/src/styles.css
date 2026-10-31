@@ -3814,7 +3814,10 @@ span.chip { cursor: default; }
 }
 
 /* =========================================================================
-   ASCII BACKGROUND LOOP ENGINE NA ÁREA DE PRODUÇÃO (AsciiProductionBg.tsx)
+   PALCO DO REACT FLOW TRANSPARENTE
+   O fundo do sistema é o vídeo plexus do FuiWebGL (.fui-webgl-camada), que
+   fica atrás de tudo. O React Flow pinta um SVG opaco por padrão: sem estes
+   dois ajustes, o palco da aba Agentes cobre o fundo da Visão Geral.
    ========================================================================= */
 .lg-rf-stage .react-flow {
   position: relative;
@@ -3822,111 +3825,13 @@ span.chip { cursor: default; }
   background: transparent !important;
 }
 
-.fui-ascii-production-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  background: radial-gradient(circle at 50% 50%, rgba(16, 16, 20, 0.55) 0%, rgba(8, 8, 10, 0.92) 100%);
+.lg-rf-stage .react-flow__background {
+  background-color: transparent !important;
 }
 
-.fui-ascii-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
 
-.fui-ascii-hud {
-  position: fixed;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 41;
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 14px 11px;
-  border-radius: 999px;
-  font-family: var(--mono);
-  overflow: hidden;
-}
 
-.fui-ascii-hud-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
-.fui-ascii-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(255, 85, 0, 0.16);
-  border: 1px solid rgba(255, 85, 0, 0.45);
-  color: #ff5500;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-
-.fui-ascii-title {
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.fui-ascii-hud-controls {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.fui-ascii-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.82);
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.16s;
-}
-
-.fui-ascii-btn:hover,
-.fui-ascii-btn.ativo {
-  background: rgba(255, 85, 0, 0.22);
-  border-color: #ff5500;
-  color: #fff;
-}
-
-.fui-ascii-progress-track {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2.5px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.fui-ascii-progress-fill {
-  height: 100%;
-  background: #ff5500;
-  box-shadow: 0 0 8px #ff5500;
-  transition: width 0.12s linear;
-}
 
 
 
