@@ -1,8 +1,9 @@
-import { ArrowUp, BookOpen, ChevronLeft, ChevronRight, Clapperboard, ExternalLink, Flame, GitBranchPlus, Pause, Play, Quote, Trash2, Volume2, VolumeX, X } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowUp, BookOpen, ChevronLeft, ChevronRight, Clapperboard, ExternalLink, Flame, GitBranchPlus, Hand, Pause, Play, Quote, Trash2, Volume2, VolumeX, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, rotaFogo, type No, type Pin } from './api'
 import { useCanvas } from './ctx'
 import { ESTADOS, alternarEstado, estadoDaTecla } from './estados'
+import { fuiAudio } from './FuiAudio'
 
 /** A imagem, vídeo, stream YouTube ou artigo ArXiv em tela cheia: operação 1 mão (Gesto ✌️ ou Pinça 👌), comentários e linhagem. */
 export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void; navegar: (id: string) => void }) {
@@ -25,13 +26,50 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
   const [foco, setFoco] = useState<string | null>(null)
   const entrada = useRef<HTMLTextAreaElement>(null)
 
-  // os pares: os irmãos na árvore que têm imagem (as saídas do mesmo pedido; numa referência, as outras da mesma tela)
+  // Deck de slides: prioriza os irmãos do mesmo pedido e concatena os demais slides do projeto para permitir folhear páginas continuamente!
   const irmas = useMemo(() => {
     const pai = arv.pai.get(no.id)
-    const lista = (pai ? arv.filhos.get(pai) || [] : [no.id]).filter((id) => porId.get(id)?.arquivo)
-    return lista.includes(no.id) ? lista : [no.id]
-  }, [no.id, arv, porId])
+    const doPedido = (pai ? arv.filhos.get(pai) || [] : [no.id]).filter((id) => porId.get(id)?.arquivo)
+    const todosComArquivo = projeto.nos.filter((n) => (n.tipo === 'imagem' || n.tipo === 'video' || n.tipo === 'referencia') && n.arquivo).map((n) => n.id)
+    const unicos = [...new Set([...doPedido, ...todosComArquivo])]
+    return unicos.includes(no.id) ? unicos : [no.id, ...unicos]
+  }, [no.id, arv, porId, projeto.nos])
   const i = irmas.indexOf(no.id)
+  const [animFlip, setAnimFlip] = useState<'next' | 'prev' | null>(null)
+  const [avisoFlip, setAvisoFlip] = useState<string | null>(null)
+
+  const irAnterior = useCallback(() => {
+    if (irmas.length <= 1) return
+    fuiAudio.hoverTick()
+    setAnimFlip('prev')
+    const idxAlvo = i > 0 ? i - 1 : irmas.length - 1
+    setAvisoFlip(`📖 PÁGINA ${idxAlvo + 1} DE ${irmas.length}`)
+    navegar(irmas[idxAlvo])
+    window.setTimeout(() => setAnimFlip(null), 320)
+    window.setTimeout(() => setAvisoFlip(null), 1100)
+  }, [irmas, i, navegar])
+
+  const irProxima = useCallback(() => {
+    if (irmas.length <= 1) return
+    fuiAudio.hoverTick()
+    setAnimFlip('next')
+    const idxAlvo = i < irmas.length - 1 ? i + 1 : 0
+    setAvisoFlip(`📖 PÁGINA ${idxAlvo + 1} DE ${irmas.length}`)
+    navegar(irmas[idxAlvo])
+    window.setTimeout(() => setAnimFlip(null), 320)
+    window.setTimeout(() => setAvisoFlip(null), 1100)
+  }, [irmas, i, navegar])
+
+  // Escuta o gesto de "Passar Página com a Mão" (Swipe Horizontal no Ar) vindo do BiometricNUI
+  useEffect(() => {
+    const aoPassarPagina = (ev: Event) => {
+      const dir = (ev as CustomEvent<{ direcao: 'next' | 'prev' }>).detail?.direcao
+      if (dir === 'next') irProxima()
+      else if (dir === 'prev') irAnterior()
+    }
+    window.addEventListener('fui:viewer-slide', aoPassarPagina)
+    return () => window.removeEventListener('fui:viewer-slide', aoPassarPagina)
+  }, [irProxima, irAnterior])
   const faixaRef = useRef<HTMLDivElement>(null)
   const pedido = no.tipo === 'imagem' || ehVideo ? porId.get(no.pedido || '') : undefined
   // linhagem: de onde esta imagem (ou vídeo) veio (as entradas do pedido que a gerou) e o que saiu dela (pedidos que a usaram)
@@ -59,8 +97,8 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
       }
       if (e.key === 'Escape') fechar()
       else if (e.key === ' ' && videoRef.current) { e.preventDefault(); alternarVideo() }
-      else if (e.key === 'ArrowRight' && i < irmas.length - 1) navegar(irmas[i + 1])
-      else if (e.key === 'ArrowLeft' && i > 0) navegar(irmas[i - 1])
+      else if (e.key === 'ArrowRight') irProxima()
+      else if (e.key === 'ArrowLeft') irAnterior()
       else if ((no.tipo === 'imagem' || no.tipo === 'video') && !e.metaKey && !e.ctrlKey) {
         const e2 = estadoDaTecla(e.key)
         if (e2) mudar(no.id, { estado: alternarEstado(estado, e2) })
@@ -68,7 +106,7 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
     }
     window.addEventListener('keydown', tecla)
     return () => window.removeEventListener('keydown', tecla)
-  }, [fechar, navegar, irmas, i, no, estado, mudar])
+  }, [fechar, irProxima, irAnterior, no, estado, mudar])
 
   const enviarComentario = async () => {
     if (!texto.trim()) return
@@ -90,19 +128,22 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
   return (
     <div className="viewer" onClick={fechar}>
       <div className="viewer-palco">
-        {/* Barra Tática de Operação com 1 Mão (Alvos Grandes para Pinça 👌 ou Gesto ✌️) */}
+        {/* Barra Tática de Operação com 1 Mão (Alvos Grandes para Pinça 👌, Passar Página 📖 ou Gesto ✌️) */}
         <div className="viewer-barra-1mao" onClick={(e) => e.stopPropagation()}>
           <button type="button" className="fui-btn-fechar-1mao" onClick={fechar} title="Fechar tela (Pinça 👌 aqui, Gesto ✌️ ou Esc)">
             <X size={16} /> FECHAR TELA (PINÇA 👌 / GESTO ✌️)
           </button>
           {irmas.length > 1 && (
             <>
-              <button type="button" className="fui-btn-nav-1mao" disabled={i <= 0} onClick={() => i > 0 && navegar(irmas[i - 1])}>
-                <ChevronLeft size={15} /> ANTERIOR
+              <button type="button" className="fui-btn-nav-1mao" onClick={irAnterior}>
+                <ChevronLeft size={15} /> PÁG. ANTERIOR ({i + 1}/{irmas.length})
               </button>
-              <button type="button" className="fui-btn-nav-1mao" disabled={i >= irmas.length - 1} onClick={() => i < irmas.length - 1 && navegar(irmas[i + 1])}>
-                PRÓXIMA <ChevronRight size={15} />
+              <button type="button" className="fui-btn-nav-1mao" onClick={irProxima}>
+                PRÓXIMA PÁG. <ChevronRight size={15} />
               </button>
+              <span className="fui-dica-folhear">
+                <Hand size={13} color="#ff5500" /> PASSE A MÃO ⬅️ / ➡️ PARA FOLHEAR SLIDES
+              </span>
             </>
           )}
           {(ehVideo || ehYoutube) && (
@@ -133,8 +174,13 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
         </div>
 
         <div className="palco-img">
-        {i > 0 && <button type="button" className="nav esq" title="Anterior (←)" onClick={(e) => { e.stopPropagation(); navegar(irmas[i - 1]) }}><ChevronLeft size={22} /></button>}
-        <div className="viewer-img" onClick={clicarImagem} title="Clique para comentar num ponto · clique fora para voltar ao canvas">
+        {avisoFlip && <div className="viewer-toast-flip">{avisoFlip}</div>}
+        {irmas.length > 1 && (
+          <button type="button" className="nav esq fui-nav-pagina" title="Página Anterior (← ou Passe a Mão para a Direita)" onClick={(e) => { e.stopPropagation(); irAnterior() }}>
+            <ChevronLeft size={26} />
+          </button>
+        )}
+        <div className={`viewer-img ${animFlip ? `flip-${animFlip}` : ''}`} onClick={clicarImagem} title="Clique para comentar num ponto · Passe a mão ⬅️/➡️ para mudar de página">
           {ehYoutube ? (
             <div className="fui-embed-palco" onClick={(e) => e.stopPropagation()}>
               <iframe
@@ -184,7 +230,11 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
             </div>
           </div>
         )}
-        {i < irmas.length - 1 && <button type="button" className="nav dir" title="Próxima (→)" onClick={(e) => { e.stopPropagation(); navegar(irmas[i + 1]) }}><ChevronRight size={22} /></button>}
+        {irmas.length > 1 && (
+          <button type="button" className="nav dir fui-nav-pagina" title="Próxima Página (→ ou Passe a Mão para a Esquerda)" onClick={(e) => { e.stopPropagation(); irProxima() }}>
+            <ChevronRight size={26} />
+          </button>
+        )}
         </div>
         {faixa.length > 1 && (
           // filme estilo Finder: as irmãs (mesmo pedido) — ou, numa referência, as imagens que saíram dela

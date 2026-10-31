@@ -100,35 +100,74 @@ function index0Z(a: Landmark, b: Landmark): number {
   return b.z || a.z || 0
 }
 
-/** Classifica ortogonalmente o gesto de 1 mão quando apenas 1 mão está ativa. */
+/** Busca magnética de alvos interativos (botões, links e cards) em um raio de 30px ao redor do cursor da mão. */
+function buscarAlvoMagnetico(sx: number, sy: number): {
+  btnEl?: HTMLElement
+  nodeEl?: HTMLElement
+  nodeId: string | null
+} {
+  const offsets = [
+    [0, 0],
+    [-14, 0], [14, 0], [0, -14], [0, 14],
+    [-26, 0], [26, 0], [0, -26], [0, 26],
+    [-18, -18], [18, -18], [-18, 18], [18, 18],
+  ]
+  let foundBtn: HTMLElement | undefined
+  let foundNode: HTMLElement | undefined
+
+  for (const [ox, oy] of offsets) {
+    const px = sx + ox
+    const py = sy + oy
+    if (px < 0 || py < 0 || px > window.innerWidth || py > window.innerHeight) continue
+    const els = document.elementsFromPoint(px, py)
+    if (!foundBtn) {
+      foundBtn = els.map((el) => el.closest('button, a')).find(Boolean) as HTMLElement | undefined
+    }
+    if (!foundNode) {
+      foundNode = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
+    }
+    if (foundBtn && foundNode) break
+  }
+
+  return {
+    btnEl: foundBtn,
+    nodeEl: foundNode,
+    nodeId: foundNode?.getAttribute('data-id') || null,
+  }
+}
+
+/** Classifica ortogonalmente o gesto de 1 mão com prioridade para Click de Pinça (👌) estável. */
 function classificarGestoMao(h: Landmark[], estavaPinch: boolean): {
   modo: ModoGesto1Mao
   distPinch: number
 } {
   const thumb = h[4]
   const index = h[8]
-  const distPinch = Math.hypot(thumb.x - index.x, thumb.y - index.y, (thumb.z - index.z) * 0.45)
+  const distPinch = Math.hypot(thumb.x - index.x, thumb.y - index.y, (thumb.z - index.z) * 0.38)
 
-  const extIndex = dedoEstendido(h, 8, 6, 1.10)
-  const extMiddle = dedoEstendido(h, 12, 10, 1.12)
-  const extRing = dedoEstendido(h, 16, 14, 1.10)
-  const extPinky = dedoEstendido(h, 20, 18, 1.10)
+  const extIndex = dedoEstendido(h, 8, 6, 1.09)
+  const extMiddle = dedoEstendido(h, 12, 10, 1.10)
+  const extRing = dedoEstendido(h, 16, 14, 1.09)
+  const extPinky = dedoEstendido(h, 20, 18, 1.09)
 
-  // 1. PUNHO FECHADO (Mão fechada para mover/Pan): Todos os 4 dedos principais dobrados na palma
-  if (!extIndex && !extMiddle && !extRing && !extPinky) {
-    return { modo: 'FIST_PAN', distPinch }
-  }
-
-  // 2. GESTO "V" / PAZ (✌️ Indicador + Médio estendidos, Anelar + Mínimo dobrados, sem pinça): FECHAR TELA COM 1 MÃO
+  // 1. GESTO "V" / PAZ (✌️ Indicador + Médio estendidos, Anelar + Mínimo dobrados, sem pinça): FECHAR TELA COM 1 MÃO
   const sepIndexMiddle = Math.hypot(h[8].x - h[12].x, h[8].y - h[12].y)
-  if (extIndex && extMiddle && !extRing && !extPinky && distPinch > 0.075 && sepIndexMiddle > 0.038) {
+  if (extIndex && extMiddle && !extRing && !extPinky && distPinch > 0.072 && sepIndexMiddle > 0.036) {
     return { modo: 'PEACE_CLOSE', distPinch }
   }
 
-  // 3. PINÇA DE PRECISÃO 👌 (Polegar + Indicador unidos, mas Médio OU Anelar estendido para diferenciar de punho fechado!)
-  const limiarPinch = estavaPinch ? 0.066 : 0.050
-  if (distPinch < limiarPinch && (extMiddle || extRing || estavaPinch)) {
+  // 2. PINÇA DE PRECISÃO 👌 (Polegar + Indicador próximos — verificado ANTES do punho fechado para nunca falhar o clique!)
+  const limiarPinch = estavaPinch ? 0.080 : 0.062
+  const dIdxWrist = Math.hypot(h[8].x - h[0].x, h[8].y - h[0].y)
+  const dMcpWrist = Math.hypot(h[5].x - h[0].x, h[5].y - h[0].y)
+  const naoEhPunhoEncolhido = extMiddle || extRing || extPinky || dIdxWrist > dMcpWrist * 0.88
+  if (distPinch < limiarPinch && (naoEhPunhoEncolhido || estavaPinch)) {
     return { modo: 'PINCH_CLICK', distPinch }
+  }
+
+  // 3. PUNHO FECHADO ✊ (Mão fechada para mover/Pan ou passar página): Todos os 4 dedos principais dobrados na palma e sem pinça
+  if (!extIndex && !extMiddle && !extRing && !extPinky) {
+    return { modo: 'FIST_PAN', distPinch }
   }
 
   return { modo: 'OPEN', distPinch }
@@ -180,6 +219,8 @@ export const BiometricNUI = memo(function BiometricNUI({
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
   const acoesRef = useRef(acoes)
   acoesRef.current = acoes
+  const viewerAbertoRef = useRef(!!viewerAberto)
+  viewerAbertoRef.current = !!viewerAberto
 
   const gestosRef = useRef({
     smoothR: { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5 },
@@ -201,6 +242,10 @@ export const BiometricNUI = memo(function BiometricNUI({
     peaceStartTime: 0,
     peaceTriggered: false,
     frameCount: 0,
+    swipeStartX: null as number | null,
+    swipeStartTime: 0,
+    lastPageFlipTime: 0,
+    lastPageFlipDir: null as 'next' | 'prev' | null,
   })
 
   // ---------- 1. RASTREAMENTO BIOMÉTRICO 60FPS (1€ FILTER + DOM DIRETO + 2-HAND GRAB ZOOM) ----------
@@ -508,19 +553,36 @@ export const BiometricNUI = memo(function BiometricNUI({
           }
 
           // =========================================================================
-          // OPERAÇÃO DE 1 MÃO (COERENTE E ULTRA-FLUIDA COM FILTRO 1€)
+          // OPERAÇÃO DE 1 MÃO (CLICK ESTABILIZADO + IMÃ MAGNÉTICO + FOLHEAR PÁGINA NO VIEWER)
           // =========================================================================
           setCamStatus((s) => (s === 'BIOMETRIC LOCK' ? s : 'BIOMETRIC LOCK'))
           const { modo: modo0, distPinch: dist0 } = classificarGestoMao(h0, g.ultimoModoR === 'PINCH_CLICK')
           const isPinching0 = modo0 === 'PINCH_CLICK'
 
-          const refPoint0 = modo0 === 'FIST_PAN' ? palm0 : h0[8]
-          const rawX0 = (1 - refPoint0.x) * W
-          const rawY0 = refPoint0.y * H
-          g.smoothR.x = filtrar1Euro(g.smoothR.x, rawX0)
-          g.smoothR.y = filtrar1Euro(g.smoothR.y, rawY0)
+          // Âncora anatômica anti-pulo: usa 60% articulação MCP (5) + 25% ponta do indicador (8) + 15% polegar (4)
+          // para que fechar o indicador sobre o polegar NUNCA desloque a mira para fora do botão!
+          const anchorPoint =
+            modo0 === 'FIST_PAN'
+              ? palm0
+              : {
+                  x: h0[5].x * 0.60 + h0[8].x * 0.25 + h0[4].x * 0.15,
+                  y: h0[5].y * 0.60 + h0[8].y * 0.25 + h0[4].y * 0.15,
+                }
+          const rawX0 = (1 - anchorPoint.x) * W
+          const rawY0 = anchorPoint.y * H
+
+          // Quando os dedos começam a fechar para clicar (dist0 < 0.088), congela/amortece a mira em 92% no início do clique!
+          const aproximandoPinch = dist0 < 0.088 && g.pinchMoveDist < 22
+          const prevSx = g.smoothR.x
+          g.smoothR.x = aproximandoPinch
+            ? filtrar1Euro(g.smoothR.x, rawX0, 0.04, 0.12, 90)
+            : filtrar1Euro(g.smoothR.x, rawX0)
+          g.smoothR.y = aproximandoPinch
+            ? filtrar1Euro(g.smoothR.y, rawY0, 0.04, 0.12, 90)
+            : filtrar1Euro(g.smoothR.y, rawY0)
           const sx0 = g.smoothR.x
           const sy0 = g.smoothR.y
+          const vx = sx0 - prevSx
 
           if (cursorRRef.current) {
             cursorRRef.current.style.transform = `translate3d(${sx0.toFixed(1)}px, ${sy0.toFixed(1)}px, 0)`
@@ -542,13 +604,37 @@ export const BiometricNUI = memo(function BiometricNUI({
             active: true,
           }
 
-          // Raycasting DOM leve (a cada 2 frames quando aberto, ou imediato ao clicar)
+          // =========================================================================
+          // MODO FOLHEAR PÁGINA / PASSAR SLIDES COM A MÃO QUANDO O VIEWER ESTÁ ABERTO
+          // =========================================================================
+          if (viewerAbertoRef.current) {
+            const nowFlip = performance.now()
+            if (Math.abs(vx) > 9.5) {
+              if (g.swipeStartX === null || nowFlip - g.swipeStartTime > 380) {
+                g.swipeStartX = prevSx
+                g.swipeStartTime = nowFlip
+              }
+              const deltaSwipeX = sx0 - g.swipeStartX
+              if (Math.abs(deltaSwipeX) > 105 && nowFlip - g.lastPageFlipTime > 650) {
+                const direcao: 'next' | 'prev' = deltaSwipeX < 0 ? 'next' : 'prev'
+                // Evita disparar a direção oposta no retorno natural da mão em menos de 1.1s
+                if (g.lastPageFlipDir !== direcao || nowFlip - g.lastPageFlipTime > 950) {
+                  g.lastPageFlipTime = nowFlip
+                  g.lastPageFlipDir = direcao
+                  g.swipeStartX = null
+                  window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao } }))
+                }
+              }
+            } else if (nowFlip - g.swipeStartTime > 380) {
+              g.swipeStartX = null
+            }
+          }
+
+          // Raycasting DOM Magnético (raio de 30px)
           let nodeId = g.hoveredNodeId
-          let els: Element[] = []
           if (modo0 !== g.ultimoModoR || g.frameCount % 2 === 0) {
-            els = document.elementsFromPoint(sx0, sy0)
-            const nodeEl = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
-            nodeId = nodeEl?.getAttribute('data-id') || null
+            const mag = buscarAlvoMagnetico(sx0, sy0)
+            nodeId = mag.nodeId
             if (nodeId && nodeId !== g.hoveredNodeId && modo0 === 'OPEN') {
               fuiAudio.hoverTick()
             }
@@ -580,7 +666,7 @@ export const BiometricNUI = memo(function BiometricNUI({
           }
 
           if (modo0 === 'FIST_PAN') {
-            // 1 MÃO FECHADA (PUNHO): Move EXCLUSIVAMENTE o canvas (Pan)
+            // 1 MÃO FECHADA (PUNHO): Move o canvas (Pan) OU puxa a página no Viewer!
             if (g.draggedNodeId) {
               acoesRef.current.soltarArrasteNo(g.draggedNodeId)
               g.draggedNodeId = null
@@ -590,33 +676,38 @@ export const BiometricNUI = memo(function BiometricNUI({
             } else {
               const dx = sx0 - g.lastPanPos.x
               const dy = sy0 - g.lastPanPos.y
-              if (Math.hypot(dx, dy) > 0.8) {
+              if (viewerAbertoRef.current) {
+                const nowFlip = performance.now()
+                if (Math.abs(dx) > 62 && nowFlip - g.lastPageFlipTime > 620) {
+                  const direcao: 'next' | 'prev' = dx < 0 ? 'next' : 'prev'
+                  g.lastPageFlipTime = nowFlip
+                  g.lastPageFlipDir = direcao
+                  g.lastPanPos = { x: sx0, y: sy0 }
+                  window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao } }))
+                }
+              } else if (Math.hypot(dx, dy) > 0.8) {
                 acoesRef.current.panBy(dx * 1.45, dy * 1.45)
                 g.lastPanPos = { x: sx0, y: sy0 }
               }
             }
           } else if (modo0 === 'PINCH_CLICK') {
-            // 1 MÃO PINÇA 👌: Clicar, selecionar, abrir ou arrastar placa
+            // 1 MÃO PINÇA 👌: Clique Magnético Imediato em Botões, Links e Cards!
             if (g.ultimoModoR !== 'PINCH_CLICK') {
               fuiAudio.pinchLock()
               const now = performance.now()
-              const distUltimoPinch = Math.hypot(sx0 - g.lastPinchPosR.x, sy0 - g.lastPinchPosR.y)
-              const isDoublePinch = (now - g.lastPinchTimeR > 120) && (now - g.lastPinchTimeR < 850) && distUltimoPinch < 85
               g.lastPinchTimeR = now
               g.lastPinchPosR = { x: sx0, y: sy0 }
               g.pinchMoveDist = 0
 
-              if (!els.length) els = document.elementsFromPoint(sx0, sy0)
-              const nodeEl = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
-              const btnEl = els.map((el) => el.closest('button, a')).find(Boolean) as HTMLElement | undefined
-              if (btnEl && (!nodeEl || btnEl.classList.contains('nodrag') || btnEl.closest('.viewer, .fui-hud-painel, .topo, .barra-selecao'))) {
+              const { btnEl, nodeEl, nodeId: magNodeId } = buscarAlvoMagnetico(sx0, sy0)
+              if (btnEl && (!nodeEl || btnEl.classList.contains('nodrag') || btnEl.closest('.viewer, .fui-hud-painel, .topo, .lg-top-navbar, .barra-selecao'))) {
                 btnEl.click()
                 g.draggedNodeId = null
                 g.wasSelectedOnPinch = false
-              } else if (nodeId) {
-                g.wasSelectedOnPinch = !!nodeEl?.classList.contains('selected')
-                acoesRef.current.selecionarNoEm(sx0, sy0, isDoublePinch)
-                g.draggedNodeId = nodeId
+              } else if (magNodeId) {
+                g.wasSelectedOnPinch = true
+                acoesRef.current.selecionarNoEm(sx0, sy0, false)
+                g.draggedNodeId = magNodeId
               } else {
                 g.draggedNodeId = null
                 g.wasSelectedOnPinch = false
@@ -626,11 +717,20 @@ export const BiometricNUI = memo(function BiometricNUI({
               const dx = sx0 - g.lastPanPos.x
               const dy = sy0 - g.lastPanPos.y
               const step = Math.hypot(dx, dy)
-              if (step > 1.0) {
+              if (step > 2.2) {
                 g.pinchMoveDist += step
-                if (g.draggedNodeId) {
+                if (viewerAbertoRef.current) {
+                  const nowFlip = performance.now()
+                  if (Math.abs(sx0 - g.lastPinchPosR.x) > 68 && nowFlip - g.lastPageFlipTime > 620) {
+                    const direcao: 'next' | 'prev' = sx0 - g.lastPinchPosR.x < 0 ? 'next' : 'prev'
+                    g.lastPageFlipTime = nowFlip
+                    g.lastPageFlipDir = direcao
+                    g.lastPinchPosR = { x: sx0, y: sy0 }
+                    window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao } }))
+                  }
+                } else if (g.draggedNodeId && g.pinchMoveDist > 26) {
                   acoesRef.current.arrastarNo(g.draggedNodeId, dx, dy)
-                } else {
+                } else if (!g.draggedNodeId) {
                   acoesRef.current.panBy(dx * 1.3, dy * 1.3)
                 }
                 g.lastPanPos = { x: sx0, y: sy0 }
@@ -638,8 +738,8 @@ export const BiometricNUI = memo(function BiometricNUI({
             }
           } else {
             if (g.draggedNodeId) {
-              // Se fez Pinça numa aba que JÁ estava selecionada e soltou sem arrastar (< 22px): ABRE EM TELA CHEIA!
-              if (g.wasSelectedOnPinch && g.pinchMoveDist < 22) {
+              // 1 Único Clique de Pinça 👌 sem arrastar (< 28px) ABRE A IMAGEM/CARD IMEDIATAMENTE EM TELA CHEIA!
+              if (g.pinchMoveDist < 28) {
                 acoesRef.current.comandoVozAcao('abrir')
               } else {
                 acoesRef.current.soltarArrasteNo(g.draggedNodeId)
@@ -718,6 +818,16 @@ export const BiometricNUI = memo(function BiometricNUI({
     if (/^(fechar|feche|voltar|sair|cancelar|esc)$/.test(f) || f.includes('fechar tela') || f.includes('fechar aba')) {
       fuiAudio.voiceDispatch()
       acoesRef.current.comandoVozAcao('fechar')
+      return
+    }
+    if (f.includes('próxima') || f.includes('próximo') || f.includes('passar página') || f.includes('avançar')) {
+      fuiAudio.voiceDispatch()
+      window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao: 'next' } }))
+      return
+    }
+    if (f.includes('anterior') || f.includes('voltar página') || f.includes('slide anterior')) {
+      fuiAudio.voiceDispatch()
+      window.dispatchEvent(new CustomEvent('fui:viewer-slide', { detail: { direcao: 'prev' } }))
       return
     }
     if (f.includes('ampliar') || f.includes('mais zoom') || f.includes('aproximar')) {
@@ -819,7 +929,7 @@ export const BiometricNUI = memo(function BiometricNUI({
   const [searchQuery, setSearchQuery] = useState('')
   const [gestoSimulado, setGestoSimulado] = useState<{ label: string; desc: string } | null>(null)
   const [modalCorrAberto, setModalCorrAberto] = useState(false)
-  const [abaCorr, setAbaCorr] = useState<'agentes' | 'llms' | 'doutrinas' | 'corr'>('agentes')
+  const [abaCorr, setAbaCorr] = useState<'agentes' | 'llms' | 'doutrinas' | 'corr' | 'repos'>('repos')
   const [dadosCorr, setDadosCorr] = useState<{
     corr_categorias?: { codigo: string; area: string; foco: string }[]
     modelos_globais?: { id: string; nome: string; origem: string; categoria: string; vram_gpu: string; ram_cpu_q4: string; comando_ollama: string; uso_militar_c4isr: string; favorito?: boolean }[]
@@ -827,17 +937,35 @@ export const BiometricNUI = memo(function BiometricNUI({
     airllm_spec?: { repo: string; principio: string; vram_minima: string; instalacao_opcional: string; codigo_exemplo: string }
     agentes_leves?: { id: string; status: string; cpu_idle: string; gpu_load: string; ram_budget: string; funcao: string }[]
     diagram_design?: { camada: string; regra_visual: string; cor_token: string }[]
+    repositorios_estudo?: {
+      id: string
+      nome?: string
+      repo?: string
+      url: string
+      camada?: string
+      camada_fui?: string
+      linguagem?: string
+      status_integracao?: string
+      papel_no_sistema: string
+      comando_clone?: string
+      clone_cmd?: string
+      query_pesquisa: string
+    }[]
   } | null>(null)
 
-  const abrirModalCorr = useCallback(() => {
-    setModalCorrAberto(true)
-    if (!dadosCorr) {
-      fetch('/api/corr-militar')
-        .then((r) => r.json())
-        .then((d) => setDadosCorr(d))
-        .catch(() => {})
-    }
-  }, [dadosCorr])
+  const abrirModalCorr = useCallback(
+    (abaInicial?: 'agentes' | 'llms' | 'doutrinas' | 'corr' | 'repos') => {
+      if (abaInicial) setAbaCorr(abaInicial)
+      setModalCorrAberto(true)
+      if (!dadosCorr) {
+        fetch('/api/corr-militar')
+          .then((r) => r.json())
+          .then((d) => setDadosCorr(d))
+          .catch(() => {})
+      }
+    },
+    [dadosCorr]
+  )
 
   const acionarGestoRapido = (tipo: 'pan' | 'zoom' | 'pinch' | 'reset') => {
     fuiAudio.pinchLock()
@@ -903,9 +1031,9 @@ export const BiometricNUI = memo(function BiometricNUI({
                     ? `👌 PINÇA // ${uiR.hoverId}`
                     : '👌 PINÇA // CLICK'
                   : viewerAberto
-                    ? '🖐️ FAÇA ✌️ PARA FECHAR'
+                    ? '📖 PASSE A MÃO ⬅️/➡️ P/ MUDAR PÁG · ✌️ FECHAR'
                     : uiR.hoverId
-                      ? `TARGET // ${uiR.hoverId}`
+                      ? `👌 PINCE P/ ABRIR // ${uiR.hoverId}`
                       : 'HAND-R // OPEN'}
         </span>
       </div>
@@ -1146,8 +1274,8 @@ export const BiometricNUI = memo(function BiometricNUI({
                 </button>
               </div>
 
-              <button type="button" className="lg-airllm-banner" onClick={abrirModalCorr}>
-                AIRLLM + ARXIV CORR + AGENTES (0% GPU)
+              <button type="button" className="lg-airllm-banner" onClick={() => abrirModalCorr('repos')}>
+                ECOSSISTEMA GITHUB + AIRLLM + ARXIV CORR (8 REPOS)
               </button>
             </div>
 
@@ -1175,10 +1303,10 @@ export const BiometricNUI = memo(function BiometricNUI({
             <div className="fui-modal-corr-header">
               <div>
                 <strong style={{ color: '#00f0ff', fontSize: 13 }}>
-                  MILITARYCON // AIRLLM + DIAGRAM DESIGN + ARXIV CoRR + LLMs SOBERANOS
+                  MILITARYCON // ECOSSISTEMA GITHUB + AIRLLM + ARXIV CoRR + LLMs SOBERANOS
                 </strong>
                 <div style={{ fontSize: 10, color: '#8ab8cc', marginTop: 2 }}>
-                  lyogavin/airllm · cathrynlavery/diagram-design · amilajack/reading · airforceaircade.com
+                  reading · openobserve · openpose · mmpose · Taskosaur · gods-eye-view · airllm · diagram-design
                 </div>
               </div>
               <button type="button" className="fui-tab-btn ativo" onClick={() => setModalCorrAberto(false)}>
@@ -1187,21 +1315,61 @@ export const BiometricNUI = memo(function BiometricNUI({
             </div>
 
             <div className="fui-modal-corr-tabs">
+              <button type="button" className={`fui-tab-btn ${abaCorr === 'repos' ? 'ativo' : ''}`} onClick={() => setAbaCorr('repos')}>
+                1. ECOSSISTEMA GITHUB (8 REPOS DE ESTUDO)
+              </button>
               <button type="button" className={`fui-tab-btn ${abaCorr === 'agentes' ? 'ativo' : ''}`} onClick={() => setAbaCorr('agentes')}>
-                1. QUAIS AGENTES RODAR (PC LEVE + AIRLLM)
+                2. QUAIS AGENTES RODAR (PC LEVE + AIRLLM)
               </button>
               <button type="button" className={`fui-tab-btn ${abaCorr === 'llms' ? 'ativo' : ''}`} onClick={() => setAbaCorr('llms')}>
-                2. LLMs SOBERANOS &amp; ABLITERATED (CPU Q4)
+                3. LLMs SOBERANOS &amp; ABLITERATED (CPU Q4)
               </button>
               <button type="button" className={`fui-tab-btn ${abaCorr === 'doutrinas' ? 'ativo' : ''}`} onClick={() => setAbaCorr('doutrinas')}>
-                3. DIAGRAM DESIGN &amp; 5 DOUTRINAS MILITARES
+                4. DIAGRAM DESIGN &amp; 5 DOUTRINAS MILITARES
               </button>
               <button type="button" className={`fui-tab-btn ${abaCorr === 'corr' ? 'ativo' : ''}`} onClick={() => setAbaCorr('corr')}>
-                4. BANCO ARXIV CoRR (41 CATEGORIAS CS)
+                5. BANCO ARXIV CoRR (41 CATEGORIAS CS)
               </button>
             </div>
 
             <div className="fui-modal-corr-body">
+              {abaCorr === 'repos' && (
+                <div className="fui-grid-cards">
+                  {(dadosCorr?.repositorios_estudo || []).map((repo) => (
+                    <div key={repo.id} className="fui-info-card" style={{ borderColor: 'rgba(255, 85, 0, 0.45)' }}>
+                      <strong style={{ color: '#ff5500' }}>📦 {repo.nome || repo.repo || repo.id}</strong>
+                      <span style={{ color: '#00ff9d', fontSize: 10, fontFamily: 'monospace' }}>
+                        {repo.camada || repo.camada_fui} · {repo.linguagem || repo.status_integracao || 'ATIVO'}
+                      </span>
+                      <span>{repo.papel_no_sistema}</span>
+                      <code>{repo.comando_clone || repo.clone_cmd}</code>
+                      <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                        <button
+                          type="button"
+                          className="fui-tab-btn ativo"
+                          onClick={() => {
+                            setModalCorrAberto(false)
+                            fuiAudio.voiceDispatch()
+                            acoes.dispararPesquisaAgentes(repo.query_pesquisa)
+                          }}
+                        >
+                          PESQUISAR ARQUITETURA NO CANVAS
+                        </button>
+                        <a
+                          href={repo.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="fui-tab-btn"
+                          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                        >
+                          ABRIR GITHUB ↗
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {abaCorr === 'agentes' && (
                 <>
                   {dadosCorr?.airllm_spec && (

@@ -1,0 +1,49 @@
+{
+ "id": "FUI-035",
+ "tipo": "pedido",
+ "criado": "2026-10-31T05:18:09",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T05:18:09",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-036",
+  "FUI-037",
+  "FUI-038",
+  "FUI-039"
+ ],
+ "atualizado": "2026-10-31T05:18:33",
+ "variacoes": [
+  {
+   "nome": "[0.72] Woman Browsing Library Shelves and Sel",
+   "prompt": "SCAN [0.721] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196 · Imagem Web indexada em tempo real · Origem: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196",
+   "tese": "SCAN [0.721] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.94] ▶ [YT] God’s Eye View Just Got a Massi",
+   "prompt": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=g3toZwkrQQE · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: g3toZwkrQQE · Query: OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture",
+   "tese": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.82] [ArXiv:2209.05324v4] Delving into the ",
+   "prompt": "TRACKING [0.825] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/abs/2209.05324v4 · [cs.CV · 2022-09-12] Autores: Hongyang Li, Chonghao Sima, Jifeng Dai, Wenhai Wang +18. Abstract: Learning powerful representations in bird's-eye-view (BEV) for perception tasks is trending and drawing extensive attention both from industry and academia. Conventional approaches for most autonomous driving algorithms perform detection, segmentation, tracking, etc., in a front or perspective view. As sensor configurations get more complex, integrating multi-source information from different sensors and representing features in a unified view come of vital importance. BEV perception inherits several advantages, as representing surrounding scenes in BEV is intuitive and fusion-friendly; and representing objects in BEV is most desirable for subsequent modules as in planning and/or control. The core problems for BEV perception lie in (a) how to reconstruct the lost 3D information via view transformation from perspective view to BEV; (b) how to acquire ground truth annotations in BEV grid; (c) how to formulate the pipeline to incorporate features from different sources and views; and (d) how to adapt and generalize algorithms as sensor configurations vary across different scenarios. In this survey, we review the most recent works on BEV perception and provide an in-depth analysis of different solutions. Moreover, several systematic designs of BEV approach from the industry are depicted as well. Furthermore, we introduce a full suite of practical guidebook to improve the performance of BEV perception tasks, including camera, LiDAR and fusion inputs. At last, we point out the future research directions in this area. We hope this report will shed some light on the community and encourage more research effort on BEV perception. We keep an active repository to collect the most recent work and provide a toolbox for bag of tricks at https://github.com/OpenDriveLab/Birds-eye-view-Perception",
+   "tese": "TRACKING [0.825] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.94] ▶ [YT] I Built God's Eye View System u",
+   "prompt": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=6hutaXj1k54 · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: 6hutaXj1k54 · Query: OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture",
+   "tese": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T05:18:33",
+ "custo": 0.0
+}

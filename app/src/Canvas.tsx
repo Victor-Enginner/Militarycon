@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, type Estado, type No } from './api'
+import { AsciiProductionBg } from './AsciiProductionBg'
 import { BiometricNUI, type AcoesEspaciaisFUI } from './BiometricNUI'
 import { CameraGesturesLab } from './CameraGesturesLab'
 import { CanvasCtx, type Ctx } from './ctx'
@@ -644,8 +645,16 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
       })
     },
     selecionarNoEm: (screenX: number, screenY: number, abrirViewer?: boolean) => {
-      const els = document.elementsFromPoint(screenX, screenY)
-      const nodeEl = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
+      const offsets = [[0, 0], [-16, 0], [16, 0], [0, -16], [0, 16], [-28, 0], [28, 0], [0, -28], [0, 28]]
+      let nodeEl: HTMLElement | undefined
+      for (const [ox, oy] of offsets) {
+        const px = screenX + ox
+        const py = screenY + oy
+        if (px < 0 || py < 0 || px > window.innerWidth || py > window.innerHeight) continue
+        const els = document.elementsFromPoint(px, py)
+        nodeEl = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
+        if (nodeEl) break
+      }
       const id = nodeEl?.getAttribute('data-id') || null
       if (!id) return null
       setNodes((ns) => ns.map((n) => ({ ...n, selected: n.id === id })))
@@ -873,8 +882,9 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
           <CameraGesturesLab onVoltarAgentes={() => irParaAba('agents')} />
         )}
 
-        {/* ABA 2: AGENTES ESPACIAIS (REACT FLOW REAL + LEFT OS PANEL + NEO STITCH TOOLS) */}
+        {/* ABA 2: AGENTES ESPACIAIS (REACT FLOW REAL + LOOP DE BACKGROUNDS ASCII + LEFT OS PANEL) */}
         <div className={`lg-rf-stage ${abaNavegacao === 'agents' ? 'ativo' : 'oculto'}`}>
+          {modoFui && abaNavegacao === 'agents' && <AsciiProductionBg zenMode={isZenMode} />}
           {nodes.length > 0 && <ReactFlow
             nodes={nodes} edges={edges} nodeTypes={nodeTypes}
             onNodesChange={onNodesChange} onNodeDragStop={onNodeDragStop}

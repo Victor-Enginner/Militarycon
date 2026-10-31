@@ -1,0 +1,41 @@
+{
+ "id": "FUI-036",
+ "tipo": "imagem",
+ "criado": "2026-10-31T05:18:28",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "b7ce4318",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.721] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-02 // WEB-IMAGE-RECON [WEB]\nFonte: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196\nResumo: Imagem Web indexada em tempo real · Origem: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T05:18:30"
+  }
+ ],
+ "pedido": "FUI-035",
+ "nome": "[0.72] Woman Browsing Library Shelves and Sel",
+ "prompt": "SCAN [0.721] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196 · Imagem Web indexada em tempo real · Origem: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.721,
+ "groot_veredito": "SCAN [0.721] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196",
+ "agente_id": "AGENT-02 // WEB-IMAGE-RECON",
+ "subtipo": "web",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Imagem Web indexada em tempo real · Origem: https://www.dreamstime.com/woman-browsing-library-shelves-selecting-books-reading-thoughtful-explores-carefully-to-read-various-topics-image357176196",
+ "atualizado": "2026-10-31T05:18:30",
+ "arquivo": "images/FUI-036.png",
+ "thumb": "thumbs/FUI-036.jpg",
+ "largura": 474,
+ "altura": 315,
+ "custo": 0.0
+}

@@ -4,4 +4,5 @@ fila.jsonl
 __pycache__/
 app/node_modules/
 airllm_shards/
+repos_estudo/
 .DS_Store

@@ -9,3 +9,4 @@
 ## 2026-10-31
 - 01:03 · Pesquisa FUI [FUI-026] "arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar" → 3 referências calibradas pelo Groot 1 (P_média=0.895): FUI-027, FUI-028, FUI-029
 - 01:18 · Pesquisa FUI [FUI-030] "youtube FUI HUD interface reel Territory Studio cockpit" → 4 referências calibradas pelo Groot 1 (P_média=0.951): FUI-031, FUI-032, FUI-033, FUI-034
+- 05:18 · Pesquisa FUI [FUI-035] "OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture" → 4 referências calibradas pelo Groot 1 (P_média=0.856): FUI-036, FUI-037, FUI-038, FUI-039

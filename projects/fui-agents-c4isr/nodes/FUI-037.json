@@ -1,0 +1,41 @@
+{
+ "id": "FUI-037",
+ "tipo": "imagem",
+ "criado": "2026-10-31T05:18:28",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "e84876d9",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=g3toZwkrQQE\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: g3toZwkrQQE · Query: OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T05:18:30"
+  }
+ ],
+ "pedido": "FUI-035",
+ "nome": "[0.94] ▶ [YT] God’s Eye View Just Got a Massi",
+ "prompt": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=g3toZwkrQQE · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: g3toZwkrQQE · Query: OpenObserve MMPose Gods Eye View Taskosaur C4ISR architecture",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.94,
+ "groot_veredito": "LOCKED [0.940] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=g3toZwkrQQE",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "g3toZwkrQQE",
+ "embed_url": "https://www.youtube.com/embed/g3toZwkrQQE?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Vídeo YouTube: \"God’s Eye View Just Got a Massive Upgrade (Thanks To You!)\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T05:18:30",
+ "arquivo": "images/FUI-037.png",
+ "thumb": "thumbs/FUI-037.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

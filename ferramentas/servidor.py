@@ -104,13 +104,41 @@ def spec_agentes(h, m, corpo):
 @rota('GET', '/api/corr-militar')
 def api_corr_militar(h, m, corpo):
     """Retorna o Banco de Dados ArXiv CoRR (41 categorias), Catálogo Global de LLMs Soberanos/Abliterated (CPU Q4),
-    5 Doutrinas de IA Militar e Especificação AirLLM + Diagram Design + Agentes Leves."""
-    from catalogo_corr_militar import ARXIV_CORR_CATEGORIAS, CATALOGO_MODELOS_GLOBAIS, DOUTRINAS_IA_MILITAR
+    5 Doutrinas de IA Militar, Especificação AirLLM + Diagram Design e os Repositórios de Estudo."""
+    from catalogo_corr_militar import (
+        ARXIV_CORR_CATEGORIAS,
+        CATALOGO_MODELOS_GLOBAIS,
+        DOUTRINAS_IA_MILITAR,
+        REPOSITORIOS_ECOSSISTEMA_FUI,
+    )
     from airllm_engine import AGENTES_RECOMENDADOS_PC_LEVE, AIRLLM_ARCHITECTURE_SPEC, DIAGRAM_DESIGN_PRINCIPLES
+    corr_lista = [
+        {'codigo': cod, 'area': info.get('nome', ''), 'foco': info.get('foco', '')}
+        for cod, info in ARXIV_CORR_CATEGORIAS.items()
+    ]
+    doutrinas_lista = [
+        {'codigo': d['codigo'], 'titulo': d['titulo'], 'descricao': d.get('resumo', '')}
+        for d in DOUTRINAS_IA_MILITAR
+    ]
+    modelos_lista = [
+        {
+            'id': mod['id'],
+            'nome': mod['nome'],
+            'origem': mod['origem'],
+            'categoria': mod.get('origem', ''),
+            'vram_gpu': mod.get('hardware', ''),
+            'ram_cpu_q4': mod.get('hardware', ''),
+            'comando_ollama': mod.get('comando_ollama', ''),
+            'uso_militar_c4isr': mod.get('papel_fui', ''),
+            'favorito': 'josiefied' in mod['id'] or 'deepseek' in mod['id'],
+        }
+        for mod in CATALOGO_MODELOS_GLOBAIS
+    ]
     return {
-        'corr_categorias': ARXIV_CORR_CATEGORIAS,
-        'modelos_globais': CATALOGO_MODELOS_GLOBAIS,
-        'doutrinas_militares': DOUTRINAS_IA_MILITAR,
+        'corr_categorias': corr_lista,
+        'modelos_globais': modelos_lista,
+        'doutrinas_militares': doutrinas_lista,
+        'repositorios_estudo': REPOSITORIOS_ECOSSISTEMA_FUI,
         'airllm_spec': AIRLLM_ARCHITECTURE_SPEC,
         'agentes_leves': AGENTES_RECOMENDADOS_PC_LEVE,
         'diagram_design': DIAGRAM_DESIGN_PRINCIPLES,

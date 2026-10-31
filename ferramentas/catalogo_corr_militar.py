@@ -230,3 +230,115 @@ DOUTRINAS_IA_MILITAR: list[dict] = [
         'resumo': 'Auditoria contínua de vulnerabilidades, proteção contra envenenamento de dados adversariais e resposta cibernética em sub-segundos.',
     },
 ]
+
+
+# ==============================================================================
+# 4. ECOSSISTEMA DE REPOSITÓRIOS DE ESTUDO & INTEGRAÇÃO ARQUITETURAL (CLONE MATRIX)
+# ==============================================================================
+REPOSITORIOS_ECOSSISTEMA_FUI: list[dict[str, str]] = [
+    {
+        'id': 'amilajack/reading',
+        'nome': 'Reading // Knowledge Graph Científico',
+        'url': 'https://github.com/amilajack/reading',
+        'camada': 'TOP STACK // INTELIGÊNCIA & LEITURA',
+        'linguagem': 'Markdown / JSON / Curadoria CS',
+        'comando_clone': 'git clone --depth 1 https://github.com/amilajack/reading.git',
+        'papel_no_sistema': (
+            'Estrutura a ingestão de artigos técnicos e papers do ArXiv CoRR em fichas de leitura '
+            'indexadas por domínio (AI, Compilers, Distributed Systems, Graphics).'
+        ),
+        'query_pesquisa': 'arxiv amilajack reading knowledge graph computer science architecture diagram',
+    },
+    {
+        'id': 'openobserve/openobserve',
+        'nome': 'OpenObserve // Telemetria & Logs C4ISR (Rust)',
+        'url': 'https://github.com/openobserve/openobserve',
+        'camada': 'MIDDLE STACK // OBSERVABILIDADE PETABYTE',
+        'linguagem': 'Rust / Vue / SQL & PromQL',
+        'comando_clone': 'git clone --depth 1 https://github.com/openobserve/openobserve.git',
+        'papel_no_sistema': (
+            'Motor de observabilidade de alta performance (140x menor custo de storage que Elasticsearch). '
+            'Inspira e alimenta nosso barramento de Logs em Tempo Real, Métricas Z/XY e Traces de Agentes.'
+        ),
+        'query_pesquisa': 'OpenObserve telemetry observability architecture logs metrics traces diagram',
+    },
+    {
+        'id': 'CMU-Perceptual-Computing-Lab/openpose',
+        'nome': 'OpenPose (CMU) // 135 Keypoints Corpo + Mãos + Rosto',
+        'url': 'https://github.com/CMU-Perceptual-Computing-Lab/openpose',
+        'camada': 'NUI STACK // VISÃO COMPUTACIONAL BIOMECÂNICA',
+        'linguagem': 'C++ / CUDA / OpenCV (Part Affinity Fields)',
+        'comando_clone': 'git clone --depth 1 https://github.com/CMU-Perceptual-Computing-Lab/openpose.git',
+        'papel_no_sistema': (
+            'Referência pioneira da Carnegie Mellon (Part Affinity Fields - PAFs) para detecção simultânea '
+            'de corpo, pés, 2x21 pontos das mãos e 70 pontos faciais em múltiplas pessoas.'
+        ),
+        'query_pesquisa': 'CMU OpenPose Part Affinity Fields hand body keypoint architecture diagram',
+    },
+    {
+        'id': 'open-mmlab/mmpose',
+        'nome': 'MMPose (OpenMMLab) // RTMPose 90+ FPS CPU/ONNX',
+        'url': 'https://github.com/open-mmlab/mmpose',
+        'camada': 'NUI STACK // RASTREAMENTO ULTRA-RÁPIDO 2D/3D',
+        'linguagem': 'Python / PyTorch / ONNX Runtime (RTMPose)',
+        'comando_clone': 'git clone --depth 1 https://github.com/open-mmlab/mmpose.git',
+        'papel_no_sistema': (
+            'Evolução moderna leve (RTMPose / WholeBody) capaz de rodar em CPU/ONNX a 90+ FPS para '
+            'rastreamento de mãos, gestos de pinça (👌), passar página no ar e pose 3D sem exigir GPU pesada.'
+        ),
+        'query_pesquisa': 'OpenMMLab MMPose RTMPose hand pose estimation architecture diagram',
+    },
+    {
+        'id': 'Taskosaur/Taskosaur',
+        'nome': 'Taskosaur // Orquestrador Autônomo de Tarefas & Agentes',
+        'url': 'https://github.com/Taskosaur/Taskosaur',
+        'camada': 'MIDDLE STACK // HARNESS & TASK ORCHESTRATION',
+        'linguagem': 'TypeScript / Node / Multi-Agent Queue',
+        'comando_clone': 'git clone --depth 1 https://github.com/Taskosaur/Taskosaur.git',
+        'papel_no_sistema': (
+            'Gerenciamento autônomo de missões, decomposição de tarefas complexas em sub-agentes '
+            'e sincronização de fila de trabalho (Harness Layer do modelo arXiv:2604.08224).'
+        ),
+        'query_pesquisa': 'autonomous task orchestration multi-agent workflow harness architecture diagram',
+    },
+    {
+        'id': 'bilawalsidhu/gods-eye-view',
+        'nome': "God's Eye View // Reconstrução Espacial 4D & C4ISR",
+        'url': 'https://github.com/bilawalsidhu/gods-eye-view',
+        'camada': 'TOP STACK // CONSCIÊNCIA SITUACIONAL 3D/4D',
+        'linguagem': 'Python / 3D Gaussian Splatting / Point Clouds / WebGL',
+        'comando_clone': 'git clone --depth 1 https://github.com/bilawalsidhu/gods-eye-view.git',
+        'papel_no_sistema': (
+            'Fusão de vídeo multi-ângulo, mapas topográficos e reconstrução volumétrica 4D em visão '
+            'onisciente ("Olho de Deus") para comando e controle espacial C4ISR.'
+        ),
+        'query_pesquisa': 'Gods Eye View 3D Gaussian Splatting spatial C4ISR point cloud reconstruction',
+    },
+    {
+        'id': 'lyogavin/airllm',
+        'nome': 'AirLLM // Inferência Layer-Wise (70B em 4GB / CPU Q4)',
+        'url': 'https://github.com/lyogavin/airllm',
+        'camada': 'BOTTOM STACK // EXECUÇÃO ZERO-GPU OVERHEAD',
+        'linguagem': 'Python / SafeTensors / Layer Sharding',
+        'comando_clone': 'git clone --depth 1 https://github.com/lyogavin/airllm.git',
+        'papel_no_sistema': (
+            'Divide LLMs em camadas individuais no SSD e executa 1 camada por vez na memória, '
+            'impedindo que o PC trave por falta de VRAM/RAM.'
+        ),
+        'query_pesquisa': 'AirLLM layer wise inference memory optimization transformer sharding diagram',
+    },
+    {
+        'id': 'cathrynlavery/diagram-design',
+        'nome': 'Diagram Design // Topologia Visual de Sistemas',
+        'url': 'https://github.com/cathrynlavery/diagram-design',
+        'camada': 'MIDDLE STACK // SÍNTESE DE DIAGRAMAS',
+        'linguagem': 'Design System / Vetores / Topologia',
+        'comando_clone': 'git clone --depth 1 https://github.com/cathrynlavery/diagram-design.git',
+        'papel_no_sistema': (
+            'Padrão visual para síntese de diagramas técnicos de alta legibilidade '
+            '(Top Stack → Middle Stack → Bottom Stack).'
+        ),
+        'query_pesquisa': 'system architecture diagram design visual topology dataflow',
+    },
+]
+
