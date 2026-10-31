@@ -1,0 +1,15 @@
+{
+ "id": "FUI-002",
+ "tipo": "tela",
+ "criado": "2026-10-30T22:19:28",
+ "pos": {
+  "x": 460,
+  "y": 0
+ },
+ "comentarios": [],
+ "titulo": "Principal",
+ "pai": "FUI-001",
+ "atualizado": "2026-10-31T00:31:10",
+ "recolhido": false,
+ "escondidos": []
+}

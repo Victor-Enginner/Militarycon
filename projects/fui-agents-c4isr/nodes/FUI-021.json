@@ -1,0 +1,38 @@
+{
+ "id": "FUI-021",
+ "tipo": "imagem",
+ "criado": "2026-10-30T22:58:45",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "81ff3639",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-01 // VISUAL-MINER\nFonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg\nResumo: CERN Atlas Control Room",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-30T22:58:45"
+  }
+ ],
+ "pedido": "FUI-018",
+ "nome": "[0.76] CERN Atlas Control Unit Pic1 2010-07",
+ "prompt": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg · CERN Atlas Control Room",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.763,
+ "groot_veredito": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg",
+ "agente_id": "AGENT-01 // VISUAL-MINER",
+ "atualizado": "2026-10-31T00:32:08",
+ "arquivo": "images/FUI-021.png",
+ "thumb": "thumbs/FUI-021.jpg",
+ "largura": 1280,
+ "altura": 853,
+ "custo": 0.0,
+ "desloc": {
+  "x": 472,
+  "y": -140
+ }
+}

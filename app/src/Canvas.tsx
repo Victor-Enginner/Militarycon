@@ -5,11 +5,13 @@ import {
 import '@xyflow/react/dist/style.css'
 import {
   ArrowUp, BadgeCheck, BookOpen, CircleDot, Clapperboard, ListTree, Check, ChevronLeft, ChevronRight, ClipboardPaste, Copy, Eye, EyeOff, FileText, GitBranchPlus, ImagePlus,
-  LayoutGrid, Maximize, Maximize2, Monitor, Star, Trash2, UnfoldHorizontal, X,
+  LayoutGrid, Maximize, Maximize2, Monitor, Radar, Star, Trash2, UnfoldHorizontal, X,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, type Estado, type No } from './api'
+import { BiometricNUI, type AcoesEspaciaisFUI } from './BiometricNUI'
 import { CanvasCtx, type Ctx } from './ctx'
+import { FuiWebGL } from './FuiWebGL'
 import { TrilhoFogo } from './Fogo'
 import { arestas, arvore, caminhoAprovadas, descendentes, ehPonto, galhoCompleto, layoutArvore, medida, ocultosSob, type ModoLayout } from './layout'
 import { Menu, type ItemMenu } from './Menu'
@@ -36,6 +38,7 @@ function CanvasInterno({ slug }: { slug: string }) {
   const [aba, setAba] = useState<'brief' | 'diario' | null>(null)
   const [esconder, setEsconder] = useState(() => localStorage.getItem('neo:esconder') === '1')
   const [pontos, setPontos] = useState(() => localStorage.getItem('neo:pontos') !== '0')  // padrão: ligado
+  const [modoFui, setModoFui] = useState(() => localStorage.getItem('neo:fui') !== '0')   // padrão: tema FUI espacial ligado
   const [focar, setFocar] = useState<string | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
   const [selecionando, setSelecionando] = useState(false)
@@ -601,13 +604,94 @@ function CanvasInterno({ slug }: { slug: string }) {
     [slug, estado, porId, arv, alternar, mudar, apagar, acao, novoPedido, pedidoVideo, novaTela, enviar, copiar, focar, pontos],
   )
 
+  // ---------- AÇÕES ESPACIAIS (MÃOS, ROSTO E VOZ -> REACT FLOW + AGENTES) ----------
+  const acoesEspaciais = useMemo<AcoesEspaciaisFUI>(() => ({
+    panBy: (dx: number, dy: number) => {
+      const vp = rf.getViewport()
+      rf.setViewport({ x: vp.x + dx, y: vp.y + dy, zoom: vp.zoom })
+    },
+    zoomByFactor: (fator: number, centerX?: number, centerY?: number) => {
+      const vp = rf.getViewport()
+      const novoZoom = Math.max(0.06, Math.min(3.2, vp.zoom * fator))
+      const cx = centerX ?? window.innerWidth / 2
+      const cy = centerY ?? window.innerHeight / 2
+      const ratio = novoZoom / vp.zoom
+      rf.setViewport({
+        x: cx - (cx - vp.x) * ratio,
+        y: cy - (cy - vp.y) * ratio,
+        zoom: novoZoom,
+      })
+    },
+    selecionarNoEm: (screenX: number, screenY: number, abrirViewer?: boolean) => {
+      const els = document.elementsFromPoint(screenX, screenY)
+      const nodeEl = els.map((el) => el.closest('.react-flow__node')).find(Boolean) as HTMLElement | undefined
+      const id = nodeEl?.getAttribute('data-id') || null
+      if (!id) return null
+      setNodes((ns) => ns.map((n) => ({ ...n, selected: n.id === id })))
+      setSelecao([id])
+      if (abrirViewer) {
+        const no = porId.get(id)
+        if (no && (no.tipo === 'imagem' || no.tipo === 'video' || no.tipo === 'referencia') && no.arquivo) {
+          setVisto(id)
+        }
+      }
+      return id
+    },
+    arrastarNo: (id: string, dxScreen: number, dyScreen: number) => {
+      const zoom = rf.getViewport().zoom || 1
+      const dx = dxScreen / zoom
+      const dy = dyScreen / zoom
+      arrastando.current.add(id)
+      const filhos = refs.current.galhoVisivel(id)
+      filhos.forEach((f) => arrastando.current.add(f))
+      const conjunto = new Set([id, ...filhos])
+      setNodes((ns) => ns.map((n) => (conjunto.has(n.id) ? { ...n, position: { x: n.position.x + dx, y: n.position.y + dy } } : n)))
+    },
+    soltarArrasteNo: (id: string) => {
+      const n = rf.getNode(id)
+      const antes = refs.current.posicoesFinais[id]
+      if (n && antes) {
+        const d = porId.get(id)?.desloc || { x: 0, y: 0 }
+        const dx = Math.round(n.position.x - antes.x)
+        const dy = Math.round(n.position.y - antes.y)
+        if (dx || dy) mudar(id, { desloc: { x: d.x + dx, y: d.y + dy } })
+      }
+      window.setTimeout(() => arrastando.current.clear(), 500)
+    },
+    dispararPesquisaAgentes: async (query: string) => {
+      setAviso(`🔍 Agentes em campo: "${query}" · Calibrando com Groot 1...`)
+      const entradas = imgsSel.map((n) => n.id)
+      await acao(() => api.pesquisar(slug, { query, entradas, tela: telaPadrao(), quantidade: 4 }))
+    },
+    comandoVozAcao: (cmd) => {
+      if (cmd === 'fechar') {
+        if (visto) { setVisto(null); setAviso('Tela fechada'); return }
+        if (aba) { setAba(null); setAviso('Painel fechado'); return }
+        if (confirmar) { setConfirmar(null); return }
+        if (menu) { setMenu(null); return }
+        limparSelecao()
+        setAviso('Seleção limpa')
+        return
+      }
+      if (cmd === 'ampliar') { rf.zoomIn({ duration: 320 }); return }
+      if (cmd === 'reduzir') { rf.zoomOut({ duration: 320 }); return }
+      if (cmd === 'enquadrar') { enquadrar(undefined, { folga: 0.06 }); return }
+      const alvos = soImagens.length ? soImagens : (visto && porId.get(visto) ? [porId.get(visto)!] : [])
+      if (cmd === 'aprovar' && alvos.length) { marcar(alvos, 'aprovada'); setAviso('Aba aprovada'); return }
+      if (cmd === 'favoritar' && alvos.length) { marcar(alvos, 'favorita'); setAviso('Aba favoritada'); return }
+      if (cmd === 'descartar' && alvos.length) { marcar(alvos, 'descartada'); setAviso('Aba descartada'); return }
+      if (cmd === 'abrir' && imgsSel.length) { setVisto(imgsSel[0].id); return }
+      if (cmd === 'video' && alvos.length) { pedidoVideo(alvos[0].id); setAviso('Pedido de vídeo criado'); return }
+    },
+  }), [rf, porId, imgsSel, soImagens, visto, aba, confirmar, menu, acao, slug, telaPadrao, enquadrar, marcar, pedidoVideo, mudar, limparSelecao])
+
   if (!estado || !ctx) {
     return <div className="carregando">{erro ? <p className="erro-tela">{erro}</p> : <span className="pulso grande" />}</div>
   }
 
   return (
     <CanvasCtx.Provider value={ctx}>
-      <div className="canvas" onDragOver={(e) => e.preventDefault()}
+      <div className={`canvas ${modoFui ? 'fui-mode' : ''}`} onDragOver={(e) => e.preventDefault()}
         onPointerDownCapture={(e) => { if (e.button === 1) meio.current = { x: e.clientX, y: e.clientY } }}
         onAuxClick={(e) => {
           // clique do meio (sem arrastar) em cima de um nó
@@ -651,6 +735,13 @@ function CanvasInterno({ slug }: { slug: string }) {
           <MiniMap position="bottom-right" pannable zoomable nodeColor={corMinimapa} nodeStrokeWidth={0} maskColor="var(--mascara)" />
         </ReactFlow>}
 
+        {modoFui && (
+          <FuiWebGL
+            grootProb={estado.telemetria?.groot_prob ?? 0.879}
+            agenteAtivo={!!estado.telemetria?.ativo}
+          />
+        )}
+        <BiometricNUI telemetria={estado.telemetria} acoes={acoesEspaciais} viewerAberto={!!visto || !!aba} />
         <TrilhoFogo slug={slug} estado={estado} />
         <header className="topo">
           <a href="#/" className="marca-app" title="Projetos">
@@ -726,6 +817,11 @@ function CanvasInterno({ slug }: { slug: string }) {
               </div>
             )}
           </div>
+          <button type="button" className={`ico ${modoFui ? 'on' : ''}`}
+            title={modoFui ? 'Modo FUI / C4ISR Holográfico Ativo (clique para tema claro clássico)' : 'Ativar Modo FUI / C4ISR Holográfico'}
+            onClick={() => { setModoFui(!modoFui); localStorage.setItem('neo:fui', modoFui ? '0' : '1') }}>
+            <Radar size={16} />
+          </button>
           <button type="button" className={`ico ${aba ? 'on' : ''}`} title="Brief e diário" onClick={() => setAba(aba ? null : 'diario')}>
             <BookOpen size={16} />
           </button>

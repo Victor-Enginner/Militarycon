@@ -1,0 +1,53 @@
+{
+ "id": "FUI-012",
+ "tipo": "pedido",
+ "criado": "2026-10-30T22:56:18",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] cyberpunk FUI holographic interface HUD radar",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-30T22:56:18",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-013",
+  "FUI-014",
+  "FUI-015",
+  "FUI-016"
+ ],
+ "atualizado": "2026-10-30T22:58:35",
+ "variacoes": [
+  {
+   "nome": "[0.70] CERN control room",
+   "prompt": "SCAN [0.705] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room.jpg · The control room at CERN.",
+   "tese": "SCAN [0.705] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.70] CERN control room computer monitors",
+   "prompt": "SCAN [0.703] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg · CERN control room's computer monitors.",
+   "tese": "SCAN [0.703] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.70] CERN Atlas Control Unit Pic6 2010-07",
+   "prompt": "SCAN [0.702] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic6_2010-07-01.jpg · CERN Atlas Control Room",
+   "tese": "SCAN [0.702] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.69] ATLAS control room (CERN)",
+   "prompt": "SCAN [0.692] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:ATLAS_control_room_(CERN).jpg · ATLAS control room (CERN)",
+   "tese": "SCAN [0.692] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-30T22:56:27",
+ "custo": 0.0,
+ "desloc": {
+  "x": -266,
+  "y": 221
+ }
+}

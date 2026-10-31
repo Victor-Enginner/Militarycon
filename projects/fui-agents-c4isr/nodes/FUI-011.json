@@ -1,0 +1,38 @@
+{
+ "id": "FUI-011",
+ "tipo": "imagem",
+ "criado": "2026-10-30T22:34:01",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "06d78246",
+   "autor": "claude",
+   "texto": "⚡ TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-01 // VISUAL-MINER\nFonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg\nResumo: CERN Atlas Control Room",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-30T22:34:02"
+  }
+ ],
+ "pedido": "FUI-008",
+ "nome": "[0.84] CERN Atlas Control Unit Pic1 2010-07",
+ "prompt": "TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg · CERN Atlas Control Room",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "favorita",
+ "groot_prob": 0.836,
+ "groot_veredito": "TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg",
+ "agente_id": "AGENT-01 // VISUAL-MINER",
+ "atualizado": "2026-10-30T22:58:44",
+ "arquivo": "images/FUI-011.png",
+ "thumb": "thumbs/FUI-011.jpg",
+ "largura": 1280,
+ "altura": 853,
+ "custo": 0.0,
+ "desloc": {
+  "x": -13,
+  "y": 121
+ }
+}

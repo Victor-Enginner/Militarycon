@@ -1,0 +1,425 @@
+{
+ "logs": [
+  {
+   "ts": "2026-10-30T22:34:01",
+   "hora": "22:34:01",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 6 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:34:01",
+   "hora": "22:34:01",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-009: P(relevância) = 0.841 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.841
+  },
+  {
+   "ts": "2026-10-30T22:34:01",
+   "hora": "22:34:01",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-010: P(relevância) = 0.838 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.838
+  },
+  {
+   "ts": "2026-10-30T22:34:01",
+   "hora": "22:34:01",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-011: P(relevância) = 0.836 → FAVORITA",
+   "nivel": "LOCKED",
+   "prob": 0.836
+  },
+  {
+   "ts": "2026-10-30T22:34:02",
+   "hora": "22:34:02",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-011 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.836
+  },
+  {
+   "ts": "2026-10-30T22:34:02",
+   "hora": "22:34:02",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-010 materializada no canvas (1280x854)",
+   "nivel": "DONE",
+   "prob": 0.838
+  },
+  {
+   "ts": "2026-10-30T22:34:03",
+   "hora": "22:34:03",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-009 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.841
+  },
+  {
+   "ts": "2026-10-30T22:34:03",
+   "hora": "22:34:03",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-008]: 3 abas projetadas · Groot 1 P=0.838",
+   "nivel": "READY",
+   "prob": 0.838
+  },
+  {
+   "ts": "2026-10-30T22:56:18",
+   "hora": "22:56:18",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"cyberpunk FUI holographic interface HUD radar\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:56:18",
+   "hora": "22:56:18",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Varrendo bases globais (Wikimedia / Openverse) para \"cyberpunk FUI holographic interface HUD radar\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:56:23",
+   "hora": "22:56:23",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 8 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:56:23",
+   "hora": "22:56:23",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-013: P(relevância) = 0.705 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.705
+  },
+  {
+   "ts": "2026-10-30T22:56:24",
+   "hora": "22:56:24",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-014: P(relevância) = 0.703 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.703
+  },
+  {
+   "ts": "2026-10-30T22:56:24",
+   "hora": "22:56:24",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-015: P(relevância) = 0.702 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.702
+  },
+  {
+   "ts": "2026-10-30T22:56:24",
+   "hora": "22:56:24",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-016: P(relevância) = 0.692 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.692
+  },
+  {
+   "ts": "2026-10-30T22:56:25",
+   "hora": "22:56:25",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-016 materializada no canvas (1280x854)",
+   "nivel": "DONE",
+   "prob": 0.692
+  },
+  {
+   "ts": "2026-10-30T22:56:25",
+   "hora": "22:56:25",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-015 materializada no canvas (1280x1920)",
+   "nivel": "DONE",
+   "prob": 0.702
+  },
+  {
+   "ts": "2026-10-30T22:56:26",
+   "hora": "22:56:26",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-013 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.705
+  },
+  {
+   "ts": "2026-10-30T22:56:27",
+   "hora": "22:56:27",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-014 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.703
+  },
+  {
+   "ts": "2026-10-30T22:56:27",
+   "hora": "22:56:27",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-012]: 4 abas projetadas · Groot 1 P=0.700",
+   "nivel": "READY",
+   "prob": 0.7
+  },
+  {
+   "ts": "2026-10-30T22:58:32",
+   "hora": "22:58:32",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"military cockpit HUD radar display C4ISR control room\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:58:32",
+   "hora": "22:58:32",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Varrendo bases globais (Wikimedia / Openverse) para \"military cockpit HUD radar display C4ISR control room\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 8 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-019: P(relevância) = 0.772 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.772
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-020: P(relevância) = 0.765 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.765
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-021: P(relevância) = 0.763 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.763
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-022: P(relevância) = 0.763 → NEUTRA",
+   "nivel": "LOCKED",
+   "prob": 0.763
+  },
+  {
+   "ts": "2026-10-30T22:58:45",
+   "hora": "22:58:45",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-020 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.765
+  },
+  {
+   "ts": "2026-10-30T22:58:46",
+   "hora": "22:58:46",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-021 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.763
+  },
+  {
+   "ts": "2026-10-30T22:58:46",
+   "hora": "22:58:46",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-019 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.772
+  },
+  {
+   "ts": "2026-10-30T22:58:46",
+   "hora": "22:58:46",
+   "agente": "AGENT-01 // VISUAL-MINER",
+   "msg": "Placa holográfica FUI-022 materializada no canvas (1280x853)",
+   "nivel": "DONE",
+   "prob": 0.763
+  },
+  {
+   "ts": "2026-10-30T22:58:46",
+   "hora": "22:58:46",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-018]: 4 abas projetadas · Groot 1 P=0.766",
+   "nivel": "READY",
+   "prob": 0.766
+  },
+  {
+   "ts": "2026-10-30T23:17:27",
+   "hora": "23:17:27",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"cyberpunk FUI holographic interface HUD radar\" (Alvo: 4 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:34",
+   "hora": "01:02:34",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO INICIADA: \"arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar\" (Alvo: 3 placas FUI)",
+   "nivel": "ACTIVE",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:34",
+   "hora": "01:02:34",
+   "agente": "ORCHESTRATOR",
+   "msg": "[ECO-TÁTICO ZERO-LAG] Acionando 2 workers leves (ArXiv Reading CV + Diagram Design + AirLLM) para \"arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar\"...",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:55",
+   "hora": "01:02:55",
+   "agente": "AGENT-06 // ARXIV-DIAGRAM-CV",
+   "msg": "4 diagramas arquiteturais de IA extraídos/sintetizados (Zero-GPU CV)",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:56",
+   "hora": "01:02:56",
+   "agente": "AGENT-05 // YOUTUBE-RECON",
+   "msg": "2 streams de vídeo encontrados no YouTube",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:56",
+   "hora": "01:02:56",
+   "agente": "AGENT-02 // WEB-IMAGE-RECON",
+   "msg": "3 imagens táticas indexadas da Web/Wikimedia",
+   "nivel": "SCANNING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:02:57",
+   "hora": "01:02:57",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "Auditando 9 referências via SystemOneRequest (marcyano/Groot-1)...",
+   "nivel": "CALIBRATING",
+   "prob": null
+  },
+  {
+   "ts": "2026-10-31T01:03:00",
+   "hora": "01:03:00",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-027 [ARXIV]: P(relevância) = 0.901 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.901
+  },
+  {
+   "ts": "2026-10-31T01:03:01",
+   "hora": "01:03:01",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-028 [ARXIV_DIAGRAM_SYNTH]: P(relevância) = 0.894 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.894
+  },
+  {
+   "ts": "2026-10-31T01:03:08",
+   "hora": "01:03:08",
+   "agente": "AGENT-06 // DIAGRAM-VISION-CV",
+   "msg": "Placa FUI-027 [ARXIV] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.901
+  },
+  {
+   "ts": "2026-10-31T01:03:08",
+   "hora": "01:03:08",
+   "agente": "GROOT-1 // CALIBRATOR",
+   "msg": "FUI-029 [ARXIV]: P(relevância) = 0.891 → APROVADA",
+   "nivel": "LOCKED",
+   "prob": 0.891
+  },
+  {
+   "ts": "2026-10-31T01:03:09",
+   "hora": "01:03:09",
+   "agente": "AGENT-06 // ARXIV-DIAGRAM-CV",
+   "msg": "Placa FUI-028 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1400x820)",
+   "nivel": "DONE",
+   "prob": 0.894
+  },
+  {
+   "ts": "2026-10-31T01:03:13",
+   "hora": "01:03:13",
+   "agente": "AGENT-06 // DIAGRAM-VISION-CV",
+   "msg": "Placa FUI-029 [ARXIV] materializada no canvas (1280x720)",
+   "nivel": "DONE",
+   "prob": 0.891
+  },
+  {
+   "ts": "2026-10-31T01:03:14",
+   "hora": "01:03:14",
+   "agente": "ORCHESTRATOR",
+   "msg": "MISSÃO CONCLUÍDA [FUI-026]: 3 abas projetadas · Groot 1 P=0.895",
+   "nivel": "READY",
+   "prob": 0.895
+  }
+ ],
+ "agentes": {
+  "ORCHESTRATOR": {
+   "status": "READY",
+   "ultima_msg": "MISSÃO CONCLUÍDA [FUI-026]: 3 abas projetadas · Groot 1 P=0.895",
+   "atualizado": "2026-10-31T01:03:14",
+   "prob": 0.895
+  },
+  "AGENT-01 // VISUAL-MINER": {
+   "status": "DONE",
+   "ultima_msg": "Placa holográfica FUI-022 materializada no canvas (1280x853)",
+   "atualizado": "2026-10-30T22:58:46",
+   "prob": 0.763
+  },
+  "GROOT-1 // CALIBRATOR": {
+   "status": "LOCKED",
+   "ultima_msg": "FUI-029 [ARXIV]: P(relevância) = 0.891 → APROVADA",
+   "atualizado": "2026-10-31T01:03:08",
+   "prob": 0.891
+  },
+  "AGENT-04 // SYNTH-CORE": {
+   "status": "DONE",
+   "ultima_msg": "Placa holográfica FUI-007 materializada no canvas (1280x720)",
+   "atualizado": "2026-10-30T22:23:23",
+   "prob": 0.917
+  },
+  "AGENT-06 // ARXIV-DIAGRAM-CV": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUI-028 [ARXIV_DIAGRAM_SYNTH] materializada no canvas (1400x820)",
+   "atualizado": "2026-10-31T01:03:09",
+   "prob": 0.894
+  },
+  "AGENT-05 // YOUTUBE-RECON": {
+   "status": "SCANNING",
+   "ultima_msg": "2 streams de vídeo encontrados no YouTube",
+   "atualizado": "2026-10-31T01:02:56",
+   "prob": null
+  },
+  "AGENT-02 // WEB-IMAGE-RECON": {
+   "status": "SCANNING",
+   "ultima_msg": "3 imagens táticas indexadas da Web/Wikimedia",
+   "atualizado": "2026-10-31T01:02:56",
+   "prob": null
+  },
+  "AGENT-06 // DIAGRAM-VISION-CV": {
+   "status": "DONE",
+   "ultima_msg": "Placa FUI-029 [ARXIV] materializada no canvas (1280x720)",
+   "atualizado": "2026-10-31T01:03:13",
+   "prob": 0.891
+  }
+ },
+ "groot_prob": 0.895,
+ "ativo": false,
+ "query": "arxiv 2604.08224 diagramas arquitetura Weights Context Harness Militar"
+}

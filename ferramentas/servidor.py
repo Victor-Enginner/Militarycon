@@ -38,6 +38,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 sys.path.insert(0, str(Path(__file__).parent))
 import base as B  # noqa: E402
+import agentes_pesquisa as AP  # noqa: E402
 
 PORTA = 8730
 DIST = B.RAIZ / 'app' / 'dist'
@@ -100,6 +101,22 @@ def spec_agentes(h, m, corpo):
     return {'texto': arq.read_text(encoding='utf-8'), 'caminho': str(arq), 'raiz': str(B.RAIZ)}
 
 
+@rota('GET', '/api/corr-militar')
+def api_corr_militar(h, m, corpo):
+    """Retorna o Banco de Dados ArXiv CoRR (41 categorias), Catálogo Global de LLMs Soberanos/Abliterated (CPU Q4),
+    5 Doutrinas de IA Militar e Especificação AirLLM + Diagram Design + Agentes Leves."""
+    from catalogo_corr_militar import ARXIV_CORR_CATEGORIAS, CATALOGO_MODELOS_GLOBAIS, DOUTRINAS_IA_MILITAR
+    from airllm_engine import AGENTES_RECOMENDADOS_PC_LEVE, AIRLLM_ARCHITECTURE_SPEC, DIAGRAM_DESIGN_PRINCIPLES
+    return {
+        'corr_categorias': ARXIV_CORR_CATEGORIAS,
+        'modelos_globais': CATALOGO_MODELOS_GLOBAIS,
+        'doutrinas_militares': DOUTRINAS_IA_MILITAR,
+        'airllm_spec': AIRLLM_ARCHITECTURE_SPEC,
+        'agentes_leves': AGENTES_RECOMENDADOS_PC_LEVE,
+        'diagram_design': DIAGRAM_DESIGN_PRINCIPLES,
+    }
+
+
 @rota('PATCH', f'/api/projetos/{SLUG}/impl/{ID}/' + r'(v\d+(?:\.\d+)?)')
 def mudar_impl(h, m, corpo):
     """A aprovação de uma versão de HTML (estado: neutra · aprovada · descartada) no impl.json; o resto é do agente."""
@@ -151,7 +168,22 @@ def estado(h, m, corpo):
             'brief': (d / 'brief.md').read_text(encoding='utf-8') if (d / 'brief.md').exists() else '',
             'diario': (d / 'diario.md').read_text(encoding='utf-8') if (d / 'diario.md').exists() else '',
             'modelos': B.MODELOS, 'aspectos': B.ASPECTOS, 'ouvinte': B.ouvinte_vivo(), 'modelos_video': B.modelos_video(),
-            'avancos': B.avancos(slug, lista)}
+            'avancos': B.avancos(slug, lista),
+            'telemetria': B.ler_json(d / 'telemetria.json', {'logs': [], 'agentes': {}, 'groot_prob': 0.879, 'ativo': False})}
+
+
+@rota('POST', f'/api/projetos/{SLUG}/pesquisar')
+def pesquisar_agentes(h, m, corpo):
+    """Aciona a frota de agentes de pesquisa (voz ou HUD) + calibração Groot 1 em background."""
+    slug = m.group(1)
+    query = (corpo.get('query') or '').strip()
+    if not query:
+        raise Erro('Informe o comando/termo de pesquisa para os agentes.')
+    entradas = [str(e) for e in (corpo.get('entradas') or []) if isinstance(e, str)]
+    tela = corpo.get('tela') if isinstance(corpo.get('tela'), str) else None
+    qtd = max(1, min(8, int(corpo.get('quantidade') or 4)))
+    AP.disparar_em_background(slug, query, entradas, tela, qtd)
+    return {'ok': True, 'query': query, 'quantidade': qtd}
 
 
 @rota('PATCH', f'/api/projetos/{SLUG}')

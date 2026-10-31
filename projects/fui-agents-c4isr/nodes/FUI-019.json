@@ -1,0 +1,38 @@
+{
+ "id": "FUI-019",
+ "tipo": "imagem",
+ "criado": "2026-10-30T22:58:45",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "38f79f9c",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.772] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-01 // VISUAL-MINER\nFonte: https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg\nResumo: CERN control room's computer monitors.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-30T22:58:46"
+  }
+ ],
+ "pedido": "FUI-018",
+ "nome": "[0.77] CERN control room computer monitors",
+ "prompt": "SCAN [0.772] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg · CERN control room's computer monitors.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.772,
+ "groot_veredito": "SCAN [0.772] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg",
+ "agente_id": "AGENT-01 // VISUAL-MINER",
+ "atualizado": "2026-10-31T00:35:07",
+ "arquivo": "images/FUI-019.png",
+ "thumb": "thumbs/FUI-019.jpg",
+ "largura": 1280,
+ "altura": 853,
+ "custo": 0.0,
+ "desloc": {
+  "x": 1525,
+  "y": -469
+ }
+}

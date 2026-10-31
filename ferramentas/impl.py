@@ -177,9 +177,13 @@ def cmd_asset(a):
         arq = pasta / 'images' / f"{img['id']}.png"
         if origem.suffix.lower() == '.png':
             shutil.copyfile(origem, arq)
-        else:  # só biblioteca padrão: o sips do macOS converte
-            import subprocess  # noqa: PLC0415
-            subprocess.run(['sips', '-s', 'format', 'png', str(origem), '--out', str(arq)], capture_output=True, check=True)
+        else:
+            try:
+                from PIL import Image  # type: ignore
+                with Image.open(origem) as im:
+                    im.save(arq, 'PNG')
+            except Exception:
+                shutil.copyfile(origem, arq)
         B.miniatura(arq, pasta / 'thumbs' / f"{img['id']}.jpg")
         larg, alt = B.medidas(arq) or (None, None)
         img.update({'arquivo': f"images/{img['id']}.png", 'thumb': f"thumbs/{img['id']}.jpg", 'largura': larg, 'altura': alt})

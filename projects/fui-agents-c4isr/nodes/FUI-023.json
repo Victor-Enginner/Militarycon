@@ -1,0 +1,29 @@
+{
+ "id": "FUI-023",
+ "tipo": "pedido",
+ "criado": "2026-10-30T22:58:54",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [
+  "FUI-014"
+ ],
+ "midia": "video",
+ "modelos": [
+  "alibaba/wan-3.0"
+ ],
+ "duracao": 4,
+ "resolucao": "720p",
+ "modelo": "openai/gpt-image-2",
+ "aspecto": "16:9",
+ "quantidade": 3,
+ "intencao": "",
+ "literal": false,
+ "status": "rascunho",
+ "saidas": [],
+ "atualizado": "2026-10-31T00:32:08",
+ "desloc": {
+  "x": 98,
+  "y": -61
+ }
+}

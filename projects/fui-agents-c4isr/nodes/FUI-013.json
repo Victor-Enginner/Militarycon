@@ -1,0 +1,38 @@
+{
+ "id": "FUI-013",
+ "tipo": "imagem",
+ "criado": "2026-10-30T22:56:23",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "11c068c6",
+   "autor": "claude",
+   "texto": "⚡ SCAN [0.705] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-01 // VISUAL-MINER\nFonte: https://commons.wikimedia.org/wiki/File:CERN_control_room.jpg\nResumo: The control room at CERN.",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-30T22:56:26"
+  }
+ ],
+ "pedido": "FUI-012",
+ "nome": "[0.70] CERN control room",
+ "prompt": "SCAN [0.705] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room.jpg · The control room at CERN.",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "neutra",
+ "groot_prob": 0.705,
+ "groot_veredito": "SCAN [0.705] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_control_room.jpg",
+ "agente_id": "AGENT-01 // VISUAL-MINER",
+ "atualizado": "2026-10-31T00:32:08",
+ "arquivo": "images/FUI-013.png",
+ "thumb": "thumbs/FUI-013.jpg",
+ "largura": 1280,
+ "altura": 853,
+ "custo": 0.0,
+ "desloc": {
+  "x": 1552,
+  "y": -59
+ }
+}

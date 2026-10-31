@@ -1,0 +1,45 @@
+{
+ "id": "FUI-008",
+ "tipo": "pedido",
+ "criado": "2026-10-30T22:33:51",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [
+  "FUI-004"
+ ],
+ "intencao": "🔍 [VOZ // AGENTES] CERN control room radar display",
+ "quantidade": 3,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-30T22:33:51",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-009",
+  "FUI-010",
+  "FUI-011"
+ ],
+ "atualizado": "2026-10-30T22:34:03",
+ "variacoes": [
+  {
+   "nome": "[0.84] CERN Atlas Control Unit Pic5 2010-07",
+   "prompt": "TRACKING [0.841] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic5_2010-07-01.jpg · CERN Atlas Control Room",
+   "tese": "TRACKING [0.841] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.84] ATLAS control room (CERN)",
+   "prompt": "TRACKING [0.838] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:ATLAS_control_room_(CERN).jpg · ATLAS control room (CERN)",
+   "tese": "TRACKING [0.838] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.84] CERN Atlas Control Unit Pic1 2010-07",
+   "prompt": "TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg · CERN Atlas Control Room",
+   "tese": "TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-30T22:34:03",
+ "custo": 0.0
+}

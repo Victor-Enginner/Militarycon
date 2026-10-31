@@ -1,15 +1,19 @@
-import { ArrowUp, ChevronLeft, ChevronRight, Clapperboard, Flame, GitBranchPlus, Pause, Play, Quote, Trash2, X } from 'lucide-react'
+import { ArrowUp, BookOpen, ChevronLeft, ChevronRight, Clapperboard, ExternalLink, Flame, GitBranchPlus, Pause, Play, Quote, Trash2, Volume2, VolumeX, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, rotaFogo, type No, type Pin } from './api'
 import { useCanvas } from './ctx'
 import { ESTADOS, alternarEstado, estadoDaTecla } from './estados'
 
-/** A imagem em tela cheia: comentários com pin, estado, prompt e navegação entre as irmãs. */
+/** A imagem, vídeo, stream YouTube ou artigo ArXiv em tela cheia: operação 1 mão (Gesto ✌️ ou Pinça 👌), comentários e linhagem. */
 export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void; navegar: (id: string) => void }) {
   const { porId, arv, slug, mudar, acao, copiar, novoPedido, pedidoVideo, estado: projeto } = useCanvas()
   const no = porId.get(id) as No
   const [pin, setPin] = useState<Pin | null>(null)
   const ehVideo = no.tipo === 'video'
+  const ehYoutube = no.subtipo === 'youtube' && !!(no.youtube_id || no.embed_url)
+  const ehArxiv = no.subtipo === 'arxiv'
+  const [verPdfArxiv, setVerPdfArxiv] = useState(false)
+  const [somVideo, setSomVideo] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [tempo, setTempo] = useState(0)
   const [rodando, setRodando] = useState(true)
@@ -86,17 +90,72 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
   return (
     <div className="viewer" onClick={fechar}>
       <div className="viewer-palco">
+        {/* Barra Tática de Operação com 1 Mão (Alvos Grandes para Pinça 👌 ou Gesto ✌️) */}
+        <div className="viewer-barra-1mao" onClick={(e) => e.stopPropagation()}>
+          <button type="button" className="fui-btn-fechar-1mao" onClick={fechar} title="Fechar tela (Pinça 👌 aqui, Gesto ✌️ ou Esc)">
+            <X size={16} /> FECHAR TELA (PINÇA 👌 / GESTO ✌️)
+          </button>
+          {irmas.length > 1 && (
+            <>
+              <button type="button" className="fui-btn-nav-1mao" disabled={i <= 0} onClick={() => i > 0 && navegar(irmas[i - 1])}>
+                <ChevronLeft size={15} /> ANTERIOR
+              </button>
+              <button type="button" className="fui-btn-nav-1mao" disabled={i >= irmas.length - 1} onClick={() => i < irmas.length - 1 && navegar(irmas[i + 1])}>
+                PRÓXIMA <ChevronRight size={15} />
+              </button>
+            </>
+          )}
+          {(ehVideo || ehYoutube) && (
+            <button
+              type="button"
+              className={`fui-btn-nav-1mao ${somVideo ? 'ativo' : ''}`}
+              onClick={() => {
+                const novo = !somVideo
+                setSomVideo(novo)
+                if (videoRef.current) videoRef.current.muted = !novo
+              }}
+              title="Alternar Som do Vídeo no Sistema"
+            >
+              {somVideo ? <Volume2 size={15} /> : <VolumeX size={15} />}
+              {somVideo ? 'SOM DO VÍDEO: ON' : 'SOM DO VÍDEO: MUDO'}
+            </button>
+          )}
+          {ehArxiv && no.pdf_url && (
+            <button type="button" className={`fui-btn-nav-1mao ${verPdfArxiv ? 'ativo' : ''}`} onClick={() => setVerPdfArxiv(!verPdfArxiv)}>
+              <BookOpen size={14} /> {verPdfArxiv ? 'VER DOSSIÊ C4ISR' : 'ABRIR PDF ARXIV AO VIVO'}
+            </button>
+          )}
+          {no.fonte_url && (
+            <a href={no.fonte_url} target="_blank" rel="noreferrer" className="fui-btn-nav-1mao">
+              <ExternalLink size={14} /> FONTE ORIGINAL
+            </a>
+          )}
+        </div>
+
         <div className="palco-img">
         {i > 0 && <button type="button" className="nav esq" title="Anterior (←)" onClick={(e) => { e.stopPropagation(); navegar(irmas[i - 1]) }}><ChevronLeft size={22} /></button>}
         <div className="viewer-img" onClick={clicarImagem} title="Clique para comentar num ponto · clique fora para voltar ao canvas">
-          {ehVideo ? (
-            <video ref={videoRef} src={arquivoUrl(slug, no.arquivo)} autoPlay muted loop playsInline
+          {ehYoutube ? (
+            <div className="fui-embed-palco" onClick={(e) => e.stopPropagation()}>
+              <iframe
+                src={no.youtube_id ? `https://www.youtube.com/embed/${no.youtube_id}?autoplay=1&mute=${somVideo ? 0 : 1}&rel=0&controls=1` : no.embed_url}
+                title={no.nome || no.id}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : ehArxiv && verPdfArxiv && no.pdf_url ? (
+            <div className="fui-embed-palco" onClick={(e) => e.stopPropagation()}>
+              <iframe src={no.pdf_url} title={no.nome || no.id} />
+            </div>
+          ) : ehVideo ? (
+            <video ref={videoRef} src={arquivoUrl(slug, no.arquivo)} autoPlay muted={!somVideo} loop playsInline
               onTimeUpdate={(e) => setTempo(e.currentTarget.currentTime)}
-              onLoadedMetadata={(e) => setTotal(e.currentTarget.duration || 0)} onPlay={() => setRodando(true)} onPause={() => setRodando(false)} />
+              onLoadedMetadata={(e) => { e.currentTarget.volume = 1.0; setTotal(e.currentTarget.duration || 0) }} onPlay={() => setRodando(true)} onPause={() => setRodando(false)} />
           ) : (
             <img src={arquivoUrl(slug, no.arquivo)} alt={no.nome || no.titulo || no.id} draggable={false} />
           )}
-          {pins.filter((c) => !ehVideo || c.pin?.t === undefined || Math.abs((c.pin.t ?? 0) - tempo) < 0.8 || foco === c.id).map((c) => (
+          {!ehYoutube && !(ehArxiv && verPdfArxiv) && pins.filter((c) => !ehVideo || c.pin?.t === undefined || Math.abs((c.pin.t ?? 0) - tempo) < 0.8 || foco === c.id).map((c) => (
             <span key={c.id} className={`pin ${c.autor} ${foco === c.id ? 'foco' : ''}`} style={{ left: `${c.pin!.x * 100}%`, top: `${c.pin!.y * 100}%` }}
               onMouseEnter={() => setFoco(c.id)} onMouseLeave={() => setFoco(null)}>
               <span>{comentarios.indexOf(c) + 1}</span>
@@ -105,11 +164,15 @@ export function Viewer({ id, fechar, navegar }: { id: string; fechar: () => void
           {pin && <span className="pin novo" style={{ left: `${pin.x * 100}%`, top: `${pin.y * 100}%` }}><span>+</span></span>}
         </div>
         {ehVideo && (
-          // controle mínimo: tocar/pausar, tempo e a linha do tempo (os pontos comentados aparecem nela)
+          // controle mínimo: tocar/pausar, som, tempo e a linha do tempo (os pontos comentados aparecem nela)
           <div className="controle-video" onClick={(e) => e.stopPropagation()}>
             <button type="button" className="ico" title={rodando ? 'Pausar (espaço)' : 'Tocar (espaço)'}
               onClick={alternarVideo}>
               {rodando ? <Pause size={16} /> : <Play size={16} />}
+            </button>
+            <button type="button" className="ico" title={somVideo ? 'Silenciar vídeo' : 'Ouvir som do vídeo'}
+              onClick={() => { const novo = !somVideo; setSomVideo(novo); if (videoRef.current) videoRef.current.muted = !novo }}>
+              {somVideo ? <Volume2 size={16} /> : <VolumeX size={16} />}
             </button>
             <span className="tempo">{mmss(tempo)} / {mmss(duracao)}</span>
             <div className="trilha">

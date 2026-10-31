@@ -1,0 +1,22 @@
+{
+ "id": "FUI-024",
+ "tipo": "pedido",
+ "criado": "2026-10-30T23:17:27",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [
+  "FUI-007"
+ ],
+ "intencao": "🔍 [VOZ // AGENTES] cyberpunk FUI holographic interface HUD radar",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "trabalhando",
+ "iniciado_em": "2026-10-30T23:17:27",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [],
+ "atualizado": "2026-10-30T23:17:27"
+}

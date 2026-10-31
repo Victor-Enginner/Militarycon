@@ -1,0 +1,34 @@
+{
+ "id": "FUI-005",
+ "tipo": "imagem",
+ "criado": "2026-10-30T22:23:19",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "8234b528",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-04 // SYNTH-CORE\nFonte: https://marcianotheory.com/\nResumo: Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-30T22:23:23"
+  }
+ ],
+ "pedido": "FUI-003",
+ "nome": "[0.92] FUI Tactical Telemetry #1 · HUD cock",
+ "prompt": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://marcianotheory.com/ · Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.918,
+ "groot_veredito": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://marcianotheory.com/",
+ "agente_id": "AGENT-04 // SYNTH-CORE",
+ "atualizado": "2026-10-30T22:23:23",
+ "arquivo": "images/FUI-005.png",
+ "thumb": "thumbs/FUI-005.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

@@ -1,7 +1,7 @@
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react'
 import {
-  AppWindow, ArrowUp, Box, Check, ChevronDown, Globe, LayoutDashboard, Link2, LoaderCircle, MessageCircle,
-  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clapperboard, Flame, Minus, Play, Plus, Quote, RotateCw, Smartphone, Sparkles, Star, Trash2, TriangleAlert, X, Archive,
+  AppWindow, ArrowUp, Box, Check, ChevronDown, ExternalLink, Globe, LayoutDashboard, Link2, LoaderCircle, Maximize2, MessageCircle,
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clapperboard, Flame, Minus, Play, Plus, Quote, Radar, RotateCw, Smartphone, Sparkles, Star, Trash2, TriangleAlert, Volume2, VolumeX, X, Archive,
 } from 'lucide-react'
 import { memo, useEffect, useRef, useState, type ReactNode } from 'react'
 import { api, arquivoUrl, dinheiro, rotaFogo, urlModelo, type ModeloVideo, type No } from './api'
@@ -213,7 +213,7 @@ export const PedidoNode = memo(function PedidoNode(props: NodeProps<NoRF>) {
 
 function PedidoCheio({ id, data, selected }: NodeProps<NoRF>) {
   const { no } = data
-  const { estado, mudar, apagar, enviar, focar, limparFoco } = useCanvas()
+  const { slug, estado, mudar, apagar, acao, enviar, focar, limparFoco } = useCanvas()
   const rascunho = no.status === 'rascunho'
   const [texto, setTexto] = useState(no.intencao || '')
   const ref = useRef<HTMLTextAreaElement>(null)
@@ -264,6 +264,20 @@ function PedidoCheio({ id, data, selected }: NodeProps<NoRF>) {
       </Botao>
       <span className="cresce" />
       {estimativa}
+      {!video && (
+        <Botao
+          titulo="Delegar para a Frota de Agentes de Pesquisa Web + Calibração Groot 1"
+          className="fui-btn-pesquisa"
+          disabled={!texto.trim()}
+          onClick={async () => {
+            if (!texto.trim()) return
+            await acao(() => api.pesquisar(slug, { query: texto.trim(), entradas: no.entradas, tela: no.tela || undefined, quantidade: qtd }))
+            await apagar(no.id)
+          }}
+        >
+          <Radar size={14} />
+        </Botao>
+      )}
       <Botao titulo="Apagar rascunho (⌘Z desfaz)" className="sutil" onClick={() => apagar(no.id)}><Trash2 size={14} /></Botao>
       <button type="button" className="enviar nodrag" disabled={!podeEnviar} onClick={disparar} title="Enviar ao Claude (⌘↵)">
         <ArrowUp size={16} />
@@ -450,6 +464,7 @@ function BotoesEstado({ no }: { no: No }) {
 export const ImagemNode = memo(function ImagemNode({ data, selected }: NodeProps<NoRF>) {
   const { no } = data
   const { slug, abrir } = useCanvas()
+  const [ytTocando, setYtTocando] = useState(false)
   const { w, h } = medidaImagem(no)
   const estado = no.estado || 'neutra'
   const n = no.comentarios?.length || 0
@@ -460,13 +475,63 @@ export const ImagemNode = memo(function ImagemNode({ data, selected }: NodeProps
           <div className="brilho" title="Gerando…" />
         ) : no.erro ? (
           <div className="falhou" title={no.erro}><TriangleAlert size={18} /></div>
+        ) : ytTocando && no.subtipo === 'youtube' && (no.youtube_id || no.embed_url) ? (
+          <iframe
+            className="nodrag"
+            style={{ width: '100%', height: '100%', border: 'none', pointerEvents: 'auto' }}
+            src={no.youtube_id ? `https://www.youtube.com/embed/${no.youtube_id}?autoplay=1&mute=0&rel=0` : no.embed_url}
+            title={no.nome || no.id}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
         ) : (
           <img src={arquivoUrl(slug, no.thumb || no.arquivo)} alt={no.nome || no.id} draggable={false} />
         )}
         {estado === 'favorita' && <span className="marca fav"><Star size={11} fill="currentColor" /></span>}
         {estado === 'aprovada' && <span className="marca ok"><Check size={12} strokeWidth={3} /></span>}
+        {no.groot_prob != null && (
+          <span className={`selo-groot ${no.groot_prob >= 0.85 ? 'alta' : ''}`} title={no.groot_veredito || 'Calibração Groot 1'}>
+            G1 · {no.groot_prob.toFixed(3)}
+          </span>
+        )}
+        {no.subtipo === 'youtube' && (
+          <button
+            type="button"
+            className="selo-subtipo youtube nodrag"
+            title={ytTocando ? 'Parar vídeo na aba' : 'Tocar vídeo com som direto nesta aba!'}
+            onClick={(e) => { e.stopPropagation(); setYtTocando(!ytTocando) }}
+          >
+            {ytTocando ? <Volume2 size={10} /> : <Play size={10} fill="currentColor" />}
+            {ytTocando ? 'TOCANDO COM SOM (PARAR)' : 'OUVIR VÍDEO AQUI'}
+          </button>
+        )}
+        {no.subtipo === 'arxiv' && (
+          <button
+            type="button"
+            className="selo-subtipo arxiv nodrag"
+            title="Abrir Dossiê Científico e PDF ArXiv.org"
+            onClick={(e) => { e.stopPropagation(); abrir(no.id) }}
+          >
+            📄 {no.arxiv_id || 'ARXIV PAPER'}
+          </button>
+        )}
         {!no.gerando && (
           <div className="acoes">
+            <Botao titulo="Abrir em Tela Cheia com Som (Duplo Pinch)" onClick={() => abrir(no.id)}>
+              <Maximize2 size={13} />
+            </Botao>
+            {no.fonte_url && (
+              <a
+                href={no.fonte_url}
+                target="_blank"
+                rel="noreferrer"
+                className="ico nodrag"
+                title={`Abrir referência original: ${no.fonte_url}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={13} />
+              </a>
+            )}
             <BotoesEstado no={no} />
             <BotaoGalho no={no} />
           </div>
@@ -476,6 +541,16 @@ export const ImagemNode = memo(function ImagemNode({ data, selected }: NodeProps
           {no.nome && <span className="nome">{no.nome}</span>}
           <span className="cresce" />
           {n > 0 && <span className="bolha" title={`${n} comentário(s)`}><MessageCircle size={11} /> {n}</span>}
+          {!no.gerando && no.arquivo && (
+            <button
+              type="button"
+              className="fui-btn-abrir-card nodrag"
+              title="Abrir aba em Tela Cheia com Som (Pinça 👌 aqui)"
+              onClick={(e) => { e.stopPropagation(); abrir(no.id) }}
+            >
+              <Maximize2 size={10} /> ABRIR
+            </button>
+          )}
         </div>
         <SeloVideos no={no} />
       </div>
@@ -526,17 +601,18 @@ export const RefNode = memo(function RefNode({ data, selected }: NodeProps<NoRF>
   )
 })
 
-/** Vídeo gerado: mostra um quadro; com o mouse em cima, toca sem som. */
+/** Vídeo gerado: mostra um quadro; com o mouse em cima ou clicando em ouvir, toca com ou sem som. */
 export const VideoNode = memo(function VideoNode({ data, selected }: NodeProps<NoRF>) {
   const { no } = data
   const { slug, abrir } = useCanvas()
   const [tocando, setTocando] = useState(false)
+  const [comSom, setComSom] = useState(false)
   const { w, h } = medidaImagem(no)
   const estado = no.estado || 'neutra'
   const n = no.comentarios?.length || 0
   return (
     <div className={`no imagem video es-${estado} ${selected ? 'sel' : ''}`} style={{ width: w }} onDoubleClick={() => abrir(no.id)}
-      onMouseEnter={() => setTocando(true)} onMouseLeave={() => setTocando(false)}>
+      onMouseEnter={() => setTocando(true)} onMouseLeave={() => { if (!comSom) setTocando(false) }}>
       <div className="quadro" style={{ height: h }}>
         {no.gerando ? (
           <div className="brilho" title="Gerando vídeo…" />
@@ -545,14 +621,40 @@ export const VideoNode = memo(function VideoNode({ data, selected }: NodeProps<N
         ) : (
           <>
             <img src={arquivoUrl(slug, no.thumb || '')} alt={no.nome || no.id} draggable={false} />
-            {tocando && no.arquivo && <video src={arquivoUrl(slug, no.arquivo)} autoPlay muted loop playsInline />}
+            {(tocando || comSom) && no.arquivo && <video src={arquivoUrl(slug, no.arquivo)} autoPlay muted={!comSom} loop playsInline />}
           </>
         )}
         <span className={`marca ${estado === 'aprovada' ? 'ok' : estado === 'favorita' ? 'fav' : 'play'}`}>
           {estado === 'aprovada' ? <Check size={12} strokeWidth={3} /> : estado === 'favorita' ? <Star size={11} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
         </span>
+        {no.groot_prob != null && (
+          <span className={`selo-groot ${no.groot_prob >= 0.85 ? 'alta' : ''}`} title={no.groot_veredito || 'Calibração Groot 1'}>
+            G1 · {no.groot_prob.toFixed(3)}
+          </span>
+        )}
         {!no.gerando && (
-          <div className="acoes"><BotoesEstado no={no} /></div>
+          <div className="acoes">
+            <Botao titulo={comSom ? 'Silenciar som do vídeo na aba' : 'Ouvir som do vídeo direto na aba'} className={comSom ? 'on' : ''}
+              onClick={() => { const nv = !comSom; setComSom(nv); setTocando(nv) }}>
+              {comSom ? <Volume2 size={13} /> : <VolumeX size={13} />}
+            </Botao>
+            <Botao titulo="Abrir vídeo com som em Tela Cheia" onClick={() => abrir(no.id)}>
+              <Maximize2 size={13} />
+            </Botao>
+            {no.fonte_url && (
+              <a
+                href={no.fonte_url}
+                target="_blank"
+                rel="noreferrer"
+                className="ico nodrag"
+                title={`Abrir referência original: ${no.fonte_url}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={13} />
+              </a>
+            )}
+            <BotoesEstado no={no} />
+          </div>
         )}
         <div className="rodape">
           <Codigo id={no.id} />
@@ -560,6 +662,16 @@ export const VideoNode = memo(function VideoNode({ data, selected }: NodeProps<N
           <span className="cresce" />
           {no.custo ? <span className="bolha">{dinheiro(no.custo)}</span> : null}
           {n > 0 && <span className="bolha"><MessageCircle size={11} /> {n}</span>}
+          {!no.gerando && no.arquivo && (
+            <button
+              type="button"
+              className="fui-btn-abrir-card nodrag"
+              title="Abrir vídeo em Tela Cheia com Som (Pinça 👌 aqui)"
+              onClick={(e) => { e.stopPropagation(); abrir(no.id) }}
+            >
+              <Maximize2 size={10} /> ABRIR
+            </button>
+          )}
         </div>
       </div>
       <Galho no={no} />

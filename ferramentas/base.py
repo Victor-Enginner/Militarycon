@@ -12,19 +12,37 @@ Contrato dos nós: .claude/skills/neo-stitch/modelo.md. Toda escrita passa por `
 """
 from __future__ import annotations
 
-import fcntl
+try:
+    import fcntl
+except ImportError:
+    fcntl = None  # Windows fallback
+try:
+    import msvcrt
+except ImportError:
+    msvcrt = None
 import hashlib
 import json
 import os
 import re
 import shutil
+import struct
 import subprocess
+import sys
 import tempfile
+import threading
 import unicodedata
 import uuid
 from contextlib import contextmanager
 from datetime import datetime, date
 from pathlib import Path
+
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')  # type: ignore[attr-defined]
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')  # type: ignore[attr-defined]
+except Exception:
+    pass
+
+_LOCK_LOCAL = threading.RLock()
 
 RAIZ = Path(__file__).resolve().parent.parent
 PROJETOS = RAIZ / 'projects'
@@ -121,12 +139,27 @@ def gravar_json(caminho: Path, dados) -> None:
 def travado(slug: str):
     """Trava exclusiva do projeto (servidor e scripts): ler → mudar → gravar sem corrida."""
     pasta(slug).mkdir(parents=True, exist_ok=True)
-    with open(pasta(slug) / '.lock', 'w') as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(f, fcntl.LOCK_UN)
+    with _LOCK_LOCAL:
+        with open(pasta(slug) / '.lock', 'a+b') as f:
+            if fcntl is not None:
+                fcntl.flock(f, fcntl.LOCK_EX)
+            elif msvcrt is not None:
+                try:
+                    f.seek(0)
+                    msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+                except OSError:
+                    pass
+            try:
+                yield
+            finally:
+                if fcntl is not None:
+                    fcntl.flock(f, fcntl.LOCK_UN)
+                elif msvcrt is not None:
+                    try:
+                        f.seek(0)
+                        msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+                    except OSError:
+                        pass
 
 
 # ---------- projetos ----------
@@ -270,7 +303,7 @@ def rev(slug: str) -> str:
     marcas = []
     # impl/: uma versão nova muda a pasta da imagem; impl.json (ou origem.json) diz quem faz, de qual vídeo e em que pé está
     impl = [*sorted((d / 'impl').glob('*')), *sorted((d / 'impl').glob('*/*/impl.json')), *sorted((d / 'impl').glob('*/*/origem.json'))]
-    for f in [d / 'projeto.json', d / 'brief.md', d / 'diario.md', *sorted((d / 'nodes').glob('*.json')), *impl]:
+    for f in [d / 'projeto.json', d / 'brief.md', d / 'diario.md', d / 'telemetria.json', *sorted((d / 'nodes').glob('*.json')), *impl]:
         try:
             marcas.append(f'{f.relative_to(d)}:{f.stat().st_mtime_ns}')
         except FileNotFoundError:
@@ -372,26 +405,82 @@ def ouvinte_vivo() -> bool:
 
 def enfileirar(slug: str, id_: str, acao: str) -> None:
     linha = json.dumps({'ts': agora(), 'projeto': slug, 'id': id_, 'acao': acao}, ensure_ascii=False)
-    with open(FILA, 'a', encoding='utf-8') as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        f.write(linha + '\n')
-        fcntl.flock(f, fcntl.LOCK_UN)
+    with _LOCK_LOCAL:
+        with open(FILA, 'a', encoding='utf-8') as f:
+            if fcntl is not None:
+                fcntl.flock(f, fcntl.LOCK_EX)
+            f.write(linha + '\n')
+            if fcntl is not None:
+                fcntl.flock(f, fcntl.LOCK_UN)
 
 
 # ---------- arquivos ----------
 
 def miniatura(origem: Path, destino: Path, lado: int = 640) -> None:
-    """JPEG reduzido com o sips do macOS (sem dependências)."""
+    """JPEG reduzido: usa Pillow, ffmpeg, sips (macOS) ou cópia direta no Windows."""
     destino.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(['sips', '-s', 'format', 'jpeg', '-s', 'formatOptions', '82', '-Z', str(lado), str(origem),
-                    '--out', str(destino)], capture_output=True, check=True)
+    try:
+        from PIL import Image  # type: ignore
+        with Image.open(origem) as im:
+            im = im.convert('RGB')
+            im.thumbnail((lado, lado))
+            im.save(destino, 'JPEG', quality=82)
+            return
+    except Exception:
+        pass
+    if shutil.which('ffmpeg'):
+        r = subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(origem), '-vf',
+                            f"scale='min({lado},iw)':'min({lado},ih)':force_original_aspect_ratio=decrease",
+                            '-q:v', '4', str(destino)], capture_output=True)
+        if r.returncode == 0 and destino.exists():
+            return
+    if shutil.which('sips'):
+        r = subprocess.run(['sips', '-s', 'format', 'jpeg', '-s', 'formatOptions', '82', '-Z', str(lado), str(origem),
+                            '--out', str(destino)], capture_output=True)
+        if r.returncode == 0 and destino.exists():
+            return
+    shutil.copyfile(origem, destino)
 
 
 def medidas(arquivo: Path) -> tuple[int, int] | None:
-    r = subprocess.run(['sips', '-g', 'pixelWidth', '-g', 'pixelHeight', str(arquivo)], capture_output=True, text=True)
-    w = re.search(r'pixelWidth:\s*(\d+)', r.stdout)
-    h = re.search(r'pixelHeight:\s*(\d+)', r.stdout)
-    return (int(w.group(1)), int(h.group(1))) if w and h else None
+    """Extrai (largura, altura) de PNG, JPEG, GIF, WebP ou via Pillow/sips."""
+    try:
+        from PIL import Image  # type: ignore
+        with Image.open(arquivo) as im:
+            return im.size
+    except Exception:
+        pass
+    try:
+        dados = arquivo.read_bytes()[:32768]
+        if dados.startswith(b'\x89PNG\r\n\x1a\n') and len(dados) >= 24:
+            w, h = struct.unpack('>II', dados[16:24])
+            return int(w), int(h)
+        if dados[:6] in (b'GIF87a', b'GIF89a') and len(dados) >= 10:
+            w, h = struct.unpack('<HH', dados[6:10])
+            return int(w), int(h)
+        if dados.startswith(b'\xff\xd8'):
+            i = 2
+            while i + 9 < len(dados):
+                if dados[i] != 0xFF:
+                    i += 1
+                    continue
+                marker = dados[i + 1]
+                if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF):
+                    h, w = struct.unpack('>HH', dados[i + 5:i + 9])
+                    return int(w), int(h)
+                if marker in (0xD8, 0xD9) or 0xD0 <= marker <= 0xD7:
+                    i += 2
+                    continue
+                seg_len = struct.unpack('>H', dados[i + 2:i + 4])[0]
+                i += 2 + seg_len
+    except Exception:
+        pass
+    if shutil.which('sips'):
+        r = subprocess.run(['sips', '-g', 'pixelWidth', '-g', 'pixelHeight', str(arquivo)], capture_output=True, text=True)
+        w = re.search(r'pixelWidth:\s*(\d+)', r.stdout)
+        h = re.search(r'pixelHeight:\s*(\d+)', r.stdout)
+        return (int(w.group(1)), int(h.group(1))) if w and h else None
+    return (1280, 720)
 
 
 def para_lixeira(slug: str, id_: str, junto: list[str] | None = None) -> None:

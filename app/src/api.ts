@@ -52,6 +52,35 @@ export type No = {
   largura?: number
   altura?: number
   gerando?: boolean
+  // FUI Agents + Groot 1 (Marciano Theory) + Multi-Source Intelligence (ArXiv / YouTube / Web)
+  groot_prob?: number
+  groot_veredito?: string
+  fonte_url?: string
+  agente_id?: string
+  subtipo?: 'imagem' | 'video' | 'youtube' | 'arxiv' | 'web' | 'c4isr'
+  youtube_id?: string
+  embed_url?: string
+  pdf_url?: string
+  arxiv_id?: string
+  autores?: string
+  resumo?: string
+}
+
+export type LogTelemetria = {
+  ts: string
+  hora: string
+  agente: string
+  msg: string
+  nivel: string
+  prob?: number | null
+}
+
+export type TelemetriaFUI = {
+  logs: LogTelemetria[]
+  agentes: Record<string, { status: string; ultima_msg: string; atualizado: string; prob?: number | null }>
+  groot_prob: number
+  ativo: boolean
+  query?: string
 }
 
 export type Projeto = {
@@ -77,6 +106,7 @@ export type EstadoProjeto = {
   aspectos: string[]
   ouvinte: boolean
   avancos: Record<string, Avanco>
+  telemetria?: TelemetriaFUI
 }
 
 /** Imagem que avançou (o "fogo"): os vídeos que saíram dela e as tentativas de HTML em impl/<código>/vN/. */
@@ -133,6 +163,8 @@ export const api = {
   restaurarNo: (slug: string, id: string) => req<No>('POST', `${P(slug)}/nos/${id}/restaurar`),
   posicoes: (slug: string, d: Record<string, Pos>) => req('PUT', `${P(slug)}/posicoes`, d),
   enviar: (slug: string, id: string) => req<No>('POST', `${P(slug)}/nos/${id}/enviar`),
+  pesquisar: (slug: string, d: { query: string; entradas?: string[]; tela?: string; quantidade?: number }) =>
+    req<{ ok: boolean; query: string; quantidade: number }>('POST', `${P(slug)}/pesquisar`, d),
   comentar: (slug: string, id: string, texto: string, pin: Pin | null) =>
     req<Comentario>('POST', `${P(slug)}/nos/${id}/comentarios`, { texto, pin }),
   apagarComentario: (slug: string, id: string, cid: string) => req('DELETE', `${P(slug)}/nos/${id}/comentarios/${cid}`),

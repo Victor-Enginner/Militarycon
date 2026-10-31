@@ -1,0 +1,49 @@
+{
+ "id": "FUI-018",
+ "tipo": "pedido",
+ "criado": "2026-10-30T22:58:32",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] military cockpit HUD radar display C4ISR control room",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-30T22:58:32",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-019",
+  "FUI-020",
+  "FUI-021",
+  "FUI-022"
+ ],
+ "atualizado": "2026-10-30T22:58:46",
+ "variacoes": [
+  {
+   "nome": "[0.77] CERN control room computer monitors",
+   "prompt": "SCAN [0.772] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg · CERN control room's computer monitors.",
+   "tese": "SCAN [0.772] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.77] CERN Atlas Control Unit Pic5 2010-07",
+   "prompt": "SCAN [0.765] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic5_2010-07-01.jpg · CERN Atlas Control Room",
+   "tese": "SCAN [0.765] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.76] CERN Atlas Control Unit Pic1 2010-07",
+   "prompt": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg · CERN Atlas Control Room",
+   "tese": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.76] CERN control room",
+   "prompt": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://commons.wikimedia.org/wiki/File:CERN_control_room.jpg · The control room at CERN.",
+   "tese": "SCAN [0.763] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-30T22:58:46",
+ "custo": 0.0
+}

@@ -1,0 +1,19 @@
+{
+ "slug": "fui-agents-c4isr",
+ "nome": "FUI Agents C4ISR",
+ "prefixo": "FUI",
+ "tipo": "webapp",
+ "criado": "2026-10-30T22:19:28",
+ "padroes": {
+  "modelo": "openai/gpt-image-2",
+  "aspecto": "16:9",
+  "resolucao": "1K",
+  "quantidade": 3
+ },
+ "tetos": {
+  "imagens_por_pedido": 6,
+  "diario_usd": 20.0,
+  "video_por_pedido_usd": 2.0
+ },
+ "contador": 29
+}

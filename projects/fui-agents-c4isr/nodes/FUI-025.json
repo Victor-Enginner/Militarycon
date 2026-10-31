@@ -1,0 +1,26 @@
+{
+ "id": "FUI-025",
+ "tipo": "pedido",
+ "criado": "2026-10-30T23:21:30",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [
+  "FUI-007"
+ ],
+ "midia": "imagem",
+ "modelo": "openai/gpt-image-2",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "quantidade": 3,
+ "intencao": "melhorar a qualidade e pronfudidade adicionado mais complexidade\n",
+ "literal": false,
+ "status": "enviado",
+ "saidas": [],
+ "atualizado": "2026-10-31T00:33:21",
+ "desloc": {
+  "x": 106,
+  "y": 103
+ },
+ "enviado_em": "2026-10-31T00:30:21"
+}

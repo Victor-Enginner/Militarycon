@@ -1,6 +1,7 @@
-import { AppWindow, ArrowUp, Flame, Globe, LayoutDashboard, Plus, Smartphone, X } from 'lucide-react'
+import { AppWindow, ArrowUp, Flame, Globe, LayoutDashboard, Plus, Radar, Smartphone, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api, dinheiro, rotaFogo, type ResumoProjeto } from './api'
+import { FuiWebGL } from './FuiWebGL'
 
 const TIPOS = [
   { v: 'site', r: 'Site', I: Globe },
@@ -27,10 +28,11 @@ export function Home() {
   const abrir = (slug: string) => { location.hash = `#/p/${slug}` }
 
   return (
-    <main className="home" onClick={() => selecionar(null)}>
+    <main className="home fui-home" onClick={() => selecionar(null)}>
+      <FuiWebGL grootProb={0.912} agenteAtivo={false} />
       <header className="home-topo">
-        <img src="/favicon.svg" alt="" width={28} height={28} />
-        <h1>Neo Stitch</h1>
+        <Radar size={26} color="#00ffcc" />
+        <h1>FUI Agents · Neo Stitch Spatial OS</h1>
       </header>
       <h2 className="home-secao">Projetos</h2>
       <section className="grade">

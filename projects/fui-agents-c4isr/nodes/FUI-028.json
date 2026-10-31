@@ -1,0 +1,41 @@
+{
+ "id": "FUI-028",
+ "tipo": "imagem",
+ "criado": "2026-10-31T01:02:57",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "58493c9c",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.894] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-06 // ARXIV-DIAGRAM-CV [ARXIV_DIAGRAM_SYNTH]\nFonte: https://arxiv.org/pdf/2604.08224\nResumo: Diagrama arquitetural completo (Donald A. Norman Cognitive Externalization → LLM Agent Memory, Skill, Protocol & Harness Ecosystem + CoRR Taxonomy).",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T01:03:08"
+  }
+ ],
+ "pedido": "FUI-026",
+ "nome": "[0.89] [ARXIV DIAGRAM #1] Externalization of ",
+ "prompt": "LOCKED [0.894] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://arxiv.org/pdf/2604.08224 · Diagrama arquitetural completo (Donald A. Norman Cognitive Externalization → LLM Agent Memory, Skill, Protocol & Harness Ecosystem + CoRR Taxonomy).",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.894,
+ "groot_veredito": "LOCKED [0.894] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://arxiv.org/pdf/2604.08224",
+ "agente_id": "AGENT-06 // ARXIV-DIAGRAM-CV",
+ "subtipo": "arxiv_diagram_synth",
+ "youtube_id": null,
+ "embed_url": null,
+ "pdf_url": "https://arxiv.org/pdf/2604.08224",
+ "arxiv_id": "arXiv:2604.08224 [cs.AI / cs.MA]",
+ "autores": null,
+ "resumo": "Diagrama arquitetural completo (Donald A. Norman Cognitive Externalization → LLM Agent Memory, Skill, Protocol & Harness Ecosystem + CoRR Taxonomy).",
+ "atualizado": "2026-10-31T01:03:08",
+ "arquivo": "images/FUI-028.png",
+ "thumb": "thumbs/FUI-028.jpg",
+ "largura": 1400,
+ "altura": 820,
+ "custo": 0.0
+}

@@ -1,0 +1,49 @@
+{
+ "id": "FUI-003",
+ "tipo": "pedido",
+ "criado": "2026-10-30T22:23:12",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] HUD cockpit radar display C4ISR interface",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-30T22:23:12",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-004",
+  "FUI-005",
+  "FUI-006",
+  "FUI-007"
+ ],
+ "atualizado": "2026-10-30T22:23:23",
+ "variacoes": [
+  {
+   "nome": "[0.92] FUI Tactical Telemetry #3 · HUD cock",
+   "prompt": "LOCKED [0.920] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://marcianotheory.com/ · Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+   "tese": "LOCKED [0.920] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.92] FUI Tactical Telemetry #1 · HUD cock",
+   "prompt": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://marcianotheory.com/ · Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+   "tese": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.92] FUI Tactical Telemetry #2 · HUD cock",
+   "prompt": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://marcianotheory.com/ · Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+   "tese": "LOCKED [0.918] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.92] FUI Tactical Telemetry #4 · HUD cock",
+   "prompt": "LOCKED [0.917] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://marcianotheory.com/ · Síntese procedural C4ISR para o vetor \"HUD cockpit radar display C4ISR interface\"",
+   "tese": "LOCKED [0.917] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-30T22:23:23",
+ "custo": 0.0
+}
