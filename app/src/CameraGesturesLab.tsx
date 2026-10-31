@@ -98,6 +98,49 @@ export function CameraGesturesLab({
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number>(0)
 
+  const iniciarCameraReal = async () => {
+    try {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop())
+      }
+      let s: MediaStream
+      try {
+        s = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+          audio: false,
+        })
+      } catch {
+        s = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        })
+      }
+      streamRef.current = s
+      if (videoRef.current) {
+        videoRef.current.srcObject = s
+        await videoRef.current.play().catch(() => {})
+      }
+      setIsCameraActive(true)
+      setDetectedLabel('WEBCAM ATIVA // MOSTRE SUA MÃO PARA RASTREAR')
+      fuiAudio.pinchLock()
+    } catch {
+      setIsCameraActive(false)
+      setDetectedLabel('PERMISSÃO DE CÂMERA PENDENTE // CLIQUE EM LIGAR WEBCAM')
+    }
+  }
+
+  // Liga a câmera automaticamente ao abrir a aba Câmera & Gestos
+  useEffect(() => {
+    iniciarCameraReal()
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
+      }
+    }
+  }, [])
+
+  // Rastreamento MediaPipe + HUD Reticle sobre o vídeo ao vivo
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -105,53 +148,156 @@ export function CameraGesturesLab({
     if (!ctx) return
 
     let cancelado = false
-    const renderLoop = () => {
-      if (cancelado) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    let emInferencia = false
 
-      if (isCameraActive && videoRef.current && videoRef.current.readyState >= 2) {
-        ctx.save()
-        ctx.translate(canvas.width, 0)
-        ctx.scale(-1, 1)
-        ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height)
-        ctx.restore()
-      } else {
-        ctx.fillStyle = '#09090b'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
+    const configurarMediaPipe = async () => {
+      if (!isCameraActive) return
+      try {
+        if (!window.Hands) {
+          await new Promise<void>((resolve, reject) => {
+            const existente = document.querySelector('script[src*="hands.js"]')
+            if (existente) {
+              resolve()
+              return
+            }
+            const sc = document.createElement('script')
+            sc.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js'
+            sc.crossOrigin = 'anonymous'
+            sc.onload = () => resolve()
+            sc.onerror = () => reject()
+            document.head.appendChild(sc)
+          })
+        }
+        if (cancelado || !window.Hands) return
+        const hands = new window.Hands({
+          locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`,
+        })
+        hands.setOptions({
+          maxNumHands: 2,
+          modelComplexity: 0,
+          minDetectionConfidence: 0.58,
+          minTrackingConfidence: 0.56,
+        })
+        hands.onResults((res) => {
+          if (cancelado || !canvasRef.current) return
+          const c = canvasRef.current
+          const context = c.getContext('2d')
+          if (!context) return
+          context.clearRect(0, 0, c.width, c.height)
+
+          const lista = res.multiHandLandmarks || []
+          if (lista.length === 0) return
+
+          lista.forEach((hand, idx) => {
+            context.strokeStyle = idx === 0 ? '#ff5500' : '#ffffff'
+            context.lineWidth = 2.2
+            const conexoes = [
+              [0, 1], [1, 2], [2, 3], [3, 4],
+              [0, 5], [5, 6], [6, 7], [7, 8],
+              [0, 9], [9, 10], [10, 11], [11, 12],
+              [0, 13], [13, 14], [14, 15], [15, 16],
+              [0, 17], [17, 18], [18, 19], [19, 20],
+            ]
+            for (const [a, b] of conexoes) {
+              context.beginPath()
+              context.moveTo((1 - hand[a].x) * c.width, hand[a].y * c.height)
+              context.lineTo((1 - hand[b].x) * c.width, hand[b].y * c.height)
+              context.stroke()
+            }
+            for (const pt of hand) {
+              context.fillStyle = '#ffffff'
+              context.beginPath()
+              context.arc((1 - pt.x) * c.width, pt.y * c.height, 3, 0, Math.PI * 2)
+              context.fill()
+            }
+          })
+
+          // Classifica o gesto ao vivo para feedback imediato no laboratório!
+          const h0 = lista[0]
+          const w = h0[0]
+          const ext = (tip: number, pip: number) =>
+            Math.hypot(h0[tip].x - w.x, h0[tip].y - w.y) > Math.hypot(h0[pip].x - w.x, h0[pip].y - w.y) * 1.11
+          const eIdx = ext(8, 6)
+          const eMid = ext(12, 10)
+          const eRng = ext(16, 14)
+          const ePnk = ext(20, 18)
+          const dPinch = Math.hypot(h0[4].x - h0[8].x, h0[4].y - h0[8].y)
+
+          if (lista.length >= 2) {
+            setDetectedLabel('✊+✊ 2 MÃOS DETECTADAS // ZOOM & ESCALA BIMANUAL')
+            setDetectedConf(0.986)
+            setSelectedTutorial('zoom')
+          } else if (!eIdx && !eMid && !eRng && !ePnk) {
+            setDetectedLabel('✊ 1 MÃO FECHADA // MOVER CENÁRIO (PAN)')
+            setDetectedConf(0.984)
+            setSelectedTutorial('pan')
+          } else if (eIdx && eMid && !eRng && !ePnk && dPinch > 0.07) {
+            setDetectedLabel('✌ GESTO "V" // FECHAR TELA / RESET')
+            setDetectedConf(0.979)
+            setSelectedTutorial('v_gesture')
+          } else if (dPinch < 0.058) {
+            setDetectedLabel('👌 PINÇA DETECTADA // CLICAR / ARRASTAR ABA')
+            setDetectedConf(0.992)
+            setSelectedTutorial('pinch_click')
+          } else {
+            setDetectedLabel('🖐️ MÃO ABERTA // RASTREANDO CURSOR 60FPS')
+            setDetectedConf(0.965)
+          }
+        })
+
+        let ultimoInfer = 0
+        const loop = (now: number) => {
+          if (cancelado) return
+          if (!emInferencia && now - ultimoInfer >= 38 && videoRef.current && videoRef.current.readyState >= 2) {
+            emInferencia = true
+            ultimoInfer = now
+            hands
+              .send({ image: videoRef.current })
+              .catch(() => {})
+              .finally(() => {
+                emInferencia = false
+              })
+          }
+          rafRef.current = requestAnimationFrame(loop)
+        }
+        rafRef.current = requestAnimationFrame(loop)
+      } catch {
+        /* mantém vídeo ao vivo mesmo sem script externo */
       }
-
-      const t = performance.now() * 0.002
-      const cx = canvas.width / 2 + Math.sin(t) * 32
-      const cy = canvas.height / 2 + Math.cos(t * 0.8) * 18
-
-      ctx.strokeStyle = '#ff5500'
-      ctx.lineWidth = 1.6
-      ctx.beginPath()
-      ctx.arc(cx, cy, 26, 0, Math.PI * 2)
-      ctx.stroke()
-
-      ctx.fillStyle = '#ff5500'
-      ctx.beginPath()
-      ctx.arc(cx, cy, 3.5, 0, Math.PI * 2)
-      ctx.fill()
-
-      rafRef.current = requestAnimationFrame(renderLoop)
     }
 
-    rafRef.current = requestAnimationFrame(renderLoop)
+    if (isCameraActive) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      configurarMediaPipe()
+    } else {
+      const renderIdle = () => {
+        if (cancelado) return
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const t = performance.now() * 0.002
+        const cx = canvas.width / 2 + Math.sin(t) * 32
+        const cy = canvas.height / 2 + Math.cos(t * 0.8) * 18
+
+        ctx.strokeStyle = '#ff5500'
+        ctx.lineWidth = 1.6
+        ctx.beginPath()
+        ctx.arc(cx, cy, 26, 0, Math.PI * 2)
+        ctx.stroke()
+
+        ctx.fillStyle = '#ff5500'
+        ctx.beginPath()
+        ctx.arc(cx, cy, 3.5, 0, Math.PI * 2)
+        ctx.fill()
+
+        rafRef.current = requestAnimationFrame(renderIdle)
+      }
+      rafRef.current = requestAnimationFrame(renderIdle)
+    }
+
     return () => {
       cancelado = true
       cancelAnimationFrame(rafRef.current)
     }
   }, [isCameraActive])
-
-  useEffect(() => {
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop())
-      }
-    }
-  }, [])
 
   const toggleCamera = async () => {
     fuiAudio.hoverTick()
@@ -160,23 +306,13 @@ export function CameraGesturesLab({
         streamRef.current.getTracks().forEach((t) => t.stop())
         streamRef.current = null
       }
-      setIsCameraActive(false)
-    } else {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
-          audio: false,
-        })
-        streamRef.current = s
-        if (videoRef.current) {
-          videoRef.current.srcObject = s
-          await videoRef.current.play()
-        }
-        setIsCameraActive(true)
-        fuiAudio.pinchLock()
-      } catch {
-        setIsCameraActive(true)
+      if (videoRef.current) {
+        videoRef.current.srcObject = null
       }
+      setIsCameraActive(false)
+      setDetectedLabel('WEBCAM DESLIGADA // CLIQUE EM LIGAR WEBCAM')
+    } else {
+      await iniciarCameraReal()
     }
   }
 
@@ -272,9 +408,22 @@ export function CameraGesturesLab({
       <div className="lg-camlab-grid">
         {/* COLUNA ESQUERDA: SENSOR DE VÍDEO */}
         <div className="lg-camlab-left">
-          <div className="lg-camlab-monitor liquid-glass-panel">
-            <video ref={videoRef} style={{ display: 'none' }} playsInline muted autoPlay />
-            <canvas ref={canvasRef} width={480} height={320} className="lg-camlab-canvas" />
+          <div
+            className="lg-camlab-monitor liquid-glass-panel"
+            style={{ cursor: isCameraActive ? 'default' : 'pointer' }}
+            onClick={() => {
+              if (!isCameraActive) iniciarCameraReal()
+            }}
+          >
+            <video
+              ref={videoRef}
+              playsInline
+              muted
+              autoPlay
+              className="lg-camlab-live-video"
+              style={{ display: isCameraActive ? 'block' : 'none' }}
+            />
+            <canvas ref={canvasRef} width={640} height={420} className="lg-camlab-canvas" />
 
             <div className="lg-camlab-hud-top">
               <span className="lg-badge-dark">

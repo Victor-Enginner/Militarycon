@@ -224,15 +224,21 @@ export const BiometricNUI = memo(function BiometricNUI({
     const iniciarBiometria = async () => {
       try {
         setCamStatus('LOADING ML...')
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 480 },
-            height: { ideal: 360 },
-            frameRate: { ideal: 60, min: 30 },
-            facingMode: 'user',
-          },
-          audio: false,
-        })
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              facingMode: 'user',
+            },
+            audio: false,
+          })
+        } catch {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+          })
+        }
         if (cancelado) {
           stream.getTracks().forEach((t) => t.stop())
           return
@@ -241,7 +247,14 @@ export const BiometricNUI = memo(function BiometricNUI({
           videoRef.current.srcObject = stream
           await videoRef.current.play().catch(() => {})
         }
+        setCamStatus('SEARCHING HANDS')
+      } catch {
+        setCamStatus('OFFLINE')
+        setCamAtiva(false)
+        return
+      }
 
+      try {
         await carregarScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js')
         if (cancelado || !window.Hands) return
 
@@ -253,8 +266,8 @@ export const BiometricNUI = memo(function BiometricNUI({
         hands.setOptions({
           maxNumHands: 2,
           modelComplexity: 0,
-          minDetectionConfidence: 0.62,
-          minTrackingConfidence: 0.60,
+          minDetectionConfidence: 0.60,
+          minTrackingConfidence: 0.58,
         })
 
         hands.onResults((results: MediaPipeHandResults) => {
@@ -321,11 +334,11 @@ export const BiometricNUI = memo(function BiometricNUI({
             }
           }
 
-          // Desenha esqueleto no mini-radar da webcam
+          // Desenha esqueleto no mini-radar da webcam em Laranja Fluorescente (#ff5500) + Branco
           if (canvas && ctx) {
             landmarksList.forEach((hand, hIdx) => {
-              ctx.strokeStyle = hIdx === 0 ? '#00ffcc' : '#00aaff'
-              ctx.lineWidth = 1.5
+              ctx.strokeStyle = hIdx === 0 ? '#ff5500' : '#ffffff'
+              ctx.lineWidth = 1.8
               const conexoes = [
                 [0, 1], [1, 2], [2, 3], [3, 4],
                 [0, 5], [5, 6], [6, 7], [7, 8],
@@ -339,11 +352,12 @@ export const BiometricNUI = memo(function BiometricNUI({
                 ctx.lineTo((1 - hand[b].x) * canvas.width, hand[b].y * canvas.height)
                 ctx.stroke()
               }
-              ctx.strokeStyle = '#ff0055'
-              ctx.beginPath()
-              ctx.moveTo((1 - hand[4].x) * canvas.width, hand[4].y * canvas.height)
-              ctx.lineTo((1 - hand[8].x) * canvas.width, hand[8].y * canvas.height)
-              ctx.stroke()
+              for (const pt of hand) {
+                ctx.fillStyle = '#ffffff'
+                ctx.beginPath()
+                ctx.arc((1 - pt.x) * canvas.width, pt.y * canvas.height, 2.2, 0, Math.PI * 2)
+                ctx.fill()
+              }
             })
           }
 
@@ -663,8 +677,8 @@ export const BiometricNUI = memo(function BiometricNUI({
         }
         rafId = requestAnimationFrame(loopFrame)
       } catch {
-        setCamStatus('OFFLINE')
-        setCamAtiva(false)
+        // Se MediaPipe CDN demorar ou falhar, mantém a câmera ligada mostrando o vídeo ao vivo!
+        setCamStatus('SEARCHING HANDS')
       }
     }
 
@@ -869,8 +883,6 @@ export const BiometricNUI = memo(function BiometricNUI({
 
   return (
     <>
-      <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
-
       {/* Cursores Espaciais Holográficos das Mãos (Movimento 60fps via DOM Ref direto!) */}
       <div
         ref={cursorRRef}
@@ -990,28 +1002,49 @@ export const BiometricNUI = memo(function BiometricNUI({
           </button>
         </div>
 
-        {!hudCompacto && (
-          <>
-            {/* Monitor de Câmera (Sempre visível como no protótipo do Google AI Studio!) */}
-            <div className="lg-cam-monitor-box">
-              {camAtiva ? (
-                <canvas ref={overlayCanvasRef} width={280} height={110} className="fui-cam-canvas" />
-              ) : (
-                <div className="lg-cam-idle-reticle">
-                  <div className="lg-idle-circle">
-                    <span className="lg-orange-dot" />
-                  </div>
-                </div>
-              )}
-              <div className="lg-cam-badge-top">
+        {/* Monitor de Câmera (Vídeo ao vivo da Webcam + Esqueleto 60fps sempre visível!) */}
+        <div
+          className="lg-cam-monitor-box"
+          style={{ display: hudCompacto ? 'none' : 'flex', cursor: camAtiva ? 'default' : 'pointer' }}
+          onClick={() => {
+            if (!camAtiva) setCamAtiva(true)
+          }}
+          title={camAtiva ? 'Webcam Ativa (60fps)' : 'Clique para ligar a câmera'}
+        >
+          <video
+            ref={videoRef}
+            playsInline
+            muted
+            autoPlay
+            className="lg-cam-live-video"
+            style={{ display: camAtiva ? 'block' : 'none' }}
+          />
+          <canvas
+            ref={overlayCanvasRef}
+            width={320}
+            height={112}
+            className="lg-cam-skeleton-canvas"
+            style={{ display: camAtiva ? 'block' : 'none' }}
+          />
+          {!camAtiva && (
+            <div className="lg-cam-idle-reticle">
+              <div className="lg-idle-circle">
                 <span className="lg-orange-dot" />
-                <span>{labelGestoAtivo}</span>
-              </div>
-              <div className="lg-cam-bar-bottom">
-                <span className="branco">{camAtiva ? `CV 60FPS // ${camStatus}` : 'CAMERA OFF'}</span>
-                <span>{descGestoAtivo}</span>
               </div>
             </div>
+          )}
+          <div className="lg-cam-badge-top">
+            <span className="lg-orange-dot" />
+            <span>{labelGestoAtivo}</span>
+          </div>
+          <div className="lg-cam-bar-bottom">
+            <span className="branco">{camAtiva ? `CAM ON // ${camStatus}` : 'CAMERA OFF (CLIQUE P/ LIGAR)'}</span>
+            <span>{descGestoAtivo}</span>
+          </div>
+        </div>
+
+        {!hudCompacto && (
+          <>
 
             {/* Linha de Pílulas Interativas de Gestos */}
             <div className="lg-gestos-row">
