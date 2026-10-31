@@ -1,6 +1,9 @@
 # /// script
 # requires-python = ">=3.11"
+# dependencies = ["pillow>=10"]
 # ///
+# Pillow: sem ele os cartões de pesquisa (dossiê ArXiv, cartão de leitura, placa FUI) saíam como uma imagem de 1x1 pixel
+# e a miniatura era uma cópia da imagem inteira. O resto do servidor continua só com a biblioteca padrão.
 """Servidor local do Neo Stitch: a API do canvas + os arquivos dos projetos + o app compilado (app/dist).
 
     uv run ferramentas/servidor.py [porta]      → http://localhost:8730/
@@ -145,6 +148,23 @@ def api_corr_militar(h, m, corpo):
     }
 
 
+@rota('POST', f'/api/projetos/{SLUG}/google')
+def perguntar_google(h, m, corpo):
+    """Pergunta ao Google (Gemini + Google Search, camada gratuita). A resposta NÃO é gravada: os termos do Google
+    só permitem mostrá-la a quem perguntou. Import tardio: sem chave ou sem o módulo, o resto do servidor sobe igual."""
+    import google_gemini as GG
+    try:
+        return GG.perguntar(corpo.get('pergunta') or '')
+    except ValueError as e:
+        raise Erro(str(e), 422)
+    except GG.SemChave as e:
+        raise Erro(str(e), 503)
+    except GG.LimiteDiario as e:
+        raise Erro(str(e), 429)
+    except GG.FalhaGoogle as e:
+        raise Erro(str(e), 502)
+
+
 @rota('PATCH', f'/api/projetos/{SLUG}/impl/{ID}/' + r'(v\d+(?:\.\d+)?)')
 def mudar_impl(h, m, corpo):
     """A aprovação de uma versão de HTML (estado: neutra · aprovada · descartada) no impl.json; o resto é do agente."""
@@ -210,7 +230,10 @@ def pesquisar_agentes(h, m, corpo):
     entradas = [str(e) for e in (corpo.get('entradas') or []) if isinstance(e, str)]
     tela = corpo.get('tela') if isinstance(corpo.get('tela'), str) else None
     qtd = max(1, min(8, int(corpo.get('quantidade') or 4)))
-    AP.disparar_em_background(slug, query, entradas, tela, qtd)
+    try:
+        AP.disparar_em_background(slug, query, entradas, tela, qtd)
+    except AP.MissaoEmCampo as e:
+        raise Erro(str(e), 409)
     return {'ok': True, 'query': query, 'quantidade': qtd}
 
 
@@ -570,6 +593,10 @@ class Servidor(ThreadingHTTPServer):
 def main() -> None:
     porta = int(sys.argv[1]) if len(sys.argv) > 1 else PORTA
     B.PROJETOS.mkdir(exist_ok=True)
+    for slug in B.projetos():
+        presos = AP.reconciliar_missoes_presas(slug)  # missões que morreram com o servidor anterior
+        if presos:
+            print(f'[{slug}] missões presas liberadas (status erro): {", ".join(presos)}', flush=True)
     srv = Servidor(('127.0.0.1', porta), Handler)
     print(f'Neo Stitch em http://localhost:{porta}/', flush=True)
     try:

@@ -1,5 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
+# dependencies = ["pillow>=10"]
 # ///
 """Frota de Agentes de Pesquisa Multi-Fonte (Google/Bing Web, Wikimedia, Openverse, YouTube e ArXiv.org)
 + Calibração Matemática Groot-1 (`marcyano/Groot-1` da Marciano Theory) para o FUI Agents / Neo Stitch.
@@ -18,7 +19,7 @@ import json
 import math
 import os
 import re
-import ssl
+import sys
 import textwrap
 import threading
 import time
@@ -29,13 +30,21 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import base as B
+import conectores_extra as CX
 from catalogo_corr_militar import ARXIV_CORR_CATEGORIAS, CATALOGO_MODELOS_GLOBAIS, DOUTRINAS_IA_MILITAR
 
 USER_AGENT = (
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
     '(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 FUIAgents/3.0'
 )
+USER_AGENT_API = 'FUIAgents/3.0 (projeto pessoal de pesquisa; Python urllib)'
 _LOCK_TELEMETRIA = threading.Lock()
+_MISSAO_EM_CAMPO = threading.Lock()  # uma missão por vez: duas escreveriam juntas na telemetria e na árvore
+MODELO_MISSAO = 'marciano/groot-1-research'
+
+
+class MissaoEmCampo(RuntimeError):
+    """Já existe uma missão de pesquisa rodando."""
 
 
 def registrar_log(slug: str, agente: str, msg: str, nivel: str = 'INFO', prob: float | None = None) -> None:
@@ -211,21 +220,43 @@ def _empacotar_veredito(prob: float, motor: str) -> dict:
 
 
 def _urlopen_seguro(req: urllib.request.Request, timeout: int = 10):
-    try:
-        return urllib.request.urlopen(req, timeout=timeout)
-    except Exception:
-        ctx = ssl._create_unverified_context()
-        return urllib.request.urlopen(req, timeout=timeout, context=ctx)
+    # A verificação do certificado fica sempre ligada. Antes, QUALQUER falha (até um simples timeout) era repetida
+    # sem verificar o certificado, o que abre a porta para interceptação; falhar é melhor que aceitar um certificado falso.
+    return urllib.request.urlopen(req, timeout=timeout)
 
 
-def _http_texto(url: str, timeout: int = 10) -> str:
-    req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT, 'Accept-Language': 'en-US,en;q=0.9,pt-BR;q=0.8'})
+def _falhou(fonte: str, erro: Exception) -> None:
+    """As fontes engoliam todo erro em silêncio: '0 resultados' nunca dizia por quê. Agora o motivo vai ao log do servidor."""
+    print(f'[pesquisa] {fonte} falhou: {type(erro).__name__}: {str(erro)[:100]}', file=sys.stderr, flush=True)
+
+
+def _http_texto(url: str, timeout: int = 10, ua: str = USER_AGENT) -> str:
+    req = urllib.request.Request(url, headers={'User-Agent': ua, 'Accept-Language': 'en-US,en;q=0.9,pt-BR;q=0.8'})
     with _urlopen_seguro(req, timeout=timeout) as r:
         return r.read().decode('utf-8', errors='replace')
 
 
 def _http_json(url: str, timeout: int = 10) -> dict:
-    return json.loads(_http_texto(url, timeout=timeout))
+    # APIs oficiais (Wikimedia, Openverse) pedem um User-Agent que identifique o projeto, não um navegador falso
+    return json.loads(_http_texto(url, timeout=timeout, ua=USER_AGENT_API))
+
+
+_PALAVRAS_VAZIAS = frozenset(
+    'a o as os um uma uns umas de do da dos das em no na nos nas por para pra com sem sobre entre que e ou mas se '
+    'eu me meu minha estou estamos quero preciso queria gostaria ideia ideias algo coisa coisas sobre como qual quais '
+    'pesquisar pesquise buscar busque procurar procure mostrar mostre achar ache criar crie fazer faça '
+    'the a an of to in on for with about and or but is are am be i my me want need find search show look get make '
+    'some any please'.split())
+
+
+def palavras_chave(query: str, maximo: int = 5) -> str:
+    """Reduz uma frase falada a poucas palavras de busca. Wikimedia e Openverse não casam frases longas: a sonda mostrou
+    'cockpit HUD radar interface' → só PDFs/0 resultados, enquanto 'cockpit radar' → 12 imagens."""
+    vistas: list[str] = []
+    for tok in re.split(r'[^\w\-]+', query.lower()):
+        if len(tok) > 2 and tok not in _PALAVRAS_VAZIAS and tok not in vistas:
+            vistas.append(tok)
+    return ' '.join(vistas[:maximo])
 
 
 def _baixar_bytes(url: str, timeout: int = 14, max_bytes: int = 18 * 1024 * 1024) -> bytes | None:
@@ -299,8 +330,8 @@ def buscar_arxiv(query: str, limite: int = 3) -> list[dict]:
             })
             if len(resultados) >= limite:
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        _falhou('arxiv', e)
     return resultados
 
 
@@ -347,8 +378,8 @@ def buscar_youtube(query: str, limite: int = 3) -> list[dict]:
             })
             if len(resultados) >= limite:
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        _falhou('youtube', e)
     return resultados
 
 
@@ -390,8 +421,8 @@ def buscar_web_imagens(query: str, limite: int = 6) -> list[dict]:
                     break
             except Exception:
                 continue
-    except Exception:
-        pass
+    except Exception as e:
+        _falhou('web (Bing HTML)', e)
     return resultados
 
 
@@ -401,7 +432,10 @@ def buscar_web_imagens(query: str, limite: int = 6) -> list[dict]:
 def buscar_wikimedia(query: str, limite: int = 6) -> list[dict]:
     """Busca imagens e vídeos reais na API global do Wikimedia Commons."""
     resultados: list[dict] = []
-    termos = [query, f'{query} display']
+    # O Commons exige que TODAS as palavras casem. Medido: 2 palavras → 12 imagens em todas as frases testadas;
+    # 3 ou 4 → 0 em várias. Então: 2 palavras primeiro, 1 palavra de reserva, sempre só imagens (filetype:bitmap).
+    kw = palavras_chave(query).split() or [query]
+    termos = [f'{c} filetype:bitmap' for c in dict.fromkeys([' '.join(kw[:2]), kw[0]])]
     vistos: set[str] = set()
 
     for termo in termos:
@@ -450,7 +484,8 @@ def buscar_wikimedia(query: str, limite: int = 6) -> list[dict]:
                 })
                 if len(resultados) >= limite:
                     break
-        except Exception:
+        except Exception as e:
+            _falhou('wikimedia', e)
             continue
     return resultados
 
@@ -458,7 +493,7 @@ def buscar_wikimedia(query: str, limite: int = 6) -> list[dict]:
 def buscar_openverse(query: str, limite: int = 4) -> list[dict]:
     """Busca referências visuais adicionais na API aberta do Openverse."""
     resultados: list[dict] = []
-    params = urllib.parse.urlencode({'q': query, 'page_size': str(min(10, limite * 2))})
+    params = urllib.parse.urlencode({'q': palavras_chave(query, 2) or query, 'page_size': str(min(10, limite * 2))})
     url = f'https://api.openverse.org/v1/images/?{params}'
     try:
         dados = _http_json(url, timeout=8)
@@ -480,8 +515,8 @@ def buscar_openverse(query: str, limite: int = 4) -> list[dict]:
             })
             if len(resultados) >= limite:
                 break
-    except Exception:
-        pass
+    except Exception as e:
+        _falhou('openverse', e)
     return resultados
 
 
@@ -921,7 +956,8 @@ def gerar_placa_fui_procedural(destino: Path, titulo: str, query: str, prob: flo
         destino.parent.mkdir(parents=True, exist_ok=True)
         im.save(destino, 'PNG')
         return w, h
-    except Exception:
+    except Exception as e:
+        _falhou('placa FUI (sem Pillow?)', e)  # antes gravava o pixel em silêncio e dizia "materializada 1280x720"
         png_1x1 = (
             b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde'
             b'\x00\x00\x00\x0cIDATx\x9cc`\xf8\xff\x9f\x01\x00\x05\xfe\x02\xfe\xa75\x81\x84\x00\x00\x00\x00IEND\xaeB`\x82'
@@ -931,10 +967,69 @@ def gerar_placa_fui_procedural(destino: Path, titulo: str, query: str, prob: flo
         return w, h
 
 
+def marcar_missao_com_erro(slug: str, pid: str | None, motivo: str) -> None:
+    """Um pedido preso em `trabalhando` vira `erro` (o status nativo do Neo Stitch: o app já mostra o motivo)."""
+    if not pid:
+        return
+    with B.travado(slug):
+        try:
+            no = B.ler_no(slug, pid)
+        except KeyError:
+            return
+        if no.get('status') in ('enviado', 'trabalhando'):
+            no.update({'status': 'erro', 'erro': motivo[:200], 'concluido_em': B.agora()})
+            B.gravar_no(slug, no)
+
+
+def reconciliar_missoes_presas(slug: str) -> list[str]:
+    """Na partida do servidor nenhuma missão está viva: o que ficou `trabalhando` morreu no meio. Libera a frota."""
+    presos = [n['id'] for n in B.nos(slug)
+              if n.get('tipo') == 'pedido' and n.get('modelo') == MODELO_MISSAO and n.get('status') in ('enviado', 'trabalhando')]
+    for pid in presos:
+        marcar_missao_com_erro(slug, pid, 'interrompida: o servidor parou antes de a missão terminar')
+    arq = B.pasta(slug) / 'telemetria.json'
+    if arq.exists() and (B.ler_json(arq, {}) or {}).get('ativo'):
+        definir_estado_frota(slug, False)
+    return presos
+
+
+def _executar_travada(slug: str, query: str, entradas: list[str] | None, tela_id: str | None, quantidade: int) -> dict:
+    """Roda a missão com `_MISSAO_EM_CAMPO` já adquirida: qualquer falha vira pedido em `erro` e a frota é sempre liberada."""
+    ctx: dict = {}
+    try:
+        return _missao(slug, query, entradas, tela_id, quantidade, ctx)
+    except Exception as e:
+        motivo = f'{type(e).__name__}: {e}'
+        marcar_missao_com_erro(slug, ctx.get('pid'), motivo)
+        registrar_log(slug, 'ORCHESTRATOR', f'MISSÃO FALHOU: {motivo}'[:300], 'ERROR')
+        raise
+    finally:
+        definir_estado_frota(slug, False, query)
+        _MISSAO_EM_CAMPO.release()
+
+
 def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None = None,
                              tela_id: str | None = None, quantidade: int = 4) -> dict:
     """Executa uma missão completa de pesquisa multi-agente (Web Images, Wikimedia, ArXiv.org e YouTube)
-    + calibração Groot 1 e pendura os nós na árvore."""
+    + calibração Groot 1 e pendura os nós na árvore. Levanta MissaoEmCampo se já houver outra rodando."""
+    if not _MISSAO_EM_CAMPO.acquire(blocking=False):
+        raise MissaoEmCampo('Já há uma missão de pesquisa em campo: espere ela terminar.')
+    return _executar_travada(slug, query, entradas, tela_id, quantidade)
+
+
+def _intercalar(listas: list[list[dict]], n: int) -> list[dict]:
+    """Um de cada lista por rodada, na ordem dada, até n itens: a busca traz de tudo um pouco, não só da fonte mais farta."""
+    saida: list[dict] = []
+    i = 0
+    while len(saida) < n and any(i < len(lst) for lst in listas):
+        for lst in listas:
+            if i < len(lst) and len(saida) < n:
+                saida.append(lst[i])
+        i += 1
+    return saida
+
+
+def _missao(slug: str, query: str, entradas: list[str] | None, tela_id: str | None, quantidade: int, ctx: dict) -> dict:
     entradas = entradas or []
     quantidade = max(1, min(8, int(quantidade)))
     definir_estado_frota(slug, True, query)
@@ -956,16 +1051,20 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
             entradas=entradas,
             intencao=f'🔍 [VOZ // AGENTES] {query}',
             quantidade=quantidade,
-            modelo='marciano/groot-1-research',
+            modelo=MODELO_MISSAO,
             status='trabalhando',
             iniciado_em=B.agora(),
         )
         pid = pedido['id']
+        ctx['pid'] = pid
 
     q_lower = query.lower()
     foco_arxiv = any(k in q_lower for k in ('arxiv', 'paper', 'artigo', 'cient', 'ieee', 'algoritmo', 'neural', 'corr', 'diagram', '2604'))
     foco_yt = any(k in q_lower for k in ('youtube', 'video', 'vídeo', 'gameplay', 'trailer', 'demo', 'reel'))
     foco_diagrama = any(k in q_lower for k in ('diagram', '2604', 'harness', 'weights', 'arquitetura', 'corr', 'militar', 'simula', 'grpo'))
+    foco_noticia = any(k in q_lower for k in ('notícia', 'noticia', 'news', 'urgente', 'manchete', 'jornal', 'atualidade', 'hoje', 'breaking'))
+    kw = palavras_chave(query, 6).split()
+    idioma = CX.escolher_idioma(query)
 
     # Extrai ID do ArXiv se presente na query (ou usa 2604.08224 como referência padrão de diagramas de agentes)
     m_arxiv_id = re.search(r'(\d{4}\.\d{4,5})', query)
@@ -978,14 +1077,20 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
         'SCANNING',
     )
 
-    # 2. Coleta candidatos com escalonador Eco-Tático (max_workers=2 para nunca pesar o PC!)
-    with ThreadPoolExecutor(max_workers=2) as ex:
+    # 2. Coleta candidatos. 4 threads: são esperas de rede, não CPU, então não pesam o PC; com 2 a missão ficava
+    # presa atrás de uma fonte lenta (o Openverse leva até 8 s de timeout).
+    with ThreadPoolExecutor(max_workers=4) as ex:
         f_web = ex.submit(buscar_web_imagens, query, quantidade)
         f_wiki = ex.submit(buscar_wikimedia, query, quantidade)
         f_arxiv = ex.submit(buscar_arxiv, query, quantidade if foco_arxiv else 2)
-        f_yt = ex.submit(buscar_youtube, query, quantidade if foco_yt else 2)
+        f_yt = ex.submit(buscar_youtube, query, quantidade if foco_yt else max(2, quantidade // 3 if foco_noticia else 2))
         f_open = ex.submit(buscar_openverse, query, 2)
         f_diag = ex.submit(extrair_diagramas_arxiv, arxiv_id_alvo, 2) if arxiv_id_alvo else None
+        # conectores extras (conectores_extra.py): nunca levantam exceção, fonte que cai vira lista vazia
+        f_news = ex.submit(CX.buscar_noticias, kw, max(2, quantidade // 2) if foco_noticia else 2)
+        f_wikip = ex.submit(CX.buscar_wikipedia, kw, 2, idioma)
+        f_papers = ex.submit(CX.buscar_papers, kw, 3 if foco_arxiv else 2)
+        f_graf = ex.submit(CX.buscar_grafico, kw)
 
         res_web = f_web.result() or []
         res_wiki = f_wiki.result() or []
@@ -993,6 +1098,10 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
         res_yt = f_yt.result() or []
         res_open = f_open.result() or []
         res_diag = (f_diag.result() or []) if f_diag else []
+        res_news = f_news.result() or []
+        res_wikip = f_wikip.result() or []
+        res_papers = f_papers.result() or []
+        res_graf = f_graf.result() or []
 
     # Se o usuário pediu diagramas de IA / ArXiv / Arquitetura Militar, adiciona os 2 Diagramas Sintetizados Zero-GPU
     if foco_diagrama or foco_arxiv:
@@ -1036,11 +1145,21 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
         registrar_log(slug, 'AGENT-05 // YOUTUBE-RECON', f'{len(res_yt)} streams de vídeo encontrados no YouTube', 'SCANNING')
     if res_web or res_wiki:
         registrar_log(slug, 'AGENT-02 // WEB-IMAGE-RECON', f'{len(res_web) + len(res_wiki)} imagens táticas indexadas da Web/Wikimedia', 'SCANNING')
+    if res_news:
+        registrar_log(slug, CX.AGENTE['noticia'], f'{len(res_news)} notícias encontradas nos feeds públicos', 'SCANNING')
+    if res_wikip:
+        registrar_log(slug, CX.AGENTE['wiki'], f'{len(res_wikip)} verbetes da Wikipedia', 'SCANNING')
+    if res_papers:
+        registrar_log(slug, CX.AGENTE['paper'], f'{len(res_papers)} artigos científicos (OpenAlex/Crossref)', 'SCANNING')
 
-    candidatos_todos = res_diag + res_arxiv + res_yt + res_web + res_wiki + res_open
+    if res_graf:
+        registrar_log(slug, CX.AGENTE['grafico'], f'gráfico de publicações por ano montado com dados do OpenAlex ("{res_graf[0]["termo"]}")', 'SCANNING')
 
-    # Garante preenchimento com placas sintéticas FUI se a busca retornar menos itens que o pedido
-    while len(candidatos_todos) < quantidade:
+    candidatos_todos = res_diag + res_arxiv + res_yt + res_web + res_wiki + res_open + res_news + res_wikip + res_papers + res_graf
+
+    # Só preenche com a placa sintética FUI se a busca não achou NADA (a missão não pode ficar vazia). Antes ela
+    # completava até a quantidade pedida, e com 8 vagas viravam vários cartões "Tactical Telemetry" que não são pesquisa.
+    while len(candidatos_todos) < min(quantidade, 1):
         idx = len(candidatos_todos) + 1
         candidatos_todos.append({
             'titulo': f'FUI Tactical Telemetry #{idx} · {query[:28]}',
@@ -1066,6 +1185,10 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
     visuais = [c for c in (res_web + res_wiki + res_open) if c.get('prob') is not None]
     visuais.sort(key=lambda x: x.get('prob', 0), reverse=True)
 
+    for lista in (res_news, res_wikip, res_papers):
+        lista.sort(key=lambda x: x.get('prob', 0), reverse=True)
+    textos = sorted(res_news + res_wikip + res_papers, key=lambda x: x.get('prob', 0), reverse=True)
+
     escolhidos: list[dict] = []
     if foco_diagrama:
         escolhidos.extend(res_diag[:quantidade])
@@ -1074,16 +1197,19 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
     elif foco_arxiv:
         escolhidos.extend(res_diag[:2])
         escolhidos.extend(res_arxiv[:max(0, quantidade - len(escolhidos))])
+        escolhidos.extend(res_papers[:max(0, quantidade - len(escolhidos))])
+    elif foco_noticia:
+        # "notícias urgentes", "vídeos sobre notícias": metade são notícias; o resto é contexto (vídeo, verbete, gráfico e,
+        # quando há assunto, imagens). Sem assunto ("notícias de hoje") imagem solta da web é ruído, então não entra.
+        assunto = [k for k in kw if CX._sem_acento(k) not in CX.PALAVRAS_DE_NOTICIA]
+        escolhidos.extend(res_news[:max(1, quantidade // 2)])
+        escolhidos.extend(_intercalar([res_yt, res_wikip, res_graf, visuais if assunto else []], quantidade - len(escolhidos)))
     elif foco_yt:
         escolhidos.extend(res_yt[:quantidade])
     else:
-        # Mix multimodal C4ISR: Imagens Web/Wikimedia + 1 Vídeo YouTube + 1 Paper ArXiv (quando disponíveis)
-        if visuais:
-            escolhidos.extend(visuais[:max(1, quantidade - 2)])
-        if res_yt and len(escolhidos) < quantidade:
-            escolhidos.append(res_yt[0])
-        if res_arxiv and len(escolhidos) < quantidade:
-            escolhidos.append(res_arxiv[0])
+        # Mix multimodal em rodízio (imagem, vídeo, paper do ArXiv, texto, gráfico): com 8 vagas cada tipo aparece 1 a 2
+        # vezes, em vez de a fonte mais farta ocupar tudo. Com 4 vagas sai imagem, vídeo, paper e 1 texto.
+        escolhidos.extend(_intercalar([visuais, res_yt, res_arxiv, textos, res_graf], quantidade))
 
     for c in sorted(candidatos_todos, key=lambda x: x.get('prob', 0), reverse=True):
         if len(escolhidos) >= quantidade:
@@ -1119,6 +1245,8 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
                 pdf_url=c.get('pdf_url'),
                 arxiv_id=c.get('arxiv_id'),
                 autores=c.get('autores'),
+                fonte_nome=c.get('fonte_nome'),
+                publicado=c.get('publicado'),
                 resumo=c.get('resumo') or c.get('descricao'),
             )
             ids_gerados.append(no['id'])
@@ -1163,6 +1291,24 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
             arq_rel = f'images/{nid}.png'
             arq_abs = pasta / arq_rel
             larg, alt = gerar_placa_arxiv_dossier(arq_abs, cand, query, prob)
+            B.miniatura(arq_abs, pasta / 'thumbs' / f'{nid}.jpg')
+        elif subtipo == 'grafico':
+            arq_rel = f'images/{nid}.png'
+            arq_abs = pasta / arq_rel
+            try:
+                larg, alt = CX.gerar_grafico(arq_abs, cand, prob)
+            except Exception as e:
+                _falhou('gráfico', e)
+                larg, alt = gerar_placa_fui_procedural(arq_abs, cand['titulo'], query, prob, idx)
+            B.miniatura(arq_abs, pasta / 'thumbs' / f'{nid}.jpg')
+        elif subtipo in CX.SUBTIPOS_TEXTO:
+            arq_rel = f'images/{nid}.png'
+            arq_abs = pasta / arq_rel
+            try:
+                larg, alt = CX.gerar_cartao_leitura(arq_abs, cand, prob)
+            except Exception as e:
+                _falhou('cartão de leitura', e)
+                larg, alt = gerar_placa_fui_procedural(arq_abs, cand['titulo'], query, prob, idx)
             B.miniatura(arq_abs, pasta / 'thumbs' / f'{nid}.jpg')
         else:
             arq_rel = f'images/{nid}.png'
@@ -1216,12 +1362,21 @@ def executar_missao_pesquisa(slug: str, query: str, entradas: list[str] | None =
 
 def disparar_em_background(slug: str, query: str, entradas: list[str] | None = None,
                            tela_id: str | None = None, quantidade: int = 4) -> None:
-    t = threading.Thread(
-        target=executar_missao_pesquisa,
-        args=(slug, query, entradas, tela_id, quantidade),
-        daemon=True,
-    )
-    t.start()
+    """Dispara a missão numa thread. Levanta MissaoEmCampo na hora (antes de criar a thread) se já houver outra."""
+    if not _MISSAO_EM_CAMPO.acquire(blocking=False):
+        raise MissaoEmCampo('Já há uma missão de pesquisa em campo: espere ela terminar.')
+
+    def alvo() -> None:
+        try:
+            _executar_travada(slug, query, entradas, tela_id, quantidade)
+        except Exception:
+            pass  # já registrado no log, no pedido e na telemetria
+
+    try:
+        threading.Thread(target=alvo, daemon=True).start()
+    except Exception:
+        _MISSAO_EM_CAMPO.release()
+        raise
 
 
 def main() -> None:
