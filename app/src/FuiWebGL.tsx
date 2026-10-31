@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { fuiAudio } from './FuiAudio'
 
 export type EstadoBiometrico = {
@@ -33,6 +33,44 @@ export const FuiWebGL = memo(function FuiWebGL({
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [freqZ, setFreqZ] = useState(59.98)
   const [pulseXY, setPulseXY] = useState(69.83)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  // Parallax do fundo: a cena responde ao cursor com amortecimento exponencial
+  // (só `transform`, nada de re-render — custo de GPU, não de React).
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let alvoX = 0
+    let alvoY = 0
+    let x = 0
+    let y = 0
+    let raf = 0
+    let ultimo = performance.now()
+
+    const mover = (e: PointerEvent) => {
+      alvoX = (e.clientX / Math.max(1, window.innerWidth) - 0.5) * 2
+      alvoY = (e.clientY / Math.max(1, window.innerHeight) - 0.5) * 2
+    }
+    window.addEventListener('pointermove', mover, { passive: true })
+
+    const laco = (agora: number) => {
+      raf = requestAnimationFrame(laco)
+      const dt = Math.min(0.05, (agora - ultimo) / 1000)
+      ultimo = agora
+      if (document.hidden) return
+      const k = 1 - Math.exp(-dt * 3.2)
+      x += (alvoX - x) * k
+      y += (alvoY - y) * k
+      v.style.transform = `scale(1.06) translate3d(${(-x * 12).toFixed(2)}px, ${(-y * 10).toFixed(2)}px, 0)`
+    }
+    raf = requestAnimationFrame(laco)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('pointermove', mover)
+    }
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,13 +87,14 @@ export const FuiWebGL = memo(function FuiWebGL({
       <div className="fui-webgl-camada" aria-hidden>
         {/* Vídeo 3D Plexus Incandescente (Decodificação nativa de mídia = 0% carga de Shader 3D!) */}
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
           src={VIDEO_PLEXUS_BG}
           className="lg-bg-video"
-          style={{ opacity: modoHero ? 1.0 : 0.68 }}
+          style={{ opacity: modoHero ? 1.0 : 0.88 }}
         />
 
         {/* Anéis de Radar Monocromáticos Sutis no Fundo */}

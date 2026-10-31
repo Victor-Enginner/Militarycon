@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, arquivoUrl, dinheiro, type Estado, type No } from './api'
+import { FundoBinario } from './FundoBinario'
 import { BiometricNUI, type AcoesEspaciaisFUI } from './BiometricNUI'
 import { CameraGesturesLab } from './CameraGesturesLab'
 import { CanvasCtx, type Ctx } from './ctx'
@@ -772,12 +773,16 @@ function CanvasInterno({ slug, abaInicial }: { slug: string; abaInicial: AbaNave
         onMouseMove={(e) => { mouse.current = { x: e.clientX, y: e.clientY } }} onMouseLeave={() => { mouse.current = null }}
         onDrop={(e) => { e.preventDefault(); subir([...e.dataTransfer.files], rf.screenToFlowPosition({ x: e.clientX, y: e.clientY })) }}>
         {modoFui && (
-          <FuiWebGL
-            grootProb={estado.telemetria?.groot_prob ?? 0.952}
-            agenteAtivo={!!estado.telemetria?.ativo}
-            modoHero={abaNavegacao === 'hero'}
-            zenMode={isZenMode}
-          />
+          <>
+            <FuiWebGL
+              grootProb={estado.telemetria?.groot_prob ?? 0.952}
+              agenteAtivo={!!estado.telemetria?.ativo}
+              modoHero={abaNavegacao === 'hero'}
+              zenMode={isZenMode}
+            />
+            {/* camada de código (binário → matrix + água no cursor) sobre o fundo, sob o palco */}
+            <FundoBinario intensidade={abaNavegacao === 'hero' ? 1 : 0.9} />
+          </>
         )}
 
         {isLoading && (

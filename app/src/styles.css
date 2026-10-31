@@ -750,6 +750,19 @@ span.chip { cursor: default; }
   height: 100%;
 }
 
+/* Camada de código: acima do fundo (z-0) e abaixo do palco (z-2).
+   O fundo do sistema é claro, então a camada entra como TINTA (multiply) em vez
+   de luz aditiva — dígito claro sobre fundo claro desaparecia. */
+.fui-binario-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
 .fui-radar-svg {
   position: absolute;
   top: 50%;
