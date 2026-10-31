@@ -6,3 +6,5 @@ app/node_modules/
 airllm_shards/
 repos_estudo/
 .DS_Store
+ferramentas/dados/gemini_uso.json
+ferramentas/dados/fontes_status.json
