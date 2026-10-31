@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 
 export type EstadoBiometrico = {
   handRight: { x: number; y: number; screenX: number; screenY: number; pinching: boolean; active: boolean; dist: number }
@@ -13,265 +13,306 @@ export const biometriaGlobal: EstadoBiometrico = {
   handLeft: { x: 0, y: 0, screenX: -999, screenY: -999, pinching: false, active: false, dist: 1 },
   head: { yaw: 0, pitch: 0, roll: 0, active: false },
   twoHandZoomDist: null,
-  audioEnergy: 0.0,
+  audioEnergy: 0.35,
 }
 
-/**
- * Background Tático "COMMAND THE STACK" (Inspirado em https://airforceaircade.com/ - U.S. Air Force)
- * Renderizado em SVG Vetorial Puro com ZERO loops de WebGL/Canvas (0% GPU/CPU em repouso para não pesar o PC!).
- * Exibe as 3 camadas aeroespaciais isométricas:
- *   1. TOP STACK (E-3 AWACS / Vigilância Orbital & Topografia)
- *   2. MIDDLE STACK (Multi-Role Air-to-Air & Air-to-Ground: TOI + AIRCRAFT)
- *   3. BOTTOM STACK (Base Terrestre / CV-22 / Bússola Azimutal 270°–330°)
- */
-export const FuiWebGL = memo(function FuiWebGL(_props: { grootProb?: number; agenteAtivo?: boolean }) {
+const VERTEX_SHADER = `
+  attribute float aIndex;
+  uniform float uTime;
+  uniform float uCount;
+  uniform vec2 uResolution;
+  uniform vec2 uHandR;
+  uniform vec2 uHandL;
+  uniform float uPinchR;
+  uniform float uPinchL;
+  uniform vec2 uHead;
+  uniform float uGrootProb;
+  uniform float uAgenteAtivo;
+
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  float hash(float n) {
+    return fract(sin(n * 12.9898) * 43758.5453123);
+  }
+
+  void main() {
+    float norm = aIndex / uCount;
+    float ringGroup = floor( mod(aIndex, 7.0) );
+    float baseRadius = 0.12 + (ringGroup / 7.0) * 0.76 + (hash(aIndex) - 0.5) * 0.08;
+    float speed = (0.07 + (1.0 - baseRadius) * 0.20) * (mod(ringGroup, 2.0) == 0.0 ? 1.0 : -0.75);
+    if (uAgenteAtivo > 0.5) speed *= 2.1;
+
+    float angle = norm * 6.2831853 * 64.0 + uTime * speed;
+    float aspect = uResolution.x / max(1.0, uResolution.y);
+
+    float topoWave = sin(angle * 5.0 + uTime * 0.4) * 0.032 + cos(angle * 3.0 - uTime * 0.3) * 0.024;
+    vec2 pos = vec2(cos(angle), sin(angle)) * (baseRadius + topoWave);
+    pos.x /= max(1.0, aspect * 0.68);
+
+    float curlX = sin(uTime * 0.45 + pos.y * 6.0 + hash(aIndex * 1.3) * 6.28) * 0.024;
+    float curlY = cos(uTime * 0.38 + pos.x * 6.0 + hash(aIndex * 2.1) * 6.28) * 0.024;
+    pos += vec2(curlX, curlY);
+
+    pos += uHead * (0.04 + baseRadius * 0.06);
+
+    float highlight = 0.0;
+    vec2 deltaR = uHandR - pos;
+    float distR = length(deltaR);
+    if (distR < 0.42) {
+      float pull = (1.0 - distR / 0.42);
+      float strength = uPinchR > 0.5 ? 0.24 : 0.065;
+      pos += normalize(deltaR + vec2(0.0001)) * pull * strength;
+      highlight = max(highlight, pull * (0.6 + uPinchR * 0.6));
+    }
+
+    vec2 deltaL = uHandL - pos;
+    float distL = length(deltaL);
+    if (distL < 0.42) {
+      float pullL = (1.0 - distL / 0.42);
+      float strengthL = uPinchL > 0.5 ? 0.24 : 0.065;
+      pos += normalize(deltaL + vec2(0.0001)) * pullL * strengthL;
+      highlight = max(highlight, pullL * (0.6 + uPinchL * 0.6));
+    }
+
+    gl_Position = vec4(pos, 0.0, 1.0);
+    gl_PointSize = (hash(aIndex * 3.7) * 2.5 + 1.0) + highlight * 2.8;
+
+    vec3 cyanCore = vec3(0.0, 0.92, 1.0);
+    vec3 tacticalBlue = vec3(0.04, 0.44, 0.92);
+    vec3 amberTarget = vec3(1.0, 0.62, 0.08);
+
+    vec3 baseCol = mix(tacticalBlue, cyanCore, clamp(uGrootProb, 0.0, 1.0));
+    if (mod(aIndex, 19.0) < 1.0) {
+      baseCol = mix(baseCol, amberTarget, 0.78);
+    }
+    if (uPinchR > 0.5 || uPinchL > 0.5) {
+      baseCol = mix(baseCol, amberTarget, highlight * 0.9);
+    } else if (uAgenteAtivo > 0.5) {
+      baseCol = mix(baseCol, vec3(0.2, 1.0, 0.65), sin(uTime * 6.0 + norm * 20.0) * 0.5 + 0.5);
+    }
+
+    vColor = baseCol + vec3(highlight * 0.45);
+    vAlpha = (0.15 + (1.0 - baseRadius) * 0.32) + highlight * 0.45;
+  }
+`
+
+const FRAGMENT_SHADER = `
+  precision highp float;
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  void main() {
+    vec2 c = gl_PointCoord - vec2(0.5);
+    float r = length(c);
+    if (r > 0.5) discard;
+    float glow = pow(1.0 - r * 2.0, 1.6);
+    gl_FragColor = vec4(vColor * glow, vAlpha * glow);
+  }
+`
+
+function compilarShader(gl: WebGLRenderingContext, tipo: number, fonte: string): WebGLShader | null {
+  const s = gl.createShader(tipo)
+  if (!s) return null
+  gl.shaderSource(s, fonte)
+  gl.compileShader(s)
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    gl.deleteShader(s)
+    return null
+  }
+  return s
+}
+
+const LINHAS_DATA_STREAM = [
+  'SYS [ON] // PROTOCOL ALPHA-000.101.112',
+  'TARGET ACQUIRED // N 38°53\'42" W 77°02\'11"',
+  'SEC LOC: 1909834763560 // Q-VEHICLE v2.0004',
+  'SPATIAL OUTPUT // FREQUENCY [Z] LOCKED',
+  'GROOT-1 SYSTEM-ONE // BAYESIAN MATRIX OK',
+  'ARXIV.ORG // NEURAL TELEMETRY SYNCED',
+  'YOUTUBE STREAM // AUDIO CHANNEL READY',
+  'C4ISR RADAR // TOPOGRAPHIC ISOLINES ON',
+]
+
+export const FuiWebGL = memo(function FuiWebGL({ grootProb = 0.879, agenteAtivo = false }: { grootProb?: number; agenteAtivo?: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const propsRef = useRef({ grootProb, agenteAtivo })
+  propsRef.current = { grootProb, agenteAtivo }
+
+  // Motor WebGL Leve (6.000 partículas com Throttling Eco-Tático para não pesar o PC!)
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const gl = (canvas.getContext('webgl2', { antialias: false, alpha: true, powerPreference: 'low-power' }) ||
+                canvas.getContext('webgl', { antialias: false, alpha: true })) as WebGLRenderingContext | null
+    if (!gl) return
+
+    const vs = compilarShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER)
+    const fs = compilarShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER)
+    if (!vs || !fs) return
+
+    const prog = gl.createProgram()
+    if (!prog) return
+    gl.attachShader(prog, vs)
+    gl.attachShader(prog, fs)
+    gl.linkProgram(prog)
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return
+    gl.useProgram(prog)
+
+    const PARTICLE_COUNT = 6000
+    const indices = new Float32Array(PARTICLE_COUNT)
+    for (let i = 0; i < PARTICLE_COUNT; i++) indices[i] = i
+
+    const buf = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+    gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW)
+
+    const aIndex = gl.getAttribLocation(prog, 'aIndex')
+    gl.enableVertexAttribArray(aIndex)
+    gl.vertexAttribPointer(aIndex, 1, gl.FLOAT, false, 0, 0)
+
+    const uTime = gl.getUniformLocation(prog, 'uTime')
+    const uCount = gl.getUniformLocation(prog, 'uCount')
+    const uResolution = gl.getUniformLocation(prog, 'uResolution')
+    const uHandR = gl.getUniformLocation(prog, 'uHandR')
+    const uHandL = gl.getUniformLocation(prog, 'uHandL')
+    const uPinchR = gl.getUniformLocation(prog, 'uPinchR')
+    const uPinchL = gl.getUniformLocation(prog, 'uPinchL')
+    const uHead = gl.getUniformLocation(prog, 'uHead')
+    const uGrootProb = gl.getUniformLocation(prog, 'uGrootProb')
+    const uAgenteAtivo = gl.getUniformLocation(prog, 'uAgenteAtivo')
+
+    gl.uniform1f(uCount, PARTICLE_COUNT)
+    gl.enable(gl.BLEND)
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE)
+
+    const redimensionar = () => {
+      canvas.width = Math.floor(window.innerWidth)
+      canvas.height = Math.floor(window.innerHeight)
+      gl.viewport(0, 0, canvas.width, canvas.height)
+    }
+    redimensionar()
+    window.addEventListener('resize', redimensionar)
+
+    let raf = 0
+    let lastDraw = 0
+    const t0 = performance.now()
+    const loop = (now: number) => {
+      raf = requestAnimationFrame(loop)
+      const hr = biometriaGlobal.handRight
+      const hl = biometriaGlobal.handLeft
+      const hd = biometriaGlobal.head
+      // Economia inteligente de GPU: 30fps com mão ativa, 12fps em repouso (não pesa nada!)
+      const intervalo = hr.active || hl.active || propsRef.current.agenteAtivo ? 32 : 80
+      if (now - lastDraw < intervalo) return
+      lastDraw = now
+
+      const t = (now - t0) * 0.001
+      gl.clearColor(0.0, 0.0, 0.0, 0.0)
+      gl.clear(gl.COLOR_BUFFER_BIT)
+
+      gl.uniform1f(uTime, t)
+      gl.uniform2f(uResolution, canvas.width, canvas.height)
+
+      gl.uniform2f(uHandR, hr.active ? hr.x : 99.0, hr.active ? hr.y : 99.0)
+      gl.uniform2f(uHandL, hl.active ? hl.x : 99.0, hl.active ? hl.y : 99.0)
+      gl.uniform1f(uPinchR, hr.active && hr.pinching ? 1.0 : 0.0)
+      gl.uniform1f(uPinchL, hl.active && hl.pinching ? 1.0 : 0.0)
+      gl.uniform2f(uHead, hd.active ? hd.yaw : 0.0, hd.active ? hd.pitch : 0.0)
+      gl.uniform1f(uGrootProb, propsRef.current.grootProb)
+      gl.uniform1f(uAgenteAtivo, propsRef.current.agenteAtivo ? 1.0 : 0.0)
+
+      gl.drawArrays(gl.POINTS, 0, PARTICLE_COUNT)
+    }
+    raf = requestAnimationFrame(loop)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', redimensionar)
+      gl.deleteBuffer(buf)
+      gl.deleteProgram(prog)
+    }
+  }, [])
+
   return (
-    <div className="fui-webgl-camada airforce-stack-bg" aria-hidden>
-      {/* CABEÇALHO SUPERIOR CENTRAL: COMMAND THE STACK */}
-      <div className="af-command-header">
-        <span className="af-sub">U.S. AIR FORCE // C4ISR SPATIAL ARCHITECTURE</span>
-        <strong className="af-title">COMMAND THE STACK</strong>
-      </div>
+    <div className="fui-webgl-camada" aria-hidden>
+      <canvas ref={canvasRef} className="fui-webgl-canvas" />
 
-      {/* DIAGRAMA ISOMÉTRICO DE 3 CAMADAS (TOP / MIDDLE / BOTTOM STACK) - ZERO GPU LOAD */}
-      <svg className="af-stack-svg" viewBox="0 0 1400 920" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <radialGradient id="afDiscGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#0c2838" stopOpacity="0.65" />
-            <stop offset="72%" stopColor="#091d2b" stopOpacity="0.82" />
-            <stop offset="95%" stopColor="#00d8ff" stopOpacity="0.28" />
-            <stop offset="100%" stopColor="#00f0ff" stopOpacity="0.0" />
-          </radialGradient>
-          <radialGradient id="afTerrainGlow" cx="50%" cy="48%" r="52%">
-            <stop offset="0%" stopColor="#2a3942" stopOpacity="0.78" />
-            <stop offset="65%" stopColor="#12202b" stopOpacity="0.88" />
-            <stop offset="94%" stopColor="#00d2ff" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="#041019" stopOpacity="0.95" />
-          </radialGradient>
-          <linearGradient id="afCyanRim" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00e1ff" stopOpacity="0.25" />
-            <stop offset="25%" stopColor="#70f3ff" stopOpacity="0.95" />
-            <stop offset="50%" stopColor="#00c8ff" stopOpacity="0.55" />
-            <stop offset="75%" stopColor="#70f3ff" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#00e1ff" stopOpacity="0.25" />
-          </linearGradient>
-        </defs>
+      {/* RADAR TOPOGRÁFICO & ORBITAL ORIGINAL (Transparente, mantendo todos os cartões 100% visíveis!) */}
+      <svg className="fui-radar-svg" viewBox="0 0 1000 1000">
+        <g transform="translate(500, 500)">
+          <circle r="445" className="fui-anel lento" strokeDasharray="2 8" />
+          <circle r="420" className="fui-anel" strokeDasharray="4 18" opacity="0.45" />
+          <circle r="340" className="fui-anel reverso" strokeDasharray="80 40 12 40" />
+          <circle r="290" className="fui-anel-ambar" strokeDasharray="180 60 30 60" />
+          <circle r="220" className="fui-anel rapido" strokeDasharray="2 10" />
+          <circle r="135" className="fui-anel pulso" strokeDasharray="120 180" />
 
-        {/* =====================================================================
-            3. BOTTOM STACK (CAMADA INFERIOR: TERRENO + CV-22 + BÚSSOLA 270°-330°)
-           ===================================================================== */}
-        <g transform="translate(560, 745)">
-          {/* Base cilíndrica escura e anel azimutal */}
-          <ellipse cx="0" cy="36" rx="370" ry="102" fill="#050b11" stroke="rgba(0, 210, 255, 0.35)" strokeWidth="1.5" />
-          <ellipse cx="0" cy="14" rx="362" ry="96" fill="url(#afTerrainGlow)" stroke="url(#afCyanRim)" strokeWidth="2.5" />
-
-          {/* Malha de relevo terrestre estilizada (Zero-GPU vector paths) */}
           <path
-            d="M-310,10 Q-210,-35 -120,-18 T40,-38 T190,-12 T310,12 Q200,58 0,68 Q-200,58 -310,10 Z"
-            fill="rgba(26, 44, 56, 0.55)"
-            stroke="rgba(120, 195, 220, 0.28)"
-            strokeWidth="1"
+            className="fui-isolinha"
+            d="M-260,-80 C-180,-240 40,-290 190,-180 C310,-90 290,110 170,220 C40,310 -190,260 -270,110 Z"
           />
           <path
-            d="M-240,4 Q-140,-28 -40,-10 T110,-26 T240,6"
-            fill="none"
-            stroke="rgba(0, 225, 255, 0.25)"
-            strokeWidth="1"
-            strokeDasharray="6 4"
-          />
-
-          {/* Anel superior do Bottom Stack */}
-          <ellipse cx="0" cy="-22" rx="348" ry="86" fill="none" stroke="url(#afCyanRim)" strokeWidth="3" />
-          <ellipse cx="0" cy="-22" rx="332" ry="80" fill="none" stroke="rgba(0, 225, 255, 0.32)" strokeWidth="1" strokeDasharray="18 10" />
-
-          {/* Hash marks táticos no aro */}
-          <ellipse cx="0" cy="-16" rx="340" ry="83" fill="none" stroke="rgba(0, 225, 255, 0.55)" strokeWidth="6" strokeDasharray="12 16" />
-
-          {/* Rótulo central do aro */}
-          <text x="0" y="-32" fill="#8ceeff" fontSize="13" fontWeight="700" letterSpacing="3" textAnchor="middle" opacity="0.88">
-            BOTTOM STACK
-          </text>
-
-          {/* Marcações de Bússola Azimutal (270 .. 280 .. 290 .. 300 .. 310 .. 320 .. 330) */}
-          {[
-            { ang: '270', x: -245, y: 66 },
-            { ang: '280', x: -168, y: 80 },
-            { ang: '290', x: -86, y: 89 },
-            { ang: '300', x: 0, y: 92 },
-            { ang: '310', x: 86, y: 89 },
-            { ang: '320', x: 168, y: 80 },
-            { ang: '330', x: 245, y: 66 },
-          ].map((b) => (
-            <g key={b.ang} transform={`translate(${b.x}, ${b.y})`}>
-              <line x1="0" y1="-10" x2="0" y2="-2" stroke="#7ce8ff" strokeWidth="1.5" />
-              <text x="0" y="10" fill="#a8ecff" fontSize="10" fontFamily="monospace" textAnchor="middle">
-                {b.ang}
-              </text>
-            </g>
-          ))}
-
-          {/* Ícone CV-22 à esquerda no Bottom Stack */}
-          <g transform="translate(-215, -36)">
-            <line x1="0" y1="0" x2="0" y2="54" stroke="#00e1ff" strokeWidth="2" />
-            <polygon points="0,-18 -14,6 0,0 14,6" fill="rgba(0, 225, 255, 0.25)" stroke="#00e1ff" strokeWidth="1.8" />
-            <text x="0" y="18" fill="#8ceeff" fontSize="10" fontFamily="monospace" textAnchor="middle">
-              CV-22
-            </text>
-          </g>
-        </g>
-
-        {/* =====================================================================
-            2. MIDDLE STACK (CAMADA INTERMEDIÁRIA: MULTI-ROLE / TOI / AIRCRAFT)
-           ===================================================================== */}
-        <g transform="translate(560, 470)">
-          <ellipse cx="0" cy="0" rx="348" ry="88" fill="url(#afDiscGlow)" stroke="url(#afCyanRim)" strokeWidth="3" />
-          <ellipse cx="0" cy="6" rx="334" ry="82" fill="none" stroke="rgba(0, 225, 255, 0.5)" strokeWidth="6" strokeDasharray="14 14" />
-          <ellipse cx="0" cy="0" rx="295" ry="72" fill="none" stroke="rgba(0, 225, 255, 0.22)" strokeWidth="1" />
-
-          <text x="0" y="54" fill="#8ceeff" fontSize="13" fontWeight="700" letterSpacing="3" textAnchor="middle" opacity="0.88">
-            MIDDLE STACK
-          </text>
-
-          {/* Alvo Esquerdo: TOI (Diamante Amarelo + Feixe Vertical até o Bottom Stack) */}
-          <g transform="translate(-145, 8)">
-            <line x1="0" y1="12" x2="0" y2="265" stroke="#ffd000" strokeWidth="2" opacity="0.9" />
-            <polygon points="0,-16 13,0 0,16 -13,0" fill="rgba(255, 208, 0, 0.18)" stroke="#ffd000" strokeWidth="2" />
-            <text x="0" y="30" fill="#ffd000" fontSize="10" fontFamily="monospace" textAnchor="middle">
-              TOI
-            </text>
-          </g>
-
-          {/* Alvo Central-Esquerdo: AIRCRAFT (Delta Coral/Vermelho + Feixe Vertical até o Bottom Stack) */}
-          <g transform="translate(-85, 16)">
-            <line x1="0" y1="12" x2="0" y2="255" stroke="#ff5e3a" strokeWidth="2" opacity="0.9" />
-            <polygon points="0,-16 -14,10 0,3 14,10" fill="rgba(255, 94, 58, 0.22)" stroke="#ff5e3a" strokeWidth="2" />
-            <text x="0" y="26" fill="#ff7b5c" fontSize="10" fontFamily="monospace" textAnchor="middle">
-              AIRCRAFT
-            </text>
-          </g>
-
-          {/* Alvo Direito: TOI (Diamante Amarelo + Feixe Vertical até o Bottom Stack) */}
-          <g transform="translate(65, 6)">
-            <line x1="0" y1="12" x2="0" y2="268" stroke="#ffd000" strokeWidth="2" opacity="0.9" />
-            <polygon points="0,-16 13,0 0,16 -13,0" fill="rgba(255, 208, 0, 0.18)" stroke="#ffd000" strokeWidth="2" />
-            <text x="0" y="30" fill="#ffd000" fontSize="10" fontFamily="monospace" textAnchor="middle">
-              TOI
-            </text>
-          </g>
-        </g>
-
-        {/* =====================================================================
-            1. TOP STACK (CAMADA SUPERIOR: ALTA ALTITUDE / E-3 AWACS / TOPOGRAFIA)
-           ===================================================================== */}
-        <g transform="translate(560, 195)">
-          <ellipse cx="0" cy="0" rx="355" ry="108" fill="url(#afDiscGlow)" stroke="url(#afCyanRim)" strokeWidth="3.2" />
-          <ellipse cx="0" cy="5" rx="340" ry="102" fill="none" stroke="rgba(0, 225, 255, 0.45)" strokeWidth="5" strokeDasharray="16 18" />
-
-          {/* Isolinhas Topográficas Internas do Top Stack (Leves e Puramente Vetoriais) */}
-          <path
-            d="M-250,-20 C-180,-75 40,-85 180,-45 C270,-15 260,45 150,72 C20,92 -170,75 -250,25 Z"
-            fill="none"
-            stroke="rgba(130, 220, 255, 0.22)"
-            strokeWidth="1.1"
+            className="fui-isolinha interna"
+            d="M-190,-50 C-120,-180 50,-210 140,-120 C220,-40 200,90 110,160 C20,220 -140,180 -195,70 Z"
           />
           <path
-            d="M-170,-10 C-110,-52 30,-58 125,-28 C190,-5 170,35 95,52 C10,65 -120,52 -170,15 Z"
-            fill="none"
-            stroke="rgba(130, 220, 255, 0.28)"
-            strokeWidth="1"
+            className="fui-isolinha nucleo"
+            d="M-110,-20 C-60,-110 40,-120 95,-60 C140,0 120,65 60,105 C0,135 -85,105 -115,35 Z"
           />
-          <line x1="-240" y1="-55" x2="240" y2="55" stroke="rgba(0, 225, 255, 0.18)" strokeWidth="1" />
-          <line x1="-220" y1="60" x2="220" y2="-60" stroke="rgba(0, 225, 255, 0.18)" strokeWidth="1" />
 
-          <text x="0" y="92" fill="#8ceeff" fontSize="13" fontWeight="700" letterSpacing="3" textAnchor="middle" opacity="0.92">
-            TOP STACK
-          </text>
+          <line x1="-280" y1="190" x2="210" y2="-240" className="fui-vetor-ambar" />
+          <line x1="-180" y1="-220" x2="260" y2="160" className="fui-vetor-ciano" />
 
-          {/* E-3 AWACS no Top Stack projetando feixe azul-ciano até o solo (Bottom Stack) */}
-          <g transform="translate(-45, -18)">
-            <line x1="0" y1="12" x2="0" y2="572" stroke="#00c8ff" strokeWidth="2.4" opacity="0.95" />
-            <ellipse cx="0" cy="2" rx="52" ry="18" fill="none" stroke="rgba(0, 200, 255, 0.45)" strokeWidth="1.2" />
-            <ellipse cx="0" cy="2" rx="28" ry="10" fill="none" stroke="rgba(0, 200, 255, 0.65)" strokeWidth="1.2" />
-            <polygon points="0,-16 -13,8 0,2 13,8" fill="rgba(0, 200, 255, 0.35)" stroke="#00e1ff" strokeWidth="2" />
-            <text x="0" y="16" fill="#7ce8ff" fontSize="10" fontFamily="monospace" textAnchor="middle">
-              E-3
-            </text>
+          <g transform="translate(-145, -95)" className="fui-alvo-orbital">
+            <circle r="18" className="fui-alvo-ext" />
+            <circle r="4" className="fui-alvo-ponto" />
           </g>
-        </g>
+          <g transform="translate(165, 115)" className="fui-alvo-orbital">
+            <circle r="22" className="fui-alvo-ext" />
+            <circle r="4.5" className="fui-alvo-ponto" />
+          </g>
+          <g transform="translate(45, -195)" className="fui-alvo-orbital">
+            <circle r="14" className="fui-alvo-ext" />
+            <circle r="3.5" className="fui-alvo-ponto" />
+          </g>
 
-        {/* =====================================================================
-            PAINÉIS TÁTICOS DIREITOS ("TOP STACK", "MIDDLE STACK", "BOTTOM STACK")
-            Estilo AirForceAircade.com + Linhas Conectoras
-           ===================================================================== */}
-        {/* Conector & Card TOP STACK */}
-        <g transform="translate(970, 115)">
-          <line x1="-60" y1="65" x2="0" y2="65" stroke="rgba(0, 225, 255, 0.45)" strokeWidth="1.2" />
-          <polygon
-            points="0,0 365,0 380,15 380,125 15,125 0,110"
-            fill="rgba(10, 18, 26, 0.76)"
-            stroke="rgba(120, 210, 235, 0.45)"
-            strokeWidth="1.2"
-          />
-          <text x="24" y="32" fill="#ffffff" fontSize="13" fontWeight="700" letterSpacing="3" fontFamily="monospace">
-            TOP STACK // HIGH VANTAGE
-          </text>
-          <text x="24" y="58" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            A higher vantage point enables Airmen &amp; AI Agents
-          </text>
-          <text x="24" y="76" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            in this stack to provide vital intelligence (ArXiv
-          </text>
-          <text x="24" y="94" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            CoRR &amp; C4ISR) to lower execution stacks.
-          </text>
-        </g>
-
-        {/* Conector & Card MIDDLE STACK */}
-        <g transform="translate(970, 395)">
-          <line x1="-60" y1="65" x2="0" y2="65" stroke="rgba(0, 225, 255, 0.45)" strokeWidth="1.2" />
-          <polygon
-            points="0,0 365,0 380,15 380,125 15,125 0,110"
-            fill="rgba(10, 18, 26, 0.76)"
-            stroke="rgba(120, 210, 235, 0.45)"
-            strokeWidth="1.2"
-          />
-          <text x="24" y="32" fill="#ffffff" fontSize="13" fontWeight="700" letterSpacing="3" fontFamily="monospace">
-            MIDDLE STACK // MULTI-ROLE
-          </text>
-          <text x="24" y="58" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            Middle ground means multi-role orchestration.
-          </text>
-          <text x="24" y="76" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            AirLLM Layer-Wise Agents + Groot-1 Calibration
-          </text>
-          <text x="24" y="94" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            fused for zero-lag tactical decision-making.
-          </text>
-        </g>
-
-        {/* Conector & Card BOTTOM STACK */}
-        <g transform="translate(970, 675)">
-          <line x1="-60" y1="65" x2="0" y2="65" stroke="rgba(0, 225, 255, 0.45)" strokeWidth="1.2" />
-          <polygon
-            points="0,0 365,0 380,15 380,125 15,125 0,110"
-            fill="rgba(10, 18, 26, 0.76)"
-            stroke="rgba(120, 210, 235, 0.45)"
-            strokeWidth="1.2"
-          />
-          <text x="24" y="32" fill="#ffffff" fontSize="13" fontWeight="700" letterSpacing="3" fontFamily="monospace">
-            BOTTOM STACK // EXECUTION
-          </text>
-          <text x="24" y="58" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            Responsible for ground-truth extraction: Diagram
-          </text>
-          <text x="24" y="76" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            Design synthesis, PDF figure CV &amp; local CPU
-          </text>
-          <text x="24" y="94" fill="#b0cad8" fontSize="11.5" fontFamily="monospace">
-            execution with 0% background GPU overhead.
-          </text>
+          <line x1="-460" y1="0" x2="-360" y2="0" className="fui-mira" />
+          <line x1="360" y1="0" x2="460" y2="0" className="fui-mira" />
+          <line x1="0" y1="-460" x2="0" y2="-360" className="fui-mira" />
+          <line x1="0" y1="360" x2="0" y2="460" className="fui-mira" />
         </g>
       </svg>
+
+      {/* PAINEL DE TELEMETRIA DIREITO ORIGINAL: MEDIDORES CIRCULARES "Frequency [Z]" & "Pulse [XY]" + DATA STREAM */}
+      <div className="fui-telemetria-direita">
+        <div className="fui-gauges-duplos">
+          <div className="fui-gauge-card">
+            <div className="fui-gauge-header">Frequency [ Z ]</div>
+            <div className="fui-gauge-sub">SPATIAL OUTPUT // SET 39</div>
+            <div className="fui-gauge-anel ambar">
+              <span className="fui-gauge-num">59.98</span>
+            </div>
+          </div>
+          <div className="fui-gauge-card">
+            <div className="fui-gauge-header">Pulse [ XY ]</div>
+            <div className="fui-gauge-sub">SPATIAL OUTPUT // SET 74</div>
+            <div className="fui-gauge-anel ciano">
+              <span className="fui-gauge-num">69.83</span>
+            </div>
+          </div>
+        </div>
+        <div className="fui-datastream-box">
+          <div className="fui-datastream-track">
+            {LINHAS_DATA_STREAM.map((linha, idx) => (
+              <div key={idx} className="fui-datastream-item">{linha}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* NOTA: Barra inferior "Fluctuation [X] // AUDIO & HARMONIC WAVEFORM" removida conforme solicitado! */}
+      <div className="fui-scanlines" />
     </div>
   )
 })

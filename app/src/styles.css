@@ -669,6 +669,11 @@ span.chip { cursor: default; }
   color: var(--tinta);
 }
 
+.canvas.fui-mode .react-flow {
+  position: relative;
+  z-index: 2;
+}
+
 .canvas.fui-mode .react-flow__pane {
   background: transparent;
 }
@@ -1339,53 +1344,143 @@ span.chip { cursor: default; }
 }
 
 /* =========================================================================
-   U.S. AIR FORCE // COMMAND THE STACK (airforceaircade.com) - ZERO GPU LOAD
+   TOPOGRAPHIC ISOLINE RADAR + GAUGES "Frequency [Z]" & "Pulse [XY]" (TRANSPARENTE)
    ========================================================================= */
-.airforce-stack-bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(ellipse at 48% 50%, #1c2933 0%, #0e161d 58%, #060b10 100%);
-  overflow: hidden;
+.fui-anel-ambar {
+  fill: none;
+  stroke: #ff9d00;
+  stroke-width: 1.4;
+  opacity: 0.72;
+  transform-origin: center;
 }
 
-.af-command-header {
+.fui-isolinha {
+  fill: rgba(0, 178, 255, 0.035);
+  stroke: rgba(0, 212, 255, 0.55);
+  stroke-width: 1.3;
+  transform-origin: center;
+}
+
+.fui-isolinha.interna {
+  stroke: rgba(0, 255, 204, 0.65);
+  stroke-dasharray: 12 4;
+}
+
+.fui-isolinha.nucleo {
+  fill: rgba(255, 157, 0, 0.04);
+  stroke: rgba(255, 166, 0, 0.75);
+  stroke-width: 1.5;
+}
+
+.fui-vetor-ambar {
+  stroke: rgba(255, 157, 0, 0.55);
+  stroke-width: 1.2;
+  stroke-dasharray: 6 4;
+}
+
+.fui-vetor-ciano {
+  stroke: rgba(0, 229, 255, 0.45);
+  stroke-width: 1;
+}
+
+.fui-alvo-ext {
+  fill: rgba(255, 157, 0, 0.08);
+  stroke: #ff9d00;
+  stroke-width: 1.4;
+}
+
+.fui-alvo-ponto {
+  fill: #fff3d1;
+}
+
+/* Painel de Telemetria Direito: Frequency [Z] & Pulse [XY] + Data Stream */
+.fui-telemetria-direita {
   position: fixed;
-  top: 52px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 56px;
+  right: 14px;
+  width: 248px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 5;
+  font-family: var(--mono);
+}
+
+.fui-gauges-duplos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.fui-gauge-card {
+  background: rgba(4, 14, 26, 0.82);
+  border: 1px solid rgba(0, 195, 255, 0.35);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  padding: 7px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  pointer-events: none;
-  z-index: 2;
-  font-family: var(--mono);
-  text-align: center;
+  box-shadow: inset 0 0 16px rgba(0, 170, 255, 0.12);
 }
 
-.af-command-header .af-sub {
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  color: rgba(130, 225, 255, 0.72);
+.fui-gauge-header {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #cbefff;
+  align-self: flex-start;
 }
 
-.af-command-header .af-title {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
+.fui-gauge-sub {
+  font-size: 7.5px;
+  color: #5ea8c8;
+  align-self: flex-start;
+  margin-bottom: 6px;
+}
+
+.fui-gauge-anel {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2.5px solid rgba(0, 212, 255, 0.75);
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.25), inset 0 0 10px rgba(0, 212, 255, 0.15);
+}
+
+.fui-gauge-anel.ambar {
+  border-color: rgba(255, 166, 0, 0.85);
+  box-shadow: 0 0 14px rgba(255, 166, 0, 0.28), inset 0 0 10px rgba(255, 166, 0, 0.15);
+}
+
+.fui-gauge-num {
+  font-size: 14px;
+  font-weight: 700;
   color: #ffffff;
-  text-shadow: 0 0 14px rgba(0, 215, 255, 0.45);
+  letter-spacing: -0.02em;
 }
 
-.af-stack-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  opacity: 0.86;
+.fui-datastream-box {
+  height: 84px;
+  background: rgba(3, 11, 20, 0.78);
+  border: 1px solid rgba(0, 195, 255, 0.28);
+  border-left: 2.5px solid #ff9d00;
+  padding: 5px 8px;
+  overflow: hidden;
+  font-size: 8px;
+  color: rgba(158, 230, 255, 0.75);
+}
+
+.fui-datastream-track {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fui-datastream-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Modal / Painel AirLLM + Diagram Design + Reading + ArXiv CoRR */

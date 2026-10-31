@@ -25,14 +25,14 @@
  "groot_veredito": "SCAN [0.703] // SINAL SECUNDÁRIO (GROOT-1 SYSTEM-ONE // CALIBRATED)",
  "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_control_room_computer_monitors.jpg",
  "agente_id": "AGENT-01 // VISUAL-MINER",
- "atualizado": "2026-10-30T22:58:44",
+ "atualizado": "2026-10-31T01:29:53",
  "arquivo": "images/FUI-014.png",
  "thumb": "thumbs/FUI-014.jpg",
  "largura": 1280,
  "altura": 853,
  "custo": 0.0,
  "desloc": {
-  "x": 592,
-  "y": -37
+  "x": 588,
+  "y": -39
  }
 }

@@ -1,0 +1,41 @@
+{
+ "id": "FUI-033",
+ "tipo": "imagem",
+ "criado": "2026-10-31T01:18:44",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "c36a7db8",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=BbUNGSYVTK0\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: BbUNGSYVTK0 · Query: FUI HUD interface reel Territory Studio cockpit",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T01:18:53"
+  }
+ ],
+ "pedido": "FUI-030",
+ "nome": "[0.95] ▶ [YT] Fui Hud Futuristic Interface",
+ "prompt": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=BbUNGSYVTK0 · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: BbUNGSYVTK0 · Query: FUI HUD interface reel Territory Studio cockpit",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.95,
+ "groot_veredito": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=BbUNGSYVTK0",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "BbUNGSYVTK0",
+ "embed_url": "https://www.youtube.com/embed/BbUNGSYVTK0?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Vídeo YouTube: \"Fui Hud Futuristic Interface\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T01:18:53",
+ "arquivo": "images/FUI-033.png",
+ "thumb": "thumbs/FUI-033.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}

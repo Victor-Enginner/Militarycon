@@ -25,14 +25,14 @@
  "groot_veredito": "TRACKING [0.836] // RELEVÂNCIA SÓLIDA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
  "fonte_url": "https://commons.wikimedia.org/wiki/File:CERN_Atlas_Control_Unit_Pic1_2010-07-01.jpg",
  "agente_id": "AGENT-01 // VISUAL-MINER",
- "atualizado": "2026-10-30T22:58:44",
+ "atualizado": "2026-10-31T01:30:35",
  "arquivo": "images/FUI-011.png",
  "thumb": "thumbs/FUI-011.jpg",
  "largura": 1280,
  "altura": 853,
  "custo": 0.0,
  "desloc": {
-  "x": -13,
+  "x": -6,
   "y": 121
  }
 }

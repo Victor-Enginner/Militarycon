@@ -1,0 +1,49 @@
+{
+ "id": "FUI-030",
+ "tipo": "pedido",
+ "criado": "2026-10-31T01:18:30",
+ "pos": null,
+ "comentarios": [],
+ "tela": "FUI-002",
+ "entradas": [],
+ "intencao": "🔍 [VOZ // AGENTES] youtube FUI HUD interface reel Territory Studio cockpit",
+ "quantidade": 4,
+ "modelo": "marciano/groot-1-research",
+ "status": "concluido",
+ "iniciado_em": "2026-10-31T01:18:29",
+ "midia": "imagem",
+ "aspecto": "16:9",
+ "resolucao": "1K",
+ "literal": false,
+ "saidas": [
+  "FUI-031",
+  "FUI-032",
+  "FUI-033",
+  "FUI-034"
+ ],
+ "atualizado": "2026-10-31T01:18:58",
+ "variacoes": [
+  {
+   "nome": "[0.95] ▶ [YT] Prometheus Projection Navigatio",
+   "prompt": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=P_VMcGeEIOc · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: P_VMcGeEIOc · Query: FUI HUD interface reel Territory Studio cockpit",
+   "tese": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.95] ▶ [YT] Prometheus Head Scanner Screen ",
+   "prompt": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=zq6yqrpXSj4 · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: zq6yqrpXSj4 · Query: FUI HUD interface reel Territory Studio cockpit",
+   "tese": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.95] ▶ [YT] Fui Hud Futuristic Interface",
+   "prompt": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=BbUNGSYVTK0 · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: BbUNGSYVTK0 · Query: FUI HUD interface reel Territory Studio cockpit",
+   "tese": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  },
+  {
+   "nome": "[0.95] ▶ [YT] Vitamin screen Prometheus | Scr",
+   "prompt": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=4dRwjDj-ZrM · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: 4dRwjDj-ZrM · Query: FUI HUD interface reel Territory Studio cockpit",
+   "tese": "LOCKED [0.950] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)"
+  }
+ ],
+ "concluido_em": "2026-10-31T01:18:58",
+ "custo": 0.0
+}

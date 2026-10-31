@@ -38,7 +38,7 @@ function CanvasInterno({ slug }: { slug: string }) {
   const [aba, setAba] = useState<'brief' | 'diario' | null>(null)
   const [esconder, setEsconder] = useState(() => localStorage.getItem('neo:esconder') === '1')
   const [pontos, setPontos] = useState(() => localStorage.getItem('neo:pontos') !== '0')  // padrão: ligado
-  const [modoFui, setModoFui] = useState(() => localStorage.getItem('neo:fui') !== '0')   // padrão: tema FUI espacial ligado
+  const [modoFui, setModoFui] = useState(true)   // padrão: tema FUI espacial sempre ligado ao iniciar
   const [focar, setFocar] = useState<string | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
   const [selecionando, setSelecionando] = useState(false)
@@ -712,6 +712,12 @@ function CanvasInterno({ slug }: { slug: string }) {
         }}
         onMouseMove={(e) => { mouse.current = { x: e.clientX, y: e.clientY } }} onMouseLeave={() => { mouse.current = null }}
         onDrop={(e) => { e.preventDefault(); subir([...e.dataTransfer.files], rf.screenToFlowPosition({ x: e.clientX, y: e.clientY })) }}>
+        {modoFui && (
+          <FuiWebGL
+            grootProb={estado.telemetria?.groot_prob ?? 0.879}
+            agenteAtivo={!!estado.telemetria?.ativo}
+          />
+        )}
         {nodes.length > 0 && <ReactFlow
           nodes={nodes} edges={edges} nodeTypes={nodeTypes}
           onNodesChange={onNodesChange} onNodeDragStop={onNodeDragStop}
@@ -734,13 +740,6 @@ function CanvasInterno({ slug }: { slug: string }) {
           </Controls>
           <MiniMap position="bottom-right" pannable zoomable nodeColor={corMinimapa} nodeStrokeWidth={0} maskColor="var(--mascara)" />
         </ReactFlow>}
-
-        {modoFui && (
-          <FuiWebGL
-            grootProb={estado.telemetria?.groot_prob ?? 0.879}
-            agenteAtivo={!!estado.telemetria?.ativo}
-          />
-        )}
         <BiometricNUI telemetria={estado.telemetria} acoes={acoesEspaciais} viewerAberto={!!visto || !!aba} />
         <TrilhoFogo slug={slug} estado={estado} />
         <header className="topo">

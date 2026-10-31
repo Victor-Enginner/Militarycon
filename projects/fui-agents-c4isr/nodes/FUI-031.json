@@ -1,0 +1,41 @@
+{
+ "id": "FUI-031",
+ "tipo": "imagem",
+ "criado": "2026-10-31T01:18:44",
+ "pos": null,
+ "comentarios": [
+  {
+   "id": "9fc7b5a7",
+   "autor": "claude",
+   "texto": "⚡ LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)\nAgente: AGENT-05 // YOUTUBE-RECON [YOUTUBE]\nFonte: https://www.youtube.com/watch?v=P_VMcGeEIOc\nResumo: Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: P_VMcGeEIOc · Query: FUI HUD interface reel Territory Studio cockpit",
+   "pin": {
+    "x": 0.88,
+    "y": 0.14
+   },
+   "criado": "2026-10-31T01:18:54"
+  }
+ ],
+ "pedido": "FUI-030",
+ "nome": "[0.95] ▶ [YT] Prometheus Projection Navigatio",
+ "prompt": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED) · Fonte: https://www.youtube.com/watch?v=P_VMcGeEIOc · Stream de Vídeo YouTube conectado ao cockpit C4ISR · ID: P_VMcGeEIOc · Query: FUI HUD interface reel Territory Studio cockpit",
+ "modelo": "marciano/groot-1",
+ "aspecto": "16:9",
+ "estado": "aprovada",
+ "groot_prob": 0.952,
+ "groot_veredito": "LOCKED [0.952] // ALTA CERTEZA (GROOT-1 SYSTEM-ONE // CALIBRATED)",
+ "fonte_url": "https://www.youtube.com/watch?v=P_VMcGeEIOc",
+ "agente_id": "AGENT-05 // YOUTUBE-RECON",
+ "subtipo": "youtube",
+ "youtube_id": "P_VMcGeEIOc",
+ "embed_url": "https://www.youtube.com/embed/P_VMcGeEIOc?autoplay=1&rel=0",
+ "pdf_url": null,
+ "arxiv_id": null,
+ "autores": null,
+ "resumo": "Vídeo YouTube: \"Prometheus Projection Navigation | Screen Graphics | Territory Studio\". Clique duas vezes ou faça Duplo Pinch para assistir ao vídeo ao vivo dentro do cockpit holográfico.",
+ "atualizado": "2026-10-31T01:18:54",
+ "arquivo": "images/FUI-031.png",
+ "thumb": "thumbs/FUI-031.jpg",
+ "largura": 1280,
+ "altura": 720,
+ "custo": 0.0
+}
